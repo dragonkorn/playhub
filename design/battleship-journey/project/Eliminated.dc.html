@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fleet sunk</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B1A2B}
+a{color:#FFC83D}a:hover{color:#FFE08A}
+</style>
+</helmet>
+<main style="width: 1180px; height: 820px; box-sizing: border-box; padding: 56px; display: grid; grid-template-columns: minmax(0, 1fr) 584px; align-items: center; gap: 56px; background: #0B1A2B; color: #EAF2F6; font-family: 'DM Sans', sans-serif">
+  <section style="display: flex; flex-direction: column; gap: 20px">
+    <h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 96px; line-height: 0.95; text-transform: uppercase; color: #FF6B4A">Fleet sunk</h1>
+    <p style="margin: 0; font-size: 24px; line-height: 1.35; color: #9DB4C4">Arm sank your last ship. You can still watch the battle.</p>
+    <a href="Result.dc.html" style="margin-top: 16px; box-sizing: border-box; height: 80px; display: flex; align-items: center; justify-content: center; background: #FFC83D; color: #0B1A2B; border-radius: 16px; font-size: 26px; font-weight: 700; text-decoration: none">Keep watching</a>
+    <a href="Main.dc.html" style="box-sizing: border-box; height: 72px; display: flex; align-items: center; justify-content: center; background: #12263B; color: #EAF2F6; border: 2px solid #27425C; border-radius: 16px; font-size: 22px; font-weight: 700; text-decoration: none">Leave room</a>
+  </section>
+  <dc-import name="Board" cell="54" ships="{{ ships }}" hits="{{ hits }}" misses="{{ misses }}" hint-size="584px,580px"></dc-import>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const ships = [
+      { r: 0, c: 1, len: 5, sunk: true, name: 'Carrier, sunk', art: '/_blob/cc5ded03eaaa068f4cc12ca5c776d996' },
+      { r: 2, c: 8, len: 4, v: true, sunk: true, name: 'Battleship, sunk', art: '/_blob/7ab20171758ec094a8f2eeef268bbf3d' },
+      { r: 4, c: 2, len: 3, v: true, sunk: true, name: 'Cruiser, sunk', art: '/_blob/8152015498d8e39f3d5bb49595739475' },
+      { r: 8, c: 4, len: 3, sunk: true, name: 'Submarine, sunk', art: '/_blob/4acc0163546ea6d01d84f85be5014f02' },
+      { r: 5, c: 5, len: 2, sunk: true, name: 'Destroyer, sunk', art: '/_blob/3110f0716b5c6a391ea3ac36abc65171' },
+    ];
+    const hits = [];
+    ships.forEach((s) => {
+      for (let i = 0; i < s.len; i++) hits.push((s.r + (s.v ? i : 0)) + ',' + (s.c + (s.v ? 0 : i)));
+    });
+    return {
+      ships,
+      hits,
+      misses: ['3,3', '7,8', '1,6', '2,2', '4,6', '6,0', '9,1', '7,5', '1,9', '9,7'],
+    };
+  }
+}
+</script>
+</body>
+</html>

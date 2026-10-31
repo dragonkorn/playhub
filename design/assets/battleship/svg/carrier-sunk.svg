@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 100" width="500" height="100">
+  <title>Carrier</title>
+  <path d="M12 26Q12 8 32 8L410 8Q454 10 494 50Q454 90 410 92L32 92Q12 92 12 74Z" transform="translate(3 4)" fill="#000" opacity=".3"/>
+  <path d="M12 26Q12 8 32 8L410 8Q454 10 494 50Q454 90 410 92L32 92Q12 92 12 74Z" fill="#4B535B" stroke="#15191E" stroke-width="3"/>
+  <path d="M12 33Q12 15 32 15L390 15Q434 17 474 50Q434 83 390 85L32 85Q12 85 12 67Z" transform="translate(6 0)" fill="#3A4047"/>
+      <path d="M40 50H420" stroke="#767E86" stroke-width="3" stroke-dasharray="20 14"/>
+      <path d="M300 22L440 42" stroke="#FF6B4A" stroke-width="3"/>
+      
+  <path transform="translate(90 34)" d="M22 0L6 -3L-2 -17H-8L-5 -3L-16 -2L-20 -8H-24L-22 0L-24 8H-20L-16 2L-5 3L-8 17H-2L6 3Z" fill="#767E86" stroke="#15191E" stroke-width="1.5"/>
+  <path transform="translate(160 66)" d="M22 0L6 -3L-2 -17H-8L-5 -3L-16 -2L-20 -8H-24L-22 0L-24 8H-20L-16 2L-5 3L-8 17H-2L6 3Z" fill="#767E86" stroke="#15191E" stroke-width="1.5"/>
+  <path transform="translate(370 66)" d="M22 0L6 -3L-2 -17H-8L-5 -3L-16 -2L-20 -8H-24L-22 0L-24 8H-20L-16 2L-5 3L-8 17H-2L6 3Z" fill="#767E86" stroke="#15191E" stroke-width="1.5"/>
+      <rect x="238" y="12" width="84" height="20" rx="6" fill="#7E858C" stroke="#15191E" stroke-width="2.5"/>
+      <rect x="248" y="17" width="64" height="10" rx="3" fill="#24292F"/>
+  <ellipse cx="50" cy="48" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(50 42)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+  <ellipse cx="150" cy="66" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(150 60)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+  <ellipse cx="250" cy="48" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(250 42)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+  <ellipse cx="350" cy="66" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(350 60)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+  <ellipse cx="450" cy="48" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(450 42)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+</svg>

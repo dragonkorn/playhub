@@ -1,0 +1,14 @@
+{
+  "name": "@playhub/game-battleship",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./logic": "./src/logic/index.ts",
+    "./ui": "./src/ui/index.ts"
+  },
+  "scripts": { "typecheck": "tsc" },
+  "dependencies": {
+    "@playhub/game-contract": "workspace:*"
+  }
+}

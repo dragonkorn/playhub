@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Game result</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B1A2B}
+a{color:#FFC83D}a:hover{color:#FFE08A}
+</style>
+</helmet>
+<main style="width: 1180px; height: 820px; box-sizing: border-box; padding: 56px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 56px; background: #0B1A2B; color: #EAF2F6; font-family: 'DM Sans', sans-serif">
+  <section style="display: flex; flex-direction: column; gap: 16px">
+    <p style="margin: 0; font-size: 22px; font-weight: 700; color: #FFC83D">Last fleet afloat</p>
+    <h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 150px; line-height: 0.9; text-transform: uppercase">Arm wins</h1>
+  </section>
+  <section style="display: flex; flex-direction: column; gap: 12px">
+    <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Final order</h2>
+    <ol style="margin: 0 0 20px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
+      <sc-for list="{{standings}}" as="s" hint-placeholder-count="3">
+        <li style="box-sizing: border-box; height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #12263B; border-radius: 12px; font-size: 24px; font-weight: 500">
+          <span>{{s.place}}. {{s.name}}</span>
+          <span style="font-size: 16px; color: #9DB4C4">{{s.note}}</span>
+        </li>
+      </sc-for>
+    </ol>
+    <a href="Lobby.dc.html" style="box-sizing: border-box; height: 80px; display: flex; align-items: center; justify-content: center; background: #FFC83D; color: #0B1A2B; border-radius: 16px; font-size: 26px; font-weight: 700; text-decoration: none">Play again</a>
+    <a href="Main.dc.html" style="box-sizing: border-box; height: 72px; display: flex; align-items: center; justify-content: center; background: #12263B; color: #EAF2F6; border: 2px solid #27425C; border-radius: 16px; font-size: 22px; font-weight: 700; text-decoration: none">Back to games</a>
+  </section>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      standings: [
+        { place: 1, name: 'Arm', note: '2 ships afloat' },
+        { place: 2, name: 'Ploy', note: 'Sunk' },
+        { place: 3, name: 'Mina', note: 'You' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

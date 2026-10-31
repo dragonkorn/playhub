@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="200" height="100">
+  <title>Destroyer</title>
+  <path d="M12 40Q12 22 32 22L120 22Q154 24 194 50Q154 76 120 78L32 78Q12 78 12 60Z" transform="translate(3 4)" fill="#000" opacity=".3"/>
+  <path d="M12 40Q12 22 32 22L120 22Q154 24 194 50Q154 76 120 78L32 78Q12 78 12 60Z" fill="#8FA9BC" stroke="#22384C" stroke-width="3"/>
+  <path d="M12 47Q12 29 32 29L100 29Q134 31 174 50Q134 69 100 71L32 71Q12 71 12 53Z" transform="translate(6 0)" fill="#B7C8D4"/>
+      
+  <ellipse cx="52" cy="50" rx="15" ry="11" fill="#33495E" stroke="#22384C" stroke-width="2.5"/>
+  <ellipse cx="52" cy="50" rx="9" ry="6" fill="#0B1A2B"/>
+  <rect x="74" y="36" width="40" height="28" rx="7" fill="#E4ECF1" stroke="#22384C" stroke-width="2.5"/>
+  <rect x="81" y="43" width="26" height="14" rx="3" fill="#33495E"/>
+      
+  <g transform="translate(144 50) rotate(0) scale(0.75)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#33495E"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#33495E"/>
+    <circle r="16" fill="#33495E"/><circle r="12" fill="#D7E2E9"/><circle r="4" fill="#33495E"/>
+  </g>
+</svg>

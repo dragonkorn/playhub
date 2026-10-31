@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" width="300" height="100">
+  <title>Submarine</title>
+      <rect x="11" y="31" width="280" height="46" rx="23" fill="#000" opacity=".3"/>
+      <path d="M8 50L26 30V70Z" fill="#33495E" stroke="#22384C" stroke-width="3"/>
+      <rect x="16" y="27" width="278" height="46" rx="23" fill="#5C7A8C" stroke="#22384C" stroke-width="3"/>
+      <path d="M44 50H270" stroke="#33495E" stroke-width="3" stroke-dasharray="14 12"/>
+      <rect x="128" y="37" width="62" height="26" rx="13" fill="#E4ECF1" stroke="#22384C" stroke-width="2.5"/>
+      <circle cx="176" cy="50" r="5" fill="#FFC83D"/><circle cx="150" cy="50" r="5" fill="#33495E"/>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+  <title>Battleship</title>
+  <path d="M12 30Q12 12 32 12L290 12Q354 14 394 50Q354 86 290 88L32 88Q12 88 12 70Z" transform="translate(3 4)" fill="#000" opacity=".3"/>
+  <path d="M12 30Q12 12 32 12L290 12Q354 14 394 50Q354 86 290 88L32 88Q12 88 12 70Z" fill="#8FA9BC" stroke="#22384C" stroke-width="3"/>
+  <path d="M12 37Q12 19 32 19L270 19Q334 21 374 50Q334 79 270 81L32 81Q12 81 12 63Z" transform="translate(6 0)" fill="#B7C8D4"/>
+      
+  <g transform="translate(62 50) rotate(180) scale(1.1)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#33495E"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#33495E"/>
+    <circle r="16" fill="#33495E"/><circle r="12" fill="#D7E2E9"/><circle r="4" fill="#33495E"/>
+  </g>
+  <g transform="translate(114 50) rotate(180) scale(1)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#33495E"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#33495E"/>
+    <circle r="16" fill="#33495E"/><circle r="12" fill="#D7E2E9"/><circle r="4" fill="#33495E"/>
+  </g>
+      
+  <ellipse cx="166" cy="50" rx="15" ry="11" fill="#33495E" stroke="#22384C" stroke-width="2.5"/>
+  <ellipse cx="166" cy="50" rx="9" ry="6" fill="#0B1A2B"/>
+  <rect x="192" y="30" width="66" height="40" rx="7" fill="#E4ECF1" stroke="#22384C" stroke-width="2.5"/>
+  <rect x="199" y="37" width="52" height="26" rx="3" fill="#33495E"/>
+      
+  <g transform="translate(290 50) rotate(0) scale(1)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#33495E"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#33495E"/>
+    <circle r="16" fill="#33495E"/><circle r="12" fill="#D7E2E9"/><circle r="4" fill="#33495E"/>
+  </g>
+  <g transform="translate(334 50) rotate(0) scale(1.1)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#33495E"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#33495E"/>
+    <circle r="16" fill="#33495E"/><circle r="12" fill="#D7E2E9"/><circle r="4" fill="#33495E"/>
+  </g>
+</svg>

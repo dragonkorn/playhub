@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="200" height="100">
+  <title>Destroyer</title>
+  <path d="M12 40Q12 22 32 22L120 22Q154 24 194 50Q154 76 120 78L32 78Q12 78 12 60Z" transform="translate(3 4)" fill="#000" opacity=".3"/>
+  <path d="M12 40Q12 22 32 22L120 22Q154 24 194 50Q154 76 120 78L32 78Q12 78 12 60Z" fill="#4B535B" stroke="#15191E" stroke-width="3"/>
+  <path d="M12 47Q12 29 32 29L100 29Q134 31 174 50Q134 69 100 71L32 71Q12 71 12 53Z" transform="translate(6 0)" fill="#5E666E"/>
+      
+  <ellipse cx="52" cy="50" rx="15" ry="11" fill="#24292F" stroke="#15191E" stroke-width="2.5"/>
+  <ellipse cx="52" cy="50" rx="9" ry="6" fill="#0B1A2B"/>
+  <rect x="74" y="36" width="40" height="28" rx="7" fill="#7E858C" stroke="#15191E" stroke-width="2.5"/>
+  <rect x="81" y="43" width="26" height="14" rx="3" fill="#24292F"/>
+      
+  <g transform="translate(144 50) rotate(0) scale(0.75)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#24292F"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#24292F"/>
+    <circle r="16" fill="#24292F"/><circle r="12" fill="#767E86"/><circle r="4" fill="#24292F"/>
+  </g>
+  <ellipse cx="50" cy="48" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(50 42)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+  <ellipse cx="150" cy="66" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(150 60)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+</svg>

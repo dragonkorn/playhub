@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Opponent's turn</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B1A2B}
+a{color:#FFC83D}a:hover{color:#FFE08A}
+</style>
+</helmet>
+<main style="width: 1180px; height: 820px; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: #0B1A2B; color: #EAF2F6; font-family: 'DM Sans', sans-serif">
+  <header style="height: 64px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; gap: 24px; background: #12263B; border-radius: 12px">
+    <h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 40px; text-transform: uppercase">Arm's turn</h1>
+    <p style="margin: 0; font-size: 18px; color: #9DB4C4">Stand by. You're next after Ploy.</p>
+  </header>
+  <div style="flex-grow: 1; min-height: 0; display: grid; grid-template-columns: 250px 584px 250px; justify-content: space-between">
+    <section style="display: flex; flex-direction: column; gap: 10px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Turn order</h2>
+      <sc-for list="{{players}}" as="p" hint-placeholder-count="3">
+        <div style="box-sizing: border-box; min-height: 80px; padding: 12px 14px; display: flex; flex-direction: column; justify-content: center; gap: 4px; background: #12263B; border: 3px solid {{p.border}}; border-radius: 12px">
+          <span style="display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700">{{p.name}}<span role="img" aria-label="Online" style="box-sizing: border-box; width: 12px; height: 12px; border-radius: 50%; background: #4FD1A5; border: 2px solid #4FD1A5"></span></span>
+          <span style="font-size: 16px; color: #9DB4C4">{{p.status}}</span>
+        </div>
+      </sc-for>
+    </section>
+    <section style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 22px; font-weight: 700">Your fleet</h2>
+      <dc-import name="Board" cell="54" ships="{{ ships }}" hits="{{ hits }}" misses="{{ misses }}" hint-size="584px,580px"></dc-import>
+    </section>
+    <section style="display: flex; flex-direction: column; gap: 10px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Latest shots</h2>
+      <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
+        <sc-for list="{{log}}" as="l" hint-placeholder-count="4">
+          <li style="box-sizing: border-box; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; background: #12263B; border-radius: 12px">
+            <span style="font-size: 16px; color: #9DB4C4">{{l.who}}</span>
+            <span style="font-size: 18px; font-weight: 700; color: {{l.color}}">{{l.result}}</span>
+          </li>
+        </sc-for>
+      </ol>
+      <a href="Reconnecting.dc.html" style="margin-top: auto; min-height: 44px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #9DB4C4">Prototype: Ploy disconnects</a>
+      <a href="Eliminated.dc.html" style="min-height: 44px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #9DB4C4">Prototype: skip to fleet sunk</a>
+    </section>
+  </div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      players: [
+        { name: 'Arm', status: 'Aiming', border: '#FFC83D' },
+        { name: 'Ploy', status: 'Next', border: 'transparent' },
+        { name: 'Mina', status: 'You', border: 'transparent' },
+      ],
+      ships: [
+        { r: 0, c: 1, len: 5, name: 'Carrier', art: '/_blob/86431cd17374477e3f855c592209654f' },
+        { r: 2, c: 8, len: 4, v: true, name: 'Battleship', art: '/_blob/e1e61c0d152095572bfe21e619da86fe' },
+        { r: 4, c: 2, len: 3, v: true, name: 'Cruiser', art: '/_blob/f27facd964156f71290ef1e568f52ca4' },
+        { r: 8, c: 4, len: 3, name: 'Submarine', art: '/_blob/9663be28225346d05a6d936a7815c9e2' },
+        { r: 5, c: 5, len: 2, sunk: true, name: 'Destroyer, sunk', art: '/_blob/3110f0716b5c6a391ea3ac36abc65171' },
+      ],
+      hits: ['0,2', '5,5', '5,6'],
+      misses: ['3,3', '7,8', '1,6'],
+      log: [
+        { who: 'You fired at Arm, B8', result: 'Miss', color: '#EAF2F6' },
+        { who: 'Ploy fired at you, F7', result: 'Hit. Destroyer sunk', color: '#FF6B4A' },
+        { who: 'Arm fired at Ploy, C2', result: 'Miss', color: '#EAF2F6' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

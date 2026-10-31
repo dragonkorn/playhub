@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" width="300" height="100">
+  <title>Cruiser</title>
+  <path d="M12 36Q12 18 32 18L200 18Q254 20 294 50Q254 80 200 82L32 82Q12 82 12 64Z" transform="translate(3 4)" fill="#000" opacity=".3"/>
+  <path d="M12 36Q12 18 32 18L200 18Q254 20 294 50Q254 80 200 82L32 82Q12 82 12 64Z" fill="#4B535B" stroke="#15191E" stroke-width="3"/>
+  <path d="M12 43Q12 25 32 25L180 25Q234 27 274 50Q234 73 180 75L32 75Q12 75 12 57Z" transform="translate(6 0)" fill="#5E666E"/>
+      
+  <g transform="translate(58 50) rotate(180) scale(0.9)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#24292F"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#24292F"/>
+    <circle r="16" fill="#24292F"/><circle r="12" fill="#767E86"/><circle r="4" fill="#24292F"/>
+  </g>
+      
+  <ellipse cx="108" cy="50" rx="15" ry="11" fill="#24292F" stroke="#15191E" stroke-width="2.5"/>
+  <ellipse cx="108" cy="50" rx="9" ry="6" fill="#0B1A2B"/>
+  <rect x="130" y="32" width="52" height="36" rx="7" fill="#7E858C" stroke="#15191E" stroke-width="2.5"/>
+  <rect x="137" y="39" width="38" height="22" rx="3" fill="#24292F"/>
+      
+  <g transform="translate(214 50) rotate(0) scale(0.9)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#24292F"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#24292F"/>
+    <circle r="16" fill="#24292F"/><circle r="12" fill="#767E86"/><circle r="4" fill="#24292F"/>
+  </g>
+  <ellipse cx="50" cy="48" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(50 42)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+  <ellipse cx="150" cy="66" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(150 60)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+  <ellipse cx="250" cy="48" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(250 42)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+</svg>

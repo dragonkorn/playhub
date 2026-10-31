@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" width="300" height="100">
+  <title>Cruiser</title>
+  <path d="M12 36Q12 18 32 18L200 18Q254 20 294 50Q254 80 200 82L32 82Q12 82 12 64Z" transform="translate(3 4)" fill="#000" opacity=".3"/>
+  <path d="M12 36Q12 18 32 18L200 18Q254 20 294 50Q254 80 200 82L32 82Q12 82 12 64Z" fill="#8FA9BC" stroke="#22384C" stroke-width="3"/>
+  <path d="M12 43Q12 25 32 25L180 25Q234 27 274 50Q234 73 180 75L32 75Q12 75 12 57Z" transform="translate(6 0)" fill="#B7C8D4"/>
+      
+  <g transform="translate(58 50) rotate(180) scale(0.9)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#33495E"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#33495E"/>
+    <circle r="16" fill="#33495E"/><circle r="12" fill="#D7E2E9"/><circle r="4" fill="#33495E"/>
+  </g>
+      
+  <ellipse cx="108" cy="50" rx="15" ry="11" fill="#33495E" stroke="#22384C" stroke-width="2.5"/>
+  <ellipse cx="108" cy="50" rx="9" ry="6" fill="#0B1A2B"/>
+  <rect x="130" y="32" width="52" height="36" rx="7" fill="#E4ECF1" stroke="#22384C" stroke-width="2.5"/>
+  <rect x="137" y="39" width="38" height="22" rx="3" fill="#33495E"/>
+      
+  <g transform="translate(214 50) rotate(0) scale(0.9)">
+    <rect x="4" y="-9" width="32" height="5" rx="2" fill="#33495E"/>
+    <rect x="4" y="4" width="32" height="5" rx="2" fill="#33495E"/>
+    <circle r="16" fill="#33495E"/><circle r="12" fill="#D7E2E9"/><circle r="4" fill="#33495E"/>
+  </g>
+</svg>

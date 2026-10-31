@@ -1,0 +1,35 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-10-31T15:00:00Z" },
+  "title": "PlayHub Battleship Journey",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 1180, "h": 820, "title": "1 Main page", "is_interactive": true },
+    "Join.dc.html": { "x": 1260, "y": 0, "w": 1180, "h": 820, "title": "2 Join with code", "is_interactive": true },
+    "Lobby.dc.html": { "x": 2520, "y": 0, "w": 1180, "h": 820, "title": "3 Lobby", "is_interactive": true },
+    "Setup.dc.html": { "x": 3780, "y": 0, "w": 1180, "h": 820, "title": "4 Setup: place fleet", "is_interactive": true },
+    "Battle.dc.html": { "x": 0, "y": 940, "w": 1180, "h": 820, "title": "5 Battle: your turn", "is_interactive": true },
+    "Waiting.dc.html": { "x": 1260, "y": 940, "w": 1180, "h": 820, "title": "6 Battle: opponent's turn", "is_interactive": true },
+    "Eliminated.dc.html": { "x": 2520, "y": 940, "w": 1180, "h": 820, "title": "7 Eliminated", "is_interactive": true },
+    "Result.dc.html": { "x": 3780, "y": 940, "w": 1180, "h": 820, "title": "8 Result", "is_interactive": true },
+    "Reconnecting.dc.html": { "x": 1260, "y": 1880, "w": 1180, "h": 820, "title": "6b Player disconnected", "is_interactive": true },
+    "Board.dc.html": { "x": 0, "y": 1880, "w": 584, "h": 580, "title": "Shared board component" }
+  },
+  "order": [
+    "Main.dc.html",
+    "Join.dc.html",
+    "Lobby.dc.html",
+    "Setup.dc.html",
+    "Battle.dc.html",
+    "Waiting.dc.html",
+    "Reconnecting.dc.html",
+    "Eliminated.dc.html",
+    "Result.dc.html",
+    "Board.dc.html"
+  ],
+  "notes": {
+    "journey": { "x": 0, "y": -300, "text": "Battleship journey on iPad", "kind": "title1", "maxW": 4960 }
+  },
+  "designSystems": []
+}

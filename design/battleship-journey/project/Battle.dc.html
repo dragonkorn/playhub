@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your turn</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B1A2B}
+a{color:#FFC83D}a:hover{color:#FFE08A}
+</style>
+</helmet>
+<main style="width: 1180px; height: 820px; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: #0B1A2B; color: #EAF2F6; font-family: 'DM Sans', sans-serif">
+  <header style="height: 64px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; gap: 24px; background: #FFC83D; color: #0B1A2B; border-radius: 12px">
+    <h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 40px; text-transform: uppercase">Your turn</h1>
+    <p style="margin: 0; font-size: 18px; font-weight: 500">Choose a board, then fire one shot</p>
+  </header>
+  <div style="flex-grow: 1; min-height: 0; display: grid; grid-template-columns: 250px 584px 250px; justify-content: space-between">
+    <section style="display: flex; flex-direction: column; gap: 10px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Opponents</h2>
+      <sc-for list="{{opponents}}" as="o" hint-placeholder-count="2">
+        <button type="button" onClick="{{o.choose}}" aria-pressed="{{o.pressed}}" style="box-sizing: border-box; min-height: 88px; padding: 12px 14px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; background: #12263B; color: #EAF2F6; border: 3px solid {{o.border}}; border-radius: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: left">
+          <span style="display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700">{{o.name}}<span role="img" aria-label="Online" style="box-sizing: border-box; width: 12px; height: 12px; border-radius: 50%; background: #4FD1A5; border: 2px solid #4FD1A5"></span></span>
+          <span style="font-size: 16px; color: #9DB4C4">{{o.afloat}} ships afloat</span>
+        </button>
+      </sc-for>
+    </section>
+    <section style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 22px; font-weight: 700">{{boardTitle}}</h2>
+      <dc-import name="Board" cell="54" ships="{{ noShips }}" hits="{{ active.hits }}" misses="{{ active.misses }}" selected="{{ selected }}" on-pick="{{ pick }}" hint-size="584px,580px"></dc-import>
+    </section>
+    <section style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; color: #9DB4C4">Your fleet<span role="img" aria-label="Online" style="box-sizing: border-box; width: 12px; height: 12px; border-radius: 50%; background: #4FD1A5; border: 2px solid #4FD1A5"></span></h2>
+      <dc-import name="Board" cell="21" labels="{{ false }}" ships="{{ myShips }}" hits="{{ myHits }}" misses="{{ myMisses }}" hint-size="228px,228px"></dc-import>
+      <p style="margin: 0; font-size: 16px; color: #9DB4C4">4 ships afloat</p>
+      <sc-if value="{{hasTarget}}" hint-placeholder-val="{{ false }}">
+        <a href="Waiting.dc.html" style="margin-top: auto; box-sizing: border-box; height: 96px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #FF6B4A; color: #0B1A2B; border-radius: 16px; font-size: 28px; font-weight: 700; text-decoration: none">Fire at {{coord}}</a>
+      </sc-if>
+      <sc-if value="{{noTarget}}" hint-placeholder-val="{{ true }}">
+        <p style="margin: auto 0 0; box-sizing: border-box; height: 96px; display: flex; align-items: center; justify-content: center; text-align: center; border: 2px dashed #27425C; border-radius: 16px; font-size: 18px; color: #9DB4C4">Tap a square to aim</p>
+      </sc-if>
+    </section>
+  </div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  state = { opponent: 'Arm', selected: null };
+
+  renderVals() {
+    const data = [
+      { name: 'Arm', afloat: 4, hits: ['2,3', '2,4', '7,1'], misses: ['1,1', '4,6', '6,8', '8,3'] },
+      { name: 'Ploy', afloat: 5, hits: ['5,5'], misses: ['0,2', '3,7', '7,4'] },
+    ];
+    const active = data.find((o) => o.name === this.state.opponent);
+    const selected = this.state.selected;
+    const [r, c] = selected ? selected.split(',').map(Number) : [0, 0];
+    return {
+      opponents: data.map((o) => ({
+        ...o,
+        pressed: o.name === active.name ? 'true' : 'false',
+        border: o.name === active.name ? '#FFC83D' : 'transparent',
+        choose: () => this.setState({ opponent: o.name, selected: null }),
+      })),
+      active,
+      selected,
+      boardTitle: active.name + "'s waters",
+      noShips: [],
+      pick: (key) => this.setState({ selected: key }),
+      hasTarget: !!selected,
+      noTarget: !selected,
+      coord: 'ABCDEFGHIJ'[r] + (c + 1),
+      myShips: [
+        { r: 0, c: 1, len: 5, name: 'Carrier', art: '/_blob/86431cd17374477e3f855c592209654f' },
+        { r: 2, c: 8, len: 4, v: true, name: 'Battleship', art: '/_blob/e1e61c0d152095572bfe21e619da86fe' },
+        { r: 4, c: 2, len: 3, v: true, name: 'Cruiser', art: '/_blob/f27facd964156f71290ef1e568f52ca4' },
+        { r: 8, c: 4, len: 3, name: 'Submarine', art: '/_blob/9663be28225346d05a6d936a7815c9e2' },
+        { r: 5, c: 5, len: 2, sunk: true, name: 'Destroyer, sunk', art: '/_blob/3110f0716b5c6a391ea3ac36abc65171' },
+      ],
+      myHits: ['0,2', '5,5', '5,6'],
+      myMisses: ['3,3', '7,8', '1,6'],
+    };
+  }
+}
+</script>
+</body>
+</html>

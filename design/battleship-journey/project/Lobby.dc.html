@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Room lobby</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B1A2B}
+a{color:#FFC83D}a:hover{color:#FFE08A}
+</style>
+</helmet>
+<main style="width: 1180px; height: 820px; box-sizing: border-box; padding: 40px 56px 56px; display: flex; flex-direction: column; gap: 32px; background: #0B1A2B; color: #EAF2F6; font-family: 'DM Sans', sans-serif">
+  <header style="display: flex; justify-content: space-between; align-items: center; gap: 24px">
+    <h1 style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 48px; text-transform: uppercase">Battleship lobby</h1>
+    <a href="Main.dc.html" style="min-height: 44px; display: flex; align-items: center; font-size: 20px; font-weight: 500; color: #9DB4C4; text-decoration: none">Leave</a>
+  </header>
+  <div style="flex-grow: 1; min-height: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px">
+    <section style="box-sizing: border-box; padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; background: #12263B; border-radius: 16px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Room code</h2>
+      <p style="margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 128px; line-height: 1; letter-spacing: 14px">K7Q2</p>
+      <div role="img" aria-label="QR code placeholder for joining room K7Q2" style="box-sizing: content-box; padding: 14px; display: grid; grid-template-columns: repeat(21, 10px); grid-auto-rows: 10px; background: #EAF2F6; border-radius: 10px">
+        <sc-for list="{{qr}}" as="q" hint-placeholder-count="441">
+          <span style="background: {{q.color}}"></span>
+        </sc-for>
+      </div>
+      <p style="margin: 0; font-size: 18px; color: #9DB4C4">Scan to join, or enter the code</p>
+    </section>
+    <section style="display: flex; flex-direction: column; gap: 16px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Players 3 of 4</h2>
+      <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
+        <sc-for list="{{players}}" as="p" hint-placeholder-count="4">
+          <li style="box-sizing: border-box; height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #12263B; border-radius: 12px; font-size: 24px; font-weight: 500">
+            <span>{{p.name}}</span>
+            <span style="font-size: 16px; color: #9DB4C4">{{p.tag}}</span>
+          </li>
+        </sc-for>
+        <li style="box-sizing: border-box; height: 72px; padding: 0 20px; display: flex; align-items: center; border: 2px dashed #27425C; border-radius: 12px; font-size: 20px; color: #9DB4C4">Waiting for players</li>
+      </ul>
+      <a href="Setup.dc.html" style="margin-top: auto; box-sizing: border-box; height: 80px; display: flex; align-items: center; justify-content: center; background: #FFC83D; color: #0B1A2B; border-radius: 16px; font-size: 26px; font-weight: 700; text-decoration: none">Start game</a>
+      <p style="margin: 0; font-size: 16px; text-align: center; color: #9DB4C4">Only the host can start. Needs 2 or more players.</p>
+    </section>
+  </div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const finder = (r, c) => {
+      const inBox = (r0, c0) => {
+        const y = r - r0;
+        const x = c - c0;
+        if (y < 0 || y > 6 || x < 0 || x > 6) return null;
+        return y === 0 || y === 6 || x === 0 || x === 6 || (y >= 2 && y <= 4 && x >= 2 && x <= 4);
+      };
+      const hits = [inBox(0, 0), inBox(0, 14), inBox(14, 0)];
+      const found = hits.find((v) => v !== null);
+      return found === undefined ? null : found;
+    };
+    const qr = [];
+    for (let r = 0; r < 21; r++) {
+      for (let c = 0; c < 21; c++) {
+        const f = finder(r, c);
+        const on = f === null ? (r * 7 + c * 13 + r * c) % 3 === 0 : f;
+        qr.push({ color: on ? '#0B1A2B' : '#EAF2F6' });
+      }
+    }
+    return {
+      qr,
+      players: [
+        { name: 'Arm', tag: 'Host' },
+        { name: 'Ploy', tag: '' },
+        { name: 'Mina', tag: 'You' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

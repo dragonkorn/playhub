@@ -1,0 +1,18 @@
+{
+  "name": "playhub",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.16.1",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "dev:web": "pnpm --filter @playhub/web dev",
+    "dev:server": "pnpm --filter @playhub/server dev",
+    "build": "pnpm --filter @playhub/web build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "vitest run --passWithNoTests"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}

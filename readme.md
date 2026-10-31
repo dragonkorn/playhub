@@ -1,0 +1,69 @@
+# PlayHub
+Playhub lets a group of friends start a board game in seconds: one person creates a room, everyone else joins with a short code or QR scan, and the game is played in real time across separate devices — no app store, no sign-up, no install.
+
+The project starts with Battleship and is designed from day one so that new games can be added as plug-ins without touching the platform core.
+
+## Goals
+
+- Instant to start — create a room, share a 4-character code, play. No accounts.
+- Built for iPad and phone — touch-first, large tap targets, installable as a PWA so it opens full-screen like an app. Each game declares its target device (iPad or smartphone) and orientation.
+- Fair multiplayer — a server acts as referee. Devices only send moves; the server validates them and sends each player only what they are allowed to see. Hidden information (like ship positions) never leaves the server.
+- 2+ players — every game declares its own player range; the platform handles lobbies, turn order, and players dropping or rejoining.
+- Easy to extend — adding a game means adding one folder that implements a shared GameDefinition contract.
+- Low cost — runs entirely on free tiers for small groups.
+
+
+## Non-goals (for now)
+ 
+- User accounts, profiles, rankings, or matchmaking with strangers
+- Native iOS/Android apps
+- AI opponents
+- Monetization
+
+
+## How it works
+ 
+```
+iPad A ─┐
+iPad B ─┼── WebSocket ──► Room "K7Q2" (server) ──► runs game logic
+iPad C ─┘                    │
+                             └─ sends each player their own view
+```
+ 
+- **Platform layer** (written once): game picker, room creation, lobby, realtime connection, turn handling, reconnect, end-of-game screen.
+- **Game layer** (one folder per game): rules, board UI, and per-player views.
+
+## Tech stack
+ 
+| Layer | Choice |
+|---|---|
+| Frontend | React + TypeScript + Vite + Tailwind CSS |
+| Realtime server | Cloudflare Workers + Durable Objects (one object per room) |
+| Hosting | Cloudflare Pages |
+| Tests | Vitest |
+| Install | Progressive Web App (Add to Home Screen) |
+
+## Engineering principles
+
+- **Spec-driven development** — specs are written before code, and code follows the spec.
+- **Design mockups stay separate** — mockups live apart from the real project, and production code never imports them.
+- **Repository pattern** — platform and game code depend on interfaces, not on external systems directly, so a provider can be replaced by writing a new adapter.
+- **Open source first** — use a maintained open source library when one fits, and build from scratch only when none does.
+- **Free tier only** — every service must run on its free tier, with no paid plans.
+
+## Roadmap
+
+### 1. Battleship (first game)
+
+Target device: iPad. Players: 2 to 10. Every player gets a 10×10 board and 5 ships, whatever the player count.
+
+- **Setup phase:** everyone places their fleet at the same time, then taps *Ready*.
+- **Battle phase:** on your turn, fire one shot. The host sets the targeting mode for the game: *round robin* (each player shoots the next player in turn order) or *free choice* (choose any opponent's board).
+- Everyone sees all shot results, and sunk ships are announced by name.
+- A player whose ships are all sunk is eliminated and stays to watch. Last fleet afloat wins.
+- If a player disconnects, the host chooses to wait or mark them as lost. If the host disconnects, the host role passes to the next connected player in turn order.
+
+### 2. Connect Four (second game)
+
+Proves the game contract works for more than one game. Starts after Battleship is finished.
+

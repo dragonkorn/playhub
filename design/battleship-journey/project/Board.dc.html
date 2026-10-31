@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Board component</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="position: relative; display: inline-block; font-family: 'DM Sans', sans-serif; color: #9DB4C4">
+  <div style="display: grid; grid-template-columns: {{cols}}; grid-template-rows: {{rows}}; gap: 2px">
+    <sc-for list="{{cells}}" as="c" hint-placeholder-count="100">
+      <sc-if value="{{c.isHead}}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">{{c.text}}</div>
+      </sc-if>
+      <sc-if value="{{c.isPlain}}" hint-placeholder-val="{{ true }}">
+        <div style="background: {{c.bg}}; border-radius: {{radius}}px"></div>
+      </sc-if>
+      <sc-if value="{{c.isButton}}" hint-placeholder-val="{{ false }}">
+        <button type="button" aria-label="{{c.label}}" onClick="{{c.pick}}" style="padding: 0; border: none; cursor: pointer; background: {{c.bg}}; outline: {{c.outline}}; outline-offset: -3px; border-radius: {{radius}}px"></button>
+      </sc-if>
+    </sc-for>
+  </div>
+  <sc-for list="{{art}}" as="s" hint-placeholder-count="0">
+    <img src="{{s.art}}" alt="{{s.alt}}" style="position: absolute; left: {{s.left}}px; top: {{s.top}}px; width: {{s.w}}px; height: {{s.h}}px; transform: {{s.transform}}; transform-origin: 0 0; pointer-events: none">
+  </sc-for>
+  <div style="position: absolute; left: 0; top: 0; display: grid; grid-template-columns: {{cols}}; grid-template-rows: {{rows}}; gap: 2px; pointer-events: none">
+    <sc-for list="{{cells}}" as="c" hint-placeholder-count="100">
+      <div style="display: flex; align-items: center; justify-content: center; background: {{c.tint}}; border-radius: {{radius}}px">
+        <sc-if value="{{c.hit}}" hint-placeholder-val="{{ false }}">
+          <svg aria-hidden="true" viewBox="0 0 24 24" style="width: 62%; height: 62%" fill="none" stroke="#0B1A2B" stroke-width="4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+        </sc-if>
+        <sc-if value="{{c.miss}}" hint-placeholder-val="{{ false }}">
+          <span style="width: 26%; height: 26%; border-radius: 50%; background: #9DB4C4"></span>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"cell":{"editor":null},"labels":{"editor":null},"ships":{"editor":null},"hits":{"editor":null},"misses":{"editor":null},"selected":{"editor":null},"onPick":{"editor":null},"$preview":{"width":584,"height":580}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const cell = Number(p.cell ?? 54);
+    const labels = p.labels ?? true;
+    const ships = p.ships ?? [{ r: 1, c: 1, len: 5 }, { r: 3, c: 7, len: 4, v: true }];
+    const hits = new Set(p.hits ?? ['1,2']);
+    const misses = new Set(p.misses ?? ['6,6']);
+    const plainShip = new Set();
+    const artShip = new Set();
+    const sunk = new Set();
+    ships.forEach((s) => {
+      for (let i = 0; i < s.len; i++) {
+        const key = (s.r + (s.v ? i : 0)) + ',' + (s.c + (s.v ? 0 : i));
+        (s.art ? artShip : plainShip).add(key);
+        if (s.sunk) sunk.add(key);
+      }
+    });
+    const cells = [];
+    if (labels) {
+      cells.push({ isHead: true, text: '', tint: 'transparent' });
+      for (let c = 1; c <= 10; c++) cells.push({ isHead: true, text: String(c), tint: 'transparent' });
+    }
+    for (let r = 0; r < 10; r++) {
+      const letter = 'ABCDEFGHIJ'[r];
+      if (labels) cells.push({ isHead: true, text: letter, tint: 'transparent' });
+      for (let c = 0; c < 10; c++) {
+        const key = r + ',' + c;
+        const onArt = artShip.has(key);
+        const hit = hits.has(key) && !sunk.has(key);
+        const miss = misses.has(key);
+        const bg = onArt ? '#16324A' : hit ? '#FF6B4A' : plainShip.has(key) ? '#6E8FA8' : '#16324A';
+        const isButton = !!p.onPick && !hits.has(key) && !miss;
+        cells.push({
+          hit,
+          miss,
+          bg,
+          isButton,
+          isPlain: !isButton,
+          tint: hit && onArt ? 'rgba(255, 107, 74, 0.6)' : 'transparent',
+          label: 'Target ' + letter + (c + 1),
+          pick: () => p.onPick && p.onPick(key),
+          outline: p.selected === key ? '3px solid #FFC83D' : 'none',
+        });
+      }
+    }
+    const offsetX = labels ? 26 : 0;
+    const offsetY = labels ? 22 : 0;
+    return {
+      cells,
+      cols: (labels ? '24px ' : '') + 'repeat(10, ' + cell + 'px)',
+      rows: (labels ? '20px ' : '') + 'repeat(10, ' + cell + 'px)',
+      radius: cell > 24 ? 6 : 3,
+      art: ships.filter((s) => s.art).map((s) => ({
+        art: s.art,
+        alt: s.name ?? '',
+        left: offsetX + s.c * (cell + 2) + (s.v ? cell : 0),
+        top: offsetY + s.r * (cell + 2),
+        w: s.len * cell + (s.len - 1) * 2,
+        h: cell,
+        transform: s.v ? 'rotate(90deg)' : 'none',
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>
