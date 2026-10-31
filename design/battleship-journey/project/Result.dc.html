@@ -21,9 +21,9 @@ a{color:#FFC83D}a:hover{color:#FFE08A}
   </section>
   <section style="display: flex; flex-direction: column; gap: 12px">
     <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Final order</h2>
-    <ol style="margin: 0 0 20px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
-      <sc-for list="{{standings}}" as="s" hint-placeholder-count="3">
-        <li style="box-sizing: border-box; height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #12263B; border-radius: 12px; font-size: 24px; font-weight: 500">
+    <ol style="margin: 0 0 12px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px">
+      <sc-for list="{{standings}}" as="s" hint-placeholder-count="10">
+        <li style="box-sizing: border-box; height: 40px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #12263B; border-radius: 8px; font-size: 18px; font-weight: 500">
           <span>{{s.place}}. {{s.name}}</span>
           <span style="font-size: 16px; color: #9DB4C4">{{s.note}}</span>
         </li>
@@ -42,6 +42,13 @@ class Component extends DCLogic {
         { place: 1, name: 'Arm', note: '2 ships afloat' },
         { place: 2, name: 'Ploy', note: 'Sunk' },
         { place: 3, name: 'Mina', note: 'You' },
+        { place: 4, name: 'Ben', note: 'Sunk' },
+        { place: 5, name: 'Tee', note: 'Sunk' },
+        { place: 6, name: 'Fah', note: 'Sunk' },
+        { place: 7, name: 'Kit', note: 'Sunk' },
+        { place: 8, name: 'Joe', note: 'Sunk' },
+        { place: 9, name: 'Nan', note: 'Sunk' },
+        { place: 10, name: 'Pim', note: 'Lost' },
       ],
     };
   }

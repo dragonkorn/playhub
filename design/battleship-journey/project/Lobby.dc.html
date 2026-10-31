@@ -31,24 +31,34 @@ a{color:#FFC83D}a:hover{color:#FFE08A}
       <p style="margin: 0; font-size: 18px; color: #9DB4C4">Scan to join, or enter the code</p>
     </section>
     <section style="display: flex; flex-direction: column; gap: 16px">
-      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Players 3 of 4</h2>
-      <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
-        <sc-for list="{{players}}" as="p" hint-placeholder-count="4">
-          <li style="box-sizing: border-box; height: 72px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #12263B; border-radius: 12px; font-size: 24px; font-weight: 500">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Players 7 of 10</h2>
+      <ul style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{players}}" as="p" hint-placeholder-count="7">
+          <li style="box-sizing: border-box; height: 52px; padding: 0 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #12263B; border-radius: 10px; font-size: 20px; font-weight: 500">
             <span>{{p.name}}</span>
-            <span style="font-size: 16px; color: #9DB4C4">{{p.tag}}</span>
+            <span style="font-size: 15px; color: #9DB4C4">{{p.tag}}</span>
           </li>
         </sc-for>
-        <li style="box-sizing: border-box; height: 72px; padding: 0 20px; display: flex; align-items: center; border: 2px dashed #27425C; border-radius: 12px; font-size: 20px; color: #9DB4C4">Waiting for players</li>
       </ul>
-      <a href="Setup.dc.html" style="margin-top: auto; box-sizing: border-box; height: 80px; display: flex; align-items: center; justify-content: center; background: #FFC83D; color: #0B1A2B; border-radius: 16px; font-size: 26px; font-weight: 700; text-decoration: none">Start game</a>
-      <p style="margin: 0; font-size: 16px; text-align: center; color: #9DB4C4">Only the host can start. Needs 2 or more players.</p>
+      <h2 style="margin: 8px 0 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Targeting</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{modes}}" as="m" hint-placeholder-count="2">
+          <button type="button" aria-pressed="{{m.pressed}}" onClick="{{m.pick}}" style="box-sizing: border-box; height: 84px; padding: 8px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: {{m.bg}}; color: {{m.fg}}; border: 2px solid {{m.line}}; border-radius: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif">
+            <span style="font-size: 20px; font-weight: 700">{{m.label}}</span>
+            <span style="font-size: 15px">{{m.hint}}</span>
+          </button>
+        </sc-for>
+      </div>
+      <a href="{{startHref}}" style="margin-top: auto; box-sizing: border-box; height: 80px; display: flex; align-items: center; justify-content: center; background: #FFC83D; color: #0B1A2B; border-radius: 16px; font-size: 26px; font-weight: 700; text-decoration: none">Start game</a>
+      <p style="margin: 0; font-size: 16px; text-align: center; color: #9DB4C4">Only the host can start or change targeting.</p>
     </section>
   </div>
 </main>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
 class Component extends DCLogic {
+  state = { mode: 'free' };
+
   renderVals() {
     const finder = (r, c) => {
       const inBox = (r0, c0) => {
@@ -72,10 +82,29 @@ class Component extends DCLogic {
     return {
       qr,
       players: [
-        { name: 'Arm', tag: 'Host' },
+        { name: 'Mina', tag: 'You, host' },
+        { name: 'Arm', tag: '' },
         { name: 'Ploy', tag: '' },
-        { name: 'Mina', tag: 'You' },
+        { name: 'Ben', tag: '' },
+        { name: 'Tee', tag: '' },
+        { name: 'Nan', tag: '' },
+        { name: 'Joe', tag: '' },
       ],
+      modes: [
+        { id: 'free', label: 'Free choice', hint: 'Shoot any opponent' },
+        { id: 'robin', label: 'Round robin', hint: 'Shoot the next player' },
+      ].map((m) => {
+        const on = m.id === this.state.mode;
+        return {
+          ...m,
+          pressed: on ? 'true' : 'false',
+          bg: on ? '#FFC83D' : '#12263B',
+          fg: on ? '#0B1A2B' : '#EAF2F6',
+          line: on ? '#FFC83D' : '#27425C',
+          pick: () => this.setState({ mode: m.id }),
+        };
+      }),
+      startHref: 'Setup.dc.html',
     };
   }
 }

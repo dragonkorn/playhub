@@ -20,11 +20,12 @@ a{color:#FFC83D}a:hover{color:#FFE08A}
     <p style="margin: 0; font-size: 18px; color: #9DB4C4">{{subline}}</p>
   </header>
   <div style="flex-grow: 1; min-height: 0; display: grid; grid-template-columns: 250px 584px 250px; justify-content: space-between">
-    <section style="display: flex; flex-direction: column; gap: 10px">
-      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Turn order</h2>
-      <sc-for list="{{players}}" as="p" hint-placeholder-count="3">
-        <div style="box-sizing: border-box; min-height: 80px; padding: 12px 14px; display: flex; flex-direction: column; justify-content: center; gap: 4px; background: #12263B; border: 3px solid {{p.border}}; border-radius: 12px">
-          <span style="display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700">{{p.name}}<span role="img" aria-label="{{p.conn}}" style="box-sizing: border-box; width: 12px; height: 12px; border-radius: 50%; background: {{p.dotFill}}; border: 2px solid {{p.dotLine}}"></span></span>
+    <section style="display: flex; flex-direction: column; gap: 6px">
+      <h2 style="margin: 0 0 4px; font-size: 18px; font-weight: 700; color: #9DB4C4">Turn order</h2>
+      <sc-for list="{{players}}" as="p" hint-placeholder-count="10">
+        <div style="box-sizing: border-box; height: 58px; padding: 0 12px; display: flex; align-items: center; gap: 10px; background: #12263B; border: 3px solid {{p.border}}; border-radius: 12px">
+          <span role="img" aria-label="{{p.conn}}" style="flex: none; box-sizing: border-box; width: 12px; height: 12px; border-radius: 50%; background: {{p.dotFill}}; border: 2px solid {{p.dotLine}}"></span>
+          <span style="flex-grow: 1; font-size: 20px; font-weight: 700">{{p.name}}</span>
           <span style="font-size: 16px; color: #9DB4C4">{{p.status}}</span>
         </div>
       </sc-for>
@@ -34,52 +35,70 @@ a{color:#FFC83D}a:hover{color:#FFE08A}
       <dc-import name="Board" cell="54" ships="{{ ships }}" hits="{{ hits }}" misses="{{ misses }}" hint-size="584px,580px"></dc-import>
     </section>
     <section style="display: flex; flex-direction: column; gap: 12px">
+      <sc-if value="{{isGuest}}" hint-placeholder-val="{{ false }}">
+        <h2 style="margin: 0; font-size: 22px; font-weight: 700">Ploy is reconnecting</h2>
+        <p style="margin: 0; font-size: 18px; line-height: 1.4; color: #9DB4C4">Mina is the host and decides whether to wait or mark Ploy as lost.</p>
+      </sc-if>
       <sc-if value="{{isOpen}}" hint-placeholder-val="{{ true }}">
         <h2 style="margin: 0; font-size: 22px; font-weight: 700">Ploy is reconnecting</h2>
-        <p style="margin: 0; font-size: 18px; line-height: 1.4; color: #9DB4C4">Wait for Ploy to return, or mark Ploy as lost to continue the game.</p>
+        <p style="margin: 0; font-size: 18px; line-height: 1.4; color: #9DB4C4">You're the host. Wait for Ploy to return, or mark Ploy as lost to continue the game.</p>
+        <button type="button" onClick="{{wait}}" style="margin-top: auto; height: 80px; background: #FFC83D; color: #0B1A2B; border: none; border-radius: 16px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 26px; font-weight: 700">Wait</button>
+        <button type="button" onClick="{{ask}}" style="height: 72px; background: #12263B; color: #FF6B4A; border: 2px solid #FF6B4A; border-radius: 16px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700">Mark as lost</button>
       </sc-if>
       <sc-if value="{{isWaiting}}" hint-placeholder-val="{{ false }}">
         <h2 style="margin: 0; font-size: 22px; font-weight: 700">Waiting for Ploy</h2>
         <p style="margin: 0; font-size: 18px; line-height: 1.4; color: #9DB4C4">The game resumes when Ploy returns. You can still mark Ploy as lost.</p>
+        <button type="button" onClick="{{ask}}" style="margin-top: auto; height: 72px; background: #12263B; color: #FF6B4A; border: 2px solid #FF6B4A; border-radius: 16px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700">Mark as lost</button>
+      </sc-if>
+      <sc-if value="{{isConfirm}}" hint-placeholder-val="{{ false }}">
+        <h2 style="margin: 0; font-size: 22px; font-weight: 700">Mark Ploy as lost?</h2>
+        <p style="margin: 0; font-size: 18px; line-height: 1.4; color: #9DB4C4">Ploy's fleet leaves the game, even if Ploy comes back. This can't be undone.</p>
+        <button type="button" onClick="{{wait}}" style="margin-top: auto; height: 72px; background: #12263B; color: #EAF2F6; border: 2px solid #27425C; border-radius: 16px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700">Keep waiting</button>
+        <button type="button" onClick="{{markLost}}" style="height: 80px; background: #FF6B4A; color: #0B1A2B; border: none; border-radius: 16px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 24px; font-weight: 700">Mark as lost</button>
       </sc-if>
       <sc-if value="{{isLost}}" hint-placeholder-val="{{ false }}">
         <h2 style="margin: 0; font-size: 22px; font-weight: 700">Ploy marked as lost</h2>
-        <p style="margin: 0; font-size: 18px; line-height: 1.4; color: #9DB4C4">Ploy's fleet is out of the game. Turn moves to you.</p>
-        <a href="Battle.dc.html" style="margin-top: auto; box-sizing: border-box; height: 80px; display: flex; align-items: center; justify-content: center; background: #FFC83D; color: #0B1A2B; border-radius: 16px; font-size: 26px; font-weight: 700; text-decoration: none">Continue</a>
-      </sc-if>
-      <sc-if value="{{isOpen}}" hint-placeholder-val="{{ true }}">
-        <button type="button" onClick="{{wait}}" style="margin-top: auto; height: 80px; background: #FFC83D; color: #0B1A2B; border: none; border-radius: 16px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 26px; font-weight: 700">Wait</button>
-      </sc-if>
-      <sc-if value="{{canMark}}" hint-placeholder-val="{{ true }}">
-        <button type="button" onClick="{{markLost}}" style="height: 72px; background: #12263B; color: #FF6B4A; border: 2px solid #FF6B4A; border-radius: 16px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700">Mark as lost</button>
+        <p style="margin: 0; font-size: 18px; line-height: 1.4; color: #9DB4C4">Ploy's fleet is out of the game. Turn moves to Ben.</p>
+        <a href="Waiting.dc.html" style="margin-top: auto; box-sizing: border-box; height: 80px; display: flex; align-items: center; justify-content: center; background: #FFC83D; color: #0B1A2B; border-radius: 16px; font-size: 26px; font-weight: 700; text-decoration: none">Continue</a>
       </sc-if>
     </section>
   </div>
 </main>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+<script type="text/x-dc" data-dc-script data-props='{"host":{"editor":"boolean","default":true},"$preview":{"width":1180,"height":820}}'>
 class Component extends DCLogic {
   state = { choice: 'open' };
 
   renderVals() {
+    const host = this.props.host ?? true;
     const choice = this.state.choice;
     const lost = choice === 'lost';
-    const online = { conn: 'Online', dotFill: '#4FD1A5', dotLine: '#4FD1A5' };
+    const row = (name, status) => ({ name, status, border: 'transparent', conn: 'Online', dotFill: '#4FD1A5', dotLine: '#4FD1A5' });
+    const ploy = lost
+      ? { ...row('Ploy', 'Out'), conn: 'Lost', dotFill: '#FF6B4A', dotLine: '#FF6B4A' }
+      : { ...row('Ploy', 'Turn'), border: '#FFC83D', conn: 'Reconnecting', dotFill: 'transparent', dotLine: '#FFC83D' };
     return {
       headline: lost ? 'Ploy is out' : 'Waiting for Ploy',
-      subline: lost ? 'Your turn is next' : "Ploy lost connection on their turn",
+      subline: lost ? 'Ben is next' : 'Ploy lost connection on their turn',
       players: [
-        { name: 'Arm', status: 'Done', border: 'transparent', ...online },
-        lost
-          ? { name: 'Ploy', status: 'Out', border: 'transparent', conn: 'Lost', dotFill: '#FF6B4A', dotLine: '#FF6B4A' }
-          : { name: 'Ploy', status: 'Their turn', border: '#FFC83D', conn: 'Reconnecting', dotFill: 'transparent', dotLine: '#FFC83D' },
-        { name: 'Mina', status: 'You', border: 'transparent', ...online },
+        row('Arm', host ? '' : 'You'),
+        ploy,
+        row('Ben', lost ? 'Next' : ''),
+        row('Tee', ''),
+        row('Nan', ''),
+        row('Joe', ''),
+        row('Fah', ''),
+        row('Pim', ''),
+        row('Kit', ''),
+        row('Mina', host ? 'You, host' : 'Host'),
       ],
-      isOpen: choice === 'open',
-      isWaiting: choice === 'waiting',
-      isLost: lost,
-      canMark: !lost,
+      isGuest: !host,
+      isOpen: host && choice === 'open',
+      isWaiting: host && choice === 'waiting',
+      isConfirm: host && choice === 'confirm',
+      isLost: host && lost,
       wait: () => this.setState({ choice: 'waiting' }),
+      ask: () => this.setState({ choice: 'confirm' }),
       markLost: () => this.setState({ choice: 'lost' }),
       ships: [
         { r: 0, c: 1, len: 5, name: 'Carrier', art: '/_blob/86431cd17374477e3f855c592209654f' },

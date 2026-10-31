@@ -7,6 +7,7 @@ The project starts with Battleship and is designed from day one so that new game
 
 - Instant to start — create a room, share a 4-character code, play. No accounts.
 - Built for iPad and phone — touch-first, large tap targets, installable as a PWA so it opens full-screen like an app. Each game declares its target device (iPad or smartphone) and orientation.
+- Localized — Thai is the main language, and all player-facing text is translatable, including text inside each game.
 - Fair multiplayer — a server acts as referee. Devices only send moves; the server validates them and sends each player only what they are allowed to see. Hidden information (like ship positions) never leaves the server.
 - 2+ players — every game declares its own player range; the platform handles lobbies, turn order, and players dropping or rejoining.
 - Easy to extend — adding a game means adding one folder that implements a shared GameDefinition contract.
@@ -39,7 +40,7 @@ iPad C ─┘                    │
 |---|---|
 | Frontend | React + TypeScript + Vite + Tailwind CSS |
 | Realtime server | Cloudflare Workers + Durable Objects (one object per room) |
-| Hosting | Cloudflare Pages |
+| Hosting | Same Cloudflare Worker, serving static assets |
 | Tests | Vitest |
 | Install | Progressive Web App (Add to Home Screen) |
 
@@ -50,6 +51,9 @@ iPad C ─┘                    │
 - **Repository pattern** — platform and game code depend on interfaces, not on external systems directly, so a provider can be replaced by writing a new adapter.
 - **Open source first** — use a maintained open source library when one fits, and build from scratch only when none does.
 - **Free tier only** — every service must run on its free tier, with no paid plans.
+- **Decisions are recorded** — significant decisions are saved as ADRs in `docs/adr/`.
+- **Test first** — every behavior starts as a failing test, then code is written until it passes.
+- **Living wiki** — `wiki/` explains how the system works and is updated with every change.
 
 ## Roadmap
 

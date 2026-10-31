@@ -42,8 +42,8 @@ a{color:#FFC83D}a:hover{color:#FFE08A}
     </section>
     <section style="display: flex; flex-direction: column; gap: 10px">
       <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">Players</h2>
-      <sc-for list="{{players}}" as="p" hint-placeholder-count="3">
-        <div style="box-sizing: border-box; height: 56px; padding: 0 14px; display: flex; justify-content: space-between; align-items: center; background: #12263B; border-radius: 12px; font-size: 18px">
+      <sc-for list="{{players}}" as="p" hint-placeholder-count="10">
+        <div style="box-sizing: border-box; height: 46px; padding: 0 14px; display: flex; justify-content: space-between; align-items: center; background: #12263B; border-radius: 10px; font-size: 18px">
           <span style="font-weight: 500">{{p.name}}</span>
           <span style="font-size: 16px; color: #9DB4C4">{{p.status}}</span>
         </div>
@@ -80,6 +80,13 @@ class Component extends DCLogic {
         { name: 'Mina', status: 'Placing' },
         { name: 'Arm', status: 'Ready' },
         { name: 'Ploy', status: 'Placing' },
+        { name: 'Ben', status: 'Ready' },
+        { name: 'Tee', status: 'Ready' },
+        { name: 'Nan', status: 'Placing' },
+        { name: 'Joe', status: 'Ready' },
+        { name: 'Fah', status: 'Placing' },
+        { name: 'Pim', status: 'Ready' },
+        { name: 'Kit', status: 'Placing' },
       ],
     };
   }
