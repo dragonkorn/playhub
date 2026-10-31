@@ -1,6 +1,6 @@
 // Plays the real app in headless Chrome against a running `wrangler dev`.
 // Covers what unit tests can't see: wiring, translations, drag, layouts at 10 players.
-// Run: node scripts/e2e-ui.mjs [baseUrl] [screenshotDir]
+// Run: node scripts/e2e-ui.mjs [baseUrl] [screenshotDir] [caching]
 import { mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join as joinPath } from "node:path";
@@ -8,6 +8,7 @@ import { chromium } from "playwright-core";
 
 const base = process.argv[2] ?? "http://localhost:8787";
 const shots = process.argv[3] ?? joinPath(tmpdir(), "playhub-e2e");
+const only = process.argv[4];
 mkdirSync(shots, { recursive: true });
 
 const browser = await chromium.launch({ channel: "chrome", headless: true });
@@ -251,11 +252,42 @@ async function languageAndScale() {
   await page.context().close();
 }
 
-await fullGame();
-await tenPlayers();
-await elimination();
-await languageAndScale();
-await disconnect();
+/** Spec C6: after the first visit, nothing the app needs comes over the network. */
+async function caching() {
+  const page = await device("cache");
+  await page.goto(base);
+  await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
+  await pause(2000);
+  await page.reload({ waitUntil: "networkidle" });
+  await pause(1000);
+
+  const responses = [];
+  page.on("response", (r) => responses.push(r));
+  await page.reload({ waitUntil: "networkidle" });
+
+  const isApp = (url) => url.startsWith(base) || /fonts\.(googleapis|gstatic)\.com/.test(url);
+  const assets = responses.filter((r) => isApp(r.url()) && !r.url().includes("/rooms"));
+  const network = assets.filter((r) => !r.fromServiceWorker());
+  for (const r of network) console.error(`  from network: ${r.url()}`);
+  check(assets.length > 0 && network.length === 0, `repeat visit served ${assets.length} assets with no downloads`);
+  check(assets.some((r) => /fonts\.gstatic\.com/.test(r.url())), "fonts come from the service worker");
+
+  const hashed = assets.find((r) => r.url().includes("/assets/"));
+  const headers = (await fetch(hashed.url(), { method: "HEAD" })).headers.get("cache-control") ?? "";
+  check(headers.includes("immutable"), `hashed files are immutable (${headers})`);
+  const html = (await fetch(base, { method: "HEAD" })).headers.get("cache-control") ?? "";
+  check(!html.includes("immutable"), "HTML still revalidates, so deploys reach players");
+  await page.context().close();
+}
+
+await caching();
+if (only !== "caching") {
+  await fullGame();
+  await tenPlayers();
+  await elimination();
+  await languageAndScale();
+  await disconnect();
+}
 await browser.close();
 
 for (const error of errors.slice(0, 10)) console.error(error);

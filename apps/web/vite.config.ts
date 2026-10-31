@@ -14,7 +14,21 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      workbox: { navigateFallbackDenylist: [/^\/rooms/] },
+      workbox: {
+        navigateFallbackDenylist: [/^\/rooms/],
+        globPatterns: ["**/*.{js,css,html,png,svg,webmanifest,m4a}"],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "fonts",
+              expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
+      },
       manifest: {
         name: "PlayHub",
         short_name: "PlayHub",

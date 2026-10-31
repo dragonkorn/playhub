@@ -263,6 +263,7 @@ Hibernation is mandatory. Without it, the free tier covers about 37 games a day 
 - **C3** `SessionRepository` wraps `localStorage`, in `apps/web/src/repositories/`, so storage can be swapped and tested.
 - **C4** The client trusts snapshots and keeps no game rules. It shows a connection-lost state while its own socket is down.
 - **C5** Game screens show only on the game's declared device and orientation. On any other device, the client shows a translated notice and doesn't block joining.
+- **C6** After the first visit, playing downloads no app assets. The service worker precaches all build output, including images and sound, and caches fonts on first use. Hashed files under `/assets/` are served `immutable` for one year. HTML and `sw.js` still revalidate, so a new deploy reaches players, and only changed files download.
 
 ## 12. Localization
 
@@ -297,5 +298,6 @@ Unless noted, these run in Vitest against `engine.ts` with the in-memory reposit
 16. Every registered game passes the test kit. (G4)
 17. Manual on `wrangler dev`: a room hibernates, wakes, and serves a reconnecting player their own view. (V1 to V4)
 18. Manual on a real iPad: sleep and wake reconnects, and joining from a QR scan works. (R4, D2)
+19. A repeat visit gets every app asset and font from the service worker, and `/assets/` files are `immutable`. (C6)
 
 `pnpm test:e2e` covers real sockets, Durable Object storage and alarms, and the app in headless Chrome. Run it against a local server for UI or protocol changes.

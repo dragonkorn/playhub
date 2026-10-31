@@ -10,6 +10,7 @@
     "dev:web": "pnpm --filter @playhub/web dev",
     "dev:server": "pnpm --filter @playhub/server dev",
     "build": "pnpm --filter @playhub/web build",
+    "deploy": "pnpm build && pnpm --filter @playhub/server deploy",
     "typecheck": "pnpm -r typecheck",
     "test": "vitest run --passWithNoTests",
     "test:e2e": "node scripts/e2e-room.mjs && node scripts/e2e-ui.mjs"

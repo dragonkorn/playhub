@@ -16,6 +16,7 @@
     "Reconnecting.dc.html": { "x": 1260, "y": 1880, "w": 1180, "h": 820, "title": "6b Player disconnected", "is_interactive": true },
     "ReconnectingGuest.dc.html": { "x": 2520, "y": 1880, "w": 1180, "h": 820, "title": "6c Player disconnected: non-host view", "is_interactive": true },
     "BattleRobin.dc.html": { "x": 3780, "y": 1880, "w": 1180, "h": 820, "title": "5b Battle: round robin", "is_interactive": true },
+    "Feedback.dc.html": { "x": 0, "y": 2820, "w": 1180, "h": 820, "title": "9 Shot feedback and sound", "is_interactive": true },
     "Board.dc.html": { "x": 0, "y": 1880, "w": 584, "h": 580, "title": "Shared board component" }
   },
   "order": [
@@ -30,6 +31,7 @@
     "ReconnectingGuest.dc.html",
     "Eliminated.dc.html",
     "Result.dc.html",
+    "Feedback.dc.html",
     "Board.dc.html"
   ],
   "notes": {

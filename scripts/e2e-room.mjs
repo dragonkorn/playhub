@@ -67,11 +67,10 @@ assert(!JSON.stringify(a.snapshot).includes(host.token), "snapshot has no token"
 a.send({ type: "setOptions", options: { targeting: "robin" } });
 await b.until((s) => s.options.targeting === "robin", "options reach guest");
 a.send({ type: "start" });
-await b.until((s) => s.phase === "playing", "game started");
+await Promise.all([a, b].map((c) => c.until((s) => s.phase === "playing" && s.view, "game started")));
 
 for (const client of [a, b]) client.send({ type: "move", version: client.snapshot.version, move: { type: "ready", fleet } });
-await a.until((s) => s.view.phase === "battle", "battle started");
-await b.until((s) => s.view.phase === "battle", "guest sees battle");
+await Promise.all([a, b].map((c) => c.until((s) => s.view?.phase === "battle", "battle started")));
 assert(b.snapshot.view.allFleets === null, "fleets hidden during play");
 
 // Reconnect mid-game: the guest gets their own view back.

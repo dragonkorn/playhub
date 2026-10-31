@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>Shot feedback</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;700;800&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B1A2B}
+button{cursor:pointer}
+button:disabled{cursor:default}
+@keyframes fx-flight{from{transform:scale(2.6);opacity:.15}to{transform:scale(.7);opacity:.95}}
+@keyframes fx-ripple{from{transform:scale(.3);opacity:.9}to{transform:scale(2.3);opacity:0}}
+@keyframes fx-drop{from{transform:translate(0,0);opacity:1}to{transform:translate(var(--dx),var(--dy));opacity:0}}
+@keyframes fx-burst{0%{transform:scale(.2);opacity:1}60%{transform:scale(1.6);opacity:1}100%{transform:scale(2.1);opacity:0}}
+@keyframes fx-flash{from{opacity:.55}to{opacity:0}}
+@keyframes fx-shake{0%,100%{transform:translate(0,0)}15%{transform:translate(-8px,4px)}30%{transform:translate(7px,-5px)}45%{transform:translate(-6px,-3px)}60%{transform:translate(5px,4px)}80%{transform:translate(-3px,2px)}}
+@keyframes fx-bigshake{0%,100%{transform:translate(0,0)}10%{transform:translate(-16px,8px)}22%{transform:translate(14px,-10px)}34%{transform:translate(-12px,-6px)}46%{transform:translate(10px,8px)}60%{transform:translate(-7px,4px)}80%{transform:translate(4px,-2px)}}
+@keyframes fx-banner{0%{transform:translate(-50%,-50%) scale(.6);opacity:0}14%{transform:translate(-50%,-50%) scale(1.06);opacity:1}20%{transform:translate(-50%,-50%) scale(1);opacity:1}85%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+@keyframes fx-sweep{0%{transform:translateX(-110%)}18%,80%{transform:translateX(0)}100%{transform:translateX(110%)}}
+@keyframes fx-edge{0%,100%{opacity:0}20%{opacity:1}}
+@keyframes fx-fade{0%{opacity:0}12%,85%{opacity:1}100%{opacity:0}}
+@keyframes fx-enter{from{opacity:.25}to{opacity:1}}
+@media (prefers-reduced-motion: reduce){
+  .fx-move{animation:fx-fade 1s both !important}
+}
+</style>
+</helmet>
+<main style="position: relative; overflow: hidden; width: 1180px; height: 820px; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: #0B1A2B; color: #EAF2F6; font-family: 'Sarabun', sans-serif; animation: {{shake}}">
+  <header style="height: 64px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; gap: 24px; background: #12263B; border-radius: 12px">
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 34px">{{headline}}</h1>
+    <p style="margin: 0; font-size: 18px; color: #9DB4C4">{{subline}}</p>
+  </header>
+  <div style="flex-grow: 1; min-height: 0; display: grid; grid-template-columns: 250px 584px 250px; justify-content: space-between">
+    <section style="display: flex; flex-direction: column; gap: 8px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">ดูจากมุมของ</h2>
+      <sc-for list="{{roles}}" as="r" hint-placeholder-count="3">
+        <button type="button" onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="height: 56px; padding: 0 12px; text-align: left; background: {{r.bg}}; color: {{r.fg}}; border: 2px solid {{r.line}}; border-radius: 12px; font-family: 'Sarabun', sans-serif; font-size: 18px; font-weight: 700">{{r.label}}</button>
+      </sc-for>
+      <h2 style="margin: 16px 0 0; font-size: 18px; font-weight: 700; color: #9DB4C4">สลับกระดาน</h2>
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+        <button type="button" onClick="{{t.pick}}" disabled="{{t.locked}}" aria-pressed="{{t.pressed}}" style="height: 56px; padding: 0 12px; text-align: left; background: #12263B; color: {{t.fg}}; border: 3px solid {{t.line}}; border-radius: 12px; font-family: 'Sarabun', sans-serif; font-size: 20px; font-weight: 700">{{t.label}}</button>
+      </sc-for>
+      <p style="margin: 8px 0 0; font-size: 16px; line-height: 1.4; color: #9DB4C4">{{tabHint}}</p>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 22px; font-weight: 700">{{boardTitle}}</h2>
+      <div style="position: relative; width: 584px; height: 580px; animation: {{enter}}">
+        <dc-import name="Board" cell="54" ships="{{ board.ships }}" hits="{{ board.hits }}" misses="{{ board.misses }}" hint-size="584px,580px"></dc-import>
+
+        <sc-if value="{{isFlight}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: {{fx.left}}px; top: {{fx.top}}px; width: 54px; height: 54px; box-sizing: border-box; border: 4px solid {{flightColor}}; border-radius: 50%; background: rgba(11, 26, 43, 0.55); animation: fx-flight .6s ease-in forwards"></div>
+        </sc-if>
+
+        <sc-if value="{{isMiss}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: {{fx.left}}px; top: {{fx.top}}px; width: 54px; height: 54px">
+            <span style="position: absolute; inset: 0; box-sizing: border-box; border: 3px solid #EAF2F6; border-radius: 50%; animation: fx-ripple .5s ease-out both"></span>
+            <span style="position: absolute; inset: 0; box-sizing: border-box; border: 3px solid #9DB4C4; border-radius: 50%; animation: fx-ripple .5s .12s ease-out both"></span>
+            <sc-for list="{{drops}}" as="d" hint-placeholder-count="6">
+              <span style="position: absolute; left: 23px; top: 23px; width: 8px; height: 8px; border-radius: 50%; background: #EAF2F6; --dx: {{d.x}}px; --dy: {{d.y}}px; animation: fx-drop .45s ease-out both"></span>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{isImpact}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; inset: 0; background: #FFF4D6; pointer-events: none; animation: fx-flash .25s ease-out both"></div>
+          <sc-for list="{{bursts}}" as="b" hint-placeholder-count="2">
+            <div style="position: absolute; left: {{b.left}}px; top: {{b.top}}px; width: 54px; height: 54px; animation-delay: {{b.delay}}">
+              <span style="position: absolute; inset: 0; border-radius: 50%; background: #FF6B4A; animation: fx-burst .7s {{b.delay}} ease-out both"></span>
+              <span style="position: absolute; inset: 12px; border-radius: 50%; background: #FFC83D; animation: fx-burst .55s {{b.delay}} ease-out both"></span>
+            </div>
+          </sc-for>
+        </sc-if>
+
+        <sc-if value="{{isSunk}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; left: 50%; top: 50%; padding: 14px 28px; white-space: nowrap; background: #0B1A2B; border: 3px solid #FF6B4A; border-radius: 14px; font-family: 'Kanit', sans-serif; font-weight: 800; font-size: 46px; color: #FF6B4A; animation: fx-banner 1.8s ease-out both">เรือพิฆาต จม!</div>
+        </sc-if>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 8px">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #9DB4C4">ลองผลการยิง</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{actions}}" as="a" hint-placeholder-count="5">
+          <button type="button" onClick="{{a.run}}" disabled="{{busy}}" style="height: 56px; background: {{a.bg}}; color: {{a.fg}}; border: 2px solid {{a.line}}; border-radius: 12px; font-family: 'Sarabun', sans-serif; font-size: 18px; font-weight: 700">{{a.label}}</button>
+        </sc-for>
+      </div>
+      <h2 style="margin: 16px 0 0; font-size: 18px; font-weight: 700; color: #9DB4C4">ฟังเสียง</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
+        <sc-for list="{{sounds}}" as="s" hint-placeholder-count="8">
+          <button type="button" onClick="{{s.play}}" style="height: 46px; background: #12263B; color: #EAF2F6; border: 2px solid #27425C; border-radius: 10px; font-family: 'Sarabun', sans-serif; font-size: 16px; font-weight: 500">{{s.label}}</button>
+        </sc-for>
+      </div>
+      <button type="button" onClick="{{toggleMute}}" aria-pressed="{{mutePressed}}" style="margin-top: auto; height: 52px; background: #12263B; color: #EAF2F6; border: 2px solid #27425C; border-radius: 12px; font-family: 'Sarabun', sans-serif; font-size: 18px; font-weight: 700">{{muteLabel}}</button>
+      <button type="button" onClick="{{reset}}" style="height: 52px; background: #12263B; color: #9DB4C4; border: 2px solid #27425C; border-radius: 12px; font-family: 'Sarabun', sans-serif; font-size: 18px; font-weight: 700">เริ่มใหม่</button>
+    </section>
+  </div>
+
+  <sc-if value="{{isTargetImpact}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 120px 30px #FF6B4A; animation: fx-edge {{edgeTime}} ease-out both"></div>
+  </sc-if>
+
+  <sc-if value="{{isEliminated}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(11, 26, 43, 0.92); animation: fx-fade 2.5s ease-out both">
+      <p style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 800; font-size: 96px; line-height: 1.1; color: #FF6B4A">Ploy ตกรอบ</p>
+      <p style="margin: 0; font-size: 28px; color: #9DB4C4">กองเรือจมหมดแล้ว</p>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isYourTurn}}" hint-placeholder-val="{{ false }}">
+    <div class="fx-move" style="position: absolute; left: 0; right: 0; top: 330px; height: 150px; display: flex; align-items: center; justify-content: center; background: #FFC83D; color: #0B1A2B; font-family: 'Kanit', sans-serif; font-weight: 800; font-size: 88px; animation: fx-sweep 1.1s ease-in-out both">ตาคุณ</div>
+  </sc-if>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+// Same formulas as design/assets/battleship/build-sounds.mjs, rendered live with Web Audio.
+const RATE = 44100;
+const lerp = (a, b, t) => a + (b - a) * t;
+const count = (d) => Math.floor(d * RATE);
+
+function noiseFrom(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), a | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return (((t ^ (t >>> 14)) >>> 0) / 4294967296) * 2 - 1;
+  };
+}
+function mix(buffer, start, duration, fn) {
+  const offset = count(start);
+  const length = count(duration);
+  for (let i = 0; i < length && offset + i < buffer.length; i++) buffer[offset + i] += fn(i / RATE, i / length);
+}
+function sweep(from, to, curve) {
+  let phase = 0;
+  return (p) => {
+    phase += (2 * Math.PI * lerp(from, to, Math.pow(p, curve || 1))) / RATE;
+    return Math.sin(phase);
+  };
+}
+function lowNoise(seed, cutoff) {
+  const noise = noiseFrom(seed);
+  let value = 0;
+  return (p) => {
+    value += (1 - Math.exp((-2 * Math.PI * cutoff(p)) / RATE)) * (noise() - value);
+    return value;
+  };
+}
+function highPass(signal) {
+  let previous = 0;
+  return (p) => {
+    const value = signal(p);
+    const result = value - previous;
+    previous = value;
+    return result;
+  };
+}
+function boom(b, start, duration, seed, size) {
+  const body = lowNoise(seed, (p) => lerp(3500, 120, Math.pow(p, 0.35)));
+  const sub = sweep(95, 32, 0.6);
+  const crackle = lowNoise(seed + 1, () => 6000);
+  mix(b, start, duration, (_, p) => Math.min(1, p * duration * 300) * (body(p) * 3.2 * Math.exp(-5 * p) + sub(p) * 0.9 * size * Math.exp(-3.5 * p) + crackle(p) * 0.5 * Math.exp(-16 * p)));
+}
+function note(b, start, duration, f, level) {
+  mix(b, start, duration, (t, p) => (Math.sin(2 * Math.PI * f * t) + 0.35 * Math.sin(4 * Math.PI * f * t) + 0.12 * Math.sin(6 * Math.PI * f * t)) * level * Math.min(1, t * 300) * Math.exp(-4.5 * p));
+}
+const RECIPES = {
+  aim: [0.06, (b) => mix(b, 0, 0.05, (t, p) => Math.sin(2 * Math.PI * 1500 * t) * Math.exp(-7 * p))],
+  launch: [0.45, (b) => {
+    const thump = sweep(150, 45, 0.5);
+    const air = lowNoise(11, (p) => lerp(2500, 300, p));
+    mix(b, 0, 0.42, (t, p) => Math.min(1, t * 400) * (thump(p) * Math.exp(-6 * p) + air(p) * 1.6 * Math.exp(-5 * p)));
+  }],
+  whistle: [0.62, (b) => {
+    const pitch = sweep(1900, 480, 1.3);
+    const air = highPass(lowNoise(12, () => 7000));
+    mix(b, 0, 0.6, (t, p) => (pitch(p) * 0.7 + air(p) * 0.5) * (1 + 0.06 * Math.sin(2 * Math.PI * 22 * t)) * Math.min(1, p * 5) * Math.min(1, (1 - p) * 12));
+  }],
+  splash: [0.85, (b) => {
+    const plop = sweep(260, 70, 0.5);
+    const spray = lowNoise(13, (p) => lerp(7500, 1100, Math.pow(p, 0.6)));
+    mix(b, 0, 0.75, (t, p) => plop(p) * 0.8 * Math.exp(-14 * p) + spray(p) * 2.6 * Math.min(1, t * 60) * Math.exp(-4.5 * p));
+    const drop = noiseFrom(14);
+    for (let i = 0; i < 12; i++) {
+      const start = 0.12 + ((drop() + 1) / 2) * 0.5;
+      const f = 900 + ((drop() + 1) / 2) * 1700;
+      mix(b, start, 0.05, (t, p) => Math.sin(2 * Math.PI * lerp(f, f * 1.6, p) * t) * 0.14 * Math.exp(-5 * p));
+    }
+  }],
+  explosion: [1.25, (b) => boom(b, 0, 1.2, 21, 1)],
+  "explosion-big": [2.1, (b) => { boom(b, 0, 1.9, 31, 1.2); boom(b, 0.32, 1.5, 41, 0.9); boom(b, 0.8, 1.1, 51, 0.6); }],
+  "your-turn": [0.7, (b) => { note(b, 0, 0.22, 784, 0.5); note(b, 0.13, 0.5, 1047, 0.5); }],
+  eliminated: [1.6, (b) => { note(b, 0, 0.4, 523, 0.5); note(b, 0.26, 0.4, 415, 0.5); note(b, 0.52, 0.9, 311, 0.5); boom(b, 0.52, 1.0, 61, 1); }],
+};
+let audio = null;
+const rendered = {};
+function playSound(name) {
+  if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+  if (audio.state === "suspended") audio.resume();
+  if (!rendered[name]) {
+    const [length, recipe] = RECIPES[name];
+    const samples = new Float32Array(count(length));
+    recipe(samples);
+    let peak = 0;
+    for (let i = 0; i < samples.length; i++) {
+      samples[i] = Math.tanh(samples[i] * 1.2);
+      peak = Math.max(peak, Math.abs(samples[i]));
+    }
+    for (let i = 0; i < samples.length; i++) samples[i] = (samples[i] / peak) * 0.89;
+    const buffer = audio.createBuffer(1, samples.length, RATE);
+    buffer.copyToChannel(samples, 0);
+    rendered[name] = buffer;
+  }
+  const source = audio.createBufferSource();
+  source.buffer = rendered[name];
+  source.connect(audio.destination);
+  source.start();
+}
+
+const ART = {
+  Carrier: ["/_blob/86431cd17374477e3f855c592209654f", "/_blob/cc5ded03eaaa068f4cc12ca5c776d996"],
+  Battleship: ["/_blob/e1e61c0d152095572bfe21e619da86fe", "/_blob/7ab20171758ec094a8f2eeef268bbf3d"],
+  Cruiser: ["/_blob/f27facd964156f71290ef1e568f52ca4", "/_blob/8152015498d8e39f3d5bb49595739475"],
+  Submarine: ["/_blob/9663be28225346d05a6d936a7815c9e2", "/_blob/4acc0163546ea6d01d84f85be5014f02"],
+  Destroyer: ["/_blob/d3045ec74297d167f3430c8c131114ea", "/_blob/3110f0716b5c6a391ea3ac36abc65171"],
+};
+const FLEETS = {
+  Ploy: [
+    { name: "Carrier", r: 1, c: 1, len: 5 },
+    { name: "Battleship", r: 3, c: 8, len: 4, v: true },
+    { name: "Cruiser", r: 6, c: 2, len: 3, v: true },
+    { name: "Submarine", r: 8, c: 4, len: 3 },
+    { name: "Destroyer", r: 4, c: 3, len: 2 },
+  ],
+  Arm: [
+    { name: "Carrier", r: 0, c: 4, len: 5 },
+    { name: "Battleship", r: 5, c: 1, len: 4 },
+    { name: "Cruiser", r: 2, c: 2, len: 3, v: true },
+    { name: "Submarine", r: 7, c: 7, len: 3 },
+    { name: "Destroyer", r: 3, c: 6, len: 2, v: true },
+  ],
+  Ben: [
+    { name: "Carrier", r: 8, c: 0, len: 5 },
+    { name: "Battleship", r: 1, c: 6, len: 4 },
+    { name: "Cruiser", r: 3, c: 1, len: 3 },
+    { name: "Submarine", r: 5, c: 5, len: 3, v: true },
+    { name: "Destroyer", r: 6, c: 8, len: 2 },
+  ],
+};
+const VIEWERS = { bystander: "Ben", target: "Ploy", shooter: "Arm" };
+const MISSES = ["0,0", "2,7", "5,5", "7,8", "9,9", "0,5", "3,0", "6,6", "8,1"];
+const TIMES = { miss: 500, hit: 900, sunk: 1800 };
+const FLIGHT = 650;
+const cleanBoards = () => ({ Ben: { hits: [], misses: [] }, Arm: { hits: [], misses: ["1,1", "6,6"] }, Ploy: { hits: [], misses: [] } });
+
+class Component extends DCLogic {
+  state = {
+    role: "bystander",
+    browsing: "Ben",
+    showing: "Ben",
+    stage: null,
+    cell: null,
+    boards: cleanBoards(),
+    sunk: [],
+    next: 0,
+    muted: false,
+    moved: 0,
+  };
+  timers = [];
+
+  componentWillUnmount() {
+    this.timers.forEach(clearTimeout);
+  }
+
+  later(ms, fn) {
+    this.timers.push(setTimeout(fn, ms));
+  }
+
+  sound(name) {
+    if (!this.state.muted) playSound(name);
+  }
+
+  shoot(kind) {
+    const { boards, role, browsing, next } = this.state;
+    const destroyer = ["4,3", "4,4"];
+    const taken = boards.Ploy.hits;
+    let key;
+    if (kind === "miss") key = MISSES[next % MISSES.length];
+    else key = destroyer.find((k) => !taken.includes(k));
+    if (kind === "sunk" && taken.length === 0) {
+      this.setState({ boards: { ...boards, Ploy: { ...boards.Ploy, hits: ["4,3"] } } });
+      key = "4,4";
+    } else if (!key) {
+      return;
+    }
+    const [r, c] = key.split(",").map(Number);
+    const real = kind === "miss" ? "miss" : kind === "sunk" || taken.length === 1 ? "sunk" : "hit";
+    this.setState({ stage: "flight", cell: { r, c }, showing: "Ploy", moved: this.state.moved + 1 });
+    this.sound("launch");
+    this.later(90, () => this.sound("whistle"));
+    this.later(FLIGHT, () => {
+      const board = this.state.boards.Ploy;
+      const update = real === "miss" ? { ...board, misses: [...board.misses, key] } : { ...board, hits: [...board.hits, key] };
+      this.setState({
+        stage: real,
+        boards: { ...this.state.boards, Ploy: update },
+        sunk: real === "sunk" ? ["Destroyer"] : this.state.sunk,
+        next: real === "miss" ? next + 1 : next,
+      });
+      this.sound(real === "miss" ? "splash" : real === "hit" ? "explosion" : "explosion-big");
+    });
+    this.later(FLIGHT + TIMES[real], () => {
+      const back = role === "target" ? "Ploy" : role === "shooter" ? "Ploy" : browsing;
+      this.setState({ stage: null, showing: back, moved: this.state.moved + 1 });
+    });
+  }
+
+  flash(stage, sound, ms) {
+    this.setState({ stage });
+    this.sound(sound);
+    this.later(ms, () => this.setState({ stage: null }));
+  }
+
+  restart(role) {
+    this.timers.forEach(clearTimeout);
+    const viewer = VIEWERS[role];
+    const start = role === "bystander" ? "Ben" : "Ploy";
+    this.setState({ role, browsing: viewer, showing: start, stage: null, cell: null, boards: cleanBoards(), sunk: [], next: 0 });
+  }
+
+  renderVals() {
+    const { role, showing, stage, cell, boards, sunk, muted, browsing, moved } = this.state;
+    const viewer = VIEWERS[role];
+    const busy = stage !== null;
+    const isTarget = role === "target";
+    const data = boards[showing];
+    const fleet = FLEETS[showing]
+      .filter((s) => showing === viewer || (showing === "Ploy" && sunk.includes(s.name)))
+      .map((s) => {
+        const isSunk = showing === "Ploy" && sunk.includes(s.name);
+        return { ...s, art: ART[s.name][isSunk ? 1 : 0], sunk: isSunk };
+      });
+    const left = cell ? 26 + cell.c * 56 : 0;
+    const top = cell ? 22 + cell.r * 56 : 0;
+    const impact = stage === "hit" || stage === "sunk";
+    const shake = !isTarget || !impact ? "none" : stage === "sunk" ? "fx-bigshake .8s ease-out both" : "fx-shake .45s ease-out both";
+    const name = (id) => (id === viewer ? `${id} (คุณ)` : id);
+    const label = cell ? "ABCDEFGHIJ"[cell.r] + (cell.c + 1) : "";
+    const tabsLocked = role !== "bystander" || busy;
+
+    return {
+      busy,
+      shake,
+      headline: busy && cell && stage !== "yourturn" && stage !== "eliminated" ? `Arm ยิง Ploy ที่ ${label}` : "ทดลองผลการยิง",
+      subline: stage === "miss" ? "พลาด" : stage === "hit" ? "โดน" : stage === "sunk" ? "จม" : role === "bystander" ? "กล้องจะพาไปดูกระดานเป้าหมาย" : isTarget ? "คุณอยู่ที่กองเรือของตัวเอง" : "คุณเป็นคนยิง",
+      boardTitle: showing === viewer ? "กองเรือของคุณ" : `น่านน้ำของ ${showing}`,
+      board: { ships: fleet, hits: data.hits, misses: data.misses },
+      enter: `fx-enter .25s ease-out ${moved % 2 === 0 ? "" : "both"}`,
+      fx: { left, top },
+      flightColor: isTarget ? "#FF6B4A" : "#FFC83D",
+      isFlight: stage === "flight",
+      isMiss: stage === "miss",
+      isImpact: impact,
+      isSunk: stage === "sunk",
+      isEliminated: stage === "eliminated",
+      isYourTurn: stage === "yourturn",
+      isTargetImpact: isTarget && impact,
+      edgeTime: stage === "sunk" ? "1.2s" : ".6s",
+      drops: [[-34, -30], [32, -34], [-40, 6], [40, 8], [-16, -44], [18, -46]].map(([x, y]) => ({ x, y })),
+      bursts:
+        stage === "sunk"
+          ? [{ left: 26 + 3 * 56, top: 22 + 4 * 56, delay: "0s" }, { left: 26 + 4 * 56, top: 22 + 4 * 56, delay: ".14s" }]
+          : [{ left, top, delay: "0s" }],
+      roles: [
+        ["bystander", "ผู้เล่นอื่น (Ben)"],
+        ["target", "เป้าหมาย (Ploy)"],
+        ["shooter", "คนยิง (Arm)"],
+      ].map(([id, text]) => ({
+        label: text,
+        pressed: id === role ? "true" : "false",
+        bg: id === role ? "#FFC83D" : "#12263B",
+        fg: id === role ? "#0B1A2B" : "#EAF2F6",
+        line: id === role ? "#FFC83D" : "#27425C",
+        pick: () => this.restart(id),
+      })),
+      tabs: ["Ben", "Arm", "Ploy"].map((id) => ({
+        label: name(id),
+        locked: tabsLocked,
+        pressed: id === showing ? "true" : "false",
+        fg: tabsLocked && id !== showing ? "#9DB4C4" : "#EAF2F6",
+        line: id === showing ? "#FFC83D" : "transparent",
+        pick: () => this.setState({ browsing: id, showing: id, moved: moved + 1 }),
+      })),
+      tabHint: role === "bystander" ? "ลองเลือกกระดานอื่น แล้วกดยิง กล้องจะกลับมาที่กระดานเดิม" : "สลับกระดานได้เฉพาะผู้เล่นที่ไม่ใช่คนยิงหรือเป้าหมาย",
+      actions: [
+        ["พลาด", () => this.shoot("miss"), false],
+        ["โดน", () => this.shoot("hit"), false],
+        ["จม", () => this.shoot("sunk"), false],
+        ["ตกรอบ", () => this.flash("eliminated", "eliminated", 2500), false],
+        ["ตาคุณ", () => this.flash("yourturn", "your-turn", 1100), true],
+        ["เล็ง", () => this.sound("aim"), false],
+      ].map(([text, run, strong]) => ({
+        label: text,
+        run,
+        bg: strong ? "#FFC83D" : "#12263B",
+        fg: strong ? "#0B1A2B" : "#EAF2F6",
+        line: strong ? "#FFC83D" : "#27425C",
+      })),
+      sounds: [
+        ["aim", "เล็ง"],
+        ["launch", "ปล่อยกระสุน"],
+        ["whistle", "กระสุนลอย"],
+        ["splash", "น้ำกระจาย"],
+        ["explosion", "ระเบิด"],
+        ["explosion-big", "ระเบิดใหญ่"],
+        ["your-turn", "ตาคุณ"],
+        ["eliminated", "ตกรอบ"],
+      ].map(([id, text]) => ({ label: text, play: () => playSound(id) })),
+      muteLabel: muted ? "เปิดเสียง" : "ปิดเสียง",
+      mutePressed: muted ? "true" : "false",
+      toggleMute: () => this.setState({ muted: !muted }),
+      reset: () => this.restart(role),
+    };
+  }
+}
+</script>
+</body>
+</html>

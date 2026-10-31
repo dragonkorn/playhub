@@ -5,6 +5,8 @@ sources:
   - specs/README.md
   - package.json
   - pnpm-workspace.yaml
+  - apps/web/public/_headers
+  - apps/web/vite.config.ts
   - apps/web/
   - apps/server/
   - packages/game-contract/
@@ -31,4 +33,10 @@ Apps depend on games, and games depend on `game-contract`. The platform never co
 
 A device sends a move over WebSocket. The room validates it, applies the game's rules, saves, then sends each player a personal snapshot. See [Realtime and storage](realtime-and-storage.md).
 
-To see how this is tested, read [Testing](testing.md).
+## Caching
+
+After the first visit, players download no app assets (C6). The service worker holds all build output, and fonts once used. Files under `/assets/` have hashed names and are `immutable` for a year, while HTML revalidates, so a deploy downloads only what changed. Include any new asset type in `globPatterns` in `apps/web/vite.config.ts`. The room connection is live data, so it isn't cached.
+
+## Running it
+
+`pnpm deploy` builds the web app and deploys the Worker. To see how this is tested, read [Testing](testing.md).

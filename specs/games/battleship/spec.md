@@ -141,7 +141,28 @@ interface View {
 - **B28** Tapping a ship, then tapping a cell, also places it, for players who can't drag.
 - **B29** Dragging uses browser Pointer Events directly (ADR-0004).
 
-## 8. Acceptance criteria
+## 8. Shot feedback
+
+Everything here runs on the client, from the shot log. Results are already public, so the server doesn't change.
+
+- **B30** Shot camera: after every shot, every screen shows the target's board while the shot lands. The target stays on their own fleet. Afterwards, each screen returns to the board it was showing.
+- **B31** A player who is waiting for their turn can browse any board. Browsing shows only public data: shots and sunk ships.
+- **B32** A shot plays in stages:
+
+| Stage | Time | Everyone | Target also |
+|---|---|---|---|
+| Flight | 0.6s | Launch and whistle sounds, shadow closing on the cell | Warning on the cell |
+| Miss | 0.5s | Splash and ripple | None |
+| Hit | 0.9s | Explosion and flash | Screen shake |
+| Sunk | 1.8s | Ship turns to sunk art, banner names the ship | Bigger shake, red edge flash |
+| Eliminated | 2.5s | Full-screen moment naming the player | The fleet sunk screen after it |
+
+- **B33** Shots play one at a time, in log order. The next shooter can act once playback ends on their device. A reconnecting device skips shots from before it reconnected.
+- **B34** When a player's turn starts, a banner sweeps across the screen with a sound.
+- **B35** There are 8 sounds: aim, launch, whistle, splash, explosion, big explosion, your turn, eliminated. They play through the Web Audio API behind a `SoundPlayer` interface, unlocked by the player's first tap. Mute is per device and stays on a toggle in the game.
+- **B36** With the device's Reduce Motion setting on, shake and sweep become fades.
+
+## 9. Acceptance criteria
 
 These run in Vitest against `logic`, except the last.
 
@@ -165,3 +186,8 @@ These run in Vitest against `logic`, except the last.
 18. Ranking is winner first, then reverse order out. (Section 6)
 19. A 10-player seeded random game finishes in both modes, and passes the platform test kit. (G4)
 20. Manual on a real iPad: dragging, tap placement and firing work by touch, in Thai. (B27 to B29)
+21. The first screen update after a shot queues one playback per new shot, in order, and skips shots from before a reconnect. (B33)
+22. A non-target screen shows the target's board during playback, then returns. (B30)
+23. A browsing player's view of another board holds no unsunk ship. (B31)
+24. Mute persists across a reload. (B35)
+25. Manual on a real iPad: sound plays after the first tap, and stays in step with the animation. (B32, B35)

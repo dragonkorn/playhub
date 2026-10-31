@@ -18,3 +18,6 @@ Questions for checking wiki accuracy. Answers and evidence come from sources, ne
 | 12 | Why doesn't dragging use a library? | `@dnd-kit/react` is pre-1.0 with unverified iPad touch behavior, and the need is small. | `docs/adr/0004-pointer-events-for-ship-dragging.md` |
 | 13 | How long is the grace period before the host decides? | 30 seconds. | `apps/server/src/room/engine.ts`, `GRACE_MS` |
 | 14 | Has drag been tested on a real iPad? | `UNVERIFIED`. Only headless Chrome touch events so far. | `wiki/testing.md` |
+| 15 | Does a returning player download the app again? | No. The service worker serves all build output and fonts. | `specs/platform/spec.md` C6 |
+| 16 | Which players can switch boards? | Players waiting for their turn who aren't the shooter or target. Browsing shows only public data. | `specs/games/battleship/spec.md` B30, B31 |
+| 17 | Is shot feedback in the live game yet? | No. Only a mockup exists. | `wiki/battleship.md` |

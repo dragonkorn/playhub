@@ -1,5 +1,5 @@
 ---
-ingested_commit: 12b9fb7
+ingested_commit: 0c2de82
 ---
 
 # PlayHub wiki
@@ -16,7 +16,7 @@ Layers: sources (code, `specs/`, `docs/adr/`) are read-only truth, these pages a
 | [Game plug-ins](game-plugins.md) | How a game connects to the platform | implemented |
 | [Realtime and storage](realtime-and-storage.md) | Messages, Durable Object, free-tier limits | implemented |
 | [Localization](localization.md) | Thai-first text, codes, fonts | implemented |
-| [Battleship](battleship.md) | Game flow, placing ships, targeting modes, hidden information | implemented |
+| [Battleship](battleship.md) | Game flow, placing ships, shot feedback, targeting, hidden information | implemented |
 | [Testing](testing.md) | The three test layers, and what is still unverified | implemented |
 
 [Golden set](golden-set.md): questions that test whether this wiki is accurate.
