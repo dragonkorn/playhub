@@ -1,5 +1,5 @@
 ---
-status: planned
+status: implemented
 sources:
   - readme.md
   - specs/README.md
@@ -31,4 +31,4 @@ Apps depend on games, and games depend on `game-contract`. The platform never co
 
 A device sends a move over WebSocket. The room validates it, applies the game's rules, saves, then sends each player a personal snapshot. See [Realtime and storage](realtime-and-storage.md).
 
-Today only the scaffold exists. Behavior on these pages comes from specs until the status changes to `implemented`.
+To see how this is tested, read [Testing](testing.md).

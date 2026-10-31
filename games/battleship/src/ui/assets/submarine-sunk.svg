@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" width="300" height="100">
+  <title>Submarine</title>
+      <rect x="11" y="31" width="280" height="46" rx="23" fill="#000" opacity=".3"/>
+      <path d="M8 50L26 30V70Z" fill="#24292F" stroke="#15191E" stroke-width="3"/>
+      <rect x="16" y="27" width="278" height="46" rx="23" fill="#3F474E" stroke="#15191E" stroke-width="3"/>
+      <path d="M44 50H270" stroke="#24292F" stroke-width="3" stroke-dasharray="14 12"/>
+      <rect x="128" y="37" width="62" height="26" rx="13" fill="#7E858C" stroke="#15191E" stroke-width="2.5"/>
+      <circle cx="176" cy="50" r="5" fill="#FF6B4A"/><circle cx="150" cy="50" r="5" fill="#24292F"/>
+  <ellipse cx="50" cy="48" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(50 42)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+  <ellipse cx="150" cy="66" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(150 60)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+  <ellipse cx="250" cy="48" rx="26" ry="16" fill="#15191E" opacity=".75"/>
+  <g transform="translate(250 42)">
+    <path d="M0 -22C10 -8 17 -2 13 10C9 21 -9 21 -13 10C-17 0 -6 -6 0 -22Z" fill="#FF6B4A" stroke="#15191E" stroke-width="2"/>
+    <path d="M0 -8C5 -2 8 1 6 7C3 12 -4 12 -6 7C-8 2 -3 -1 0 -8Z" fill="#FFC83D"/>
+  </g>
+</svg>

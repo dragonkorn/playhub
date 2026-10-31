@@ -41,11 +41,9 @@ function changes() {
   const base = all.find((p) => p.file === "index.md")?.commit;
   if (!base) throw new Error("wiki/index.md has no ingested_commit");
 
-  const changed = tracked([
-    ...git("diff", "--name-only", base),
-    ...git("ls-files", "--others", "--exclude-standard"),
-  ]);
-  const total = tracked(git("ls-files")).length;
+  const untracked = git("ls-files", "--others", "--exclude-standard");
+  const changed = tracked([...new Set([...git("diff", "--name-only", base), ...untracked])]);
+  const total = new Set(tracked([...git("ls-files"), ...untracked])).size;
   const content = all.filter((p) => !META_PAGES.has(p.file));
 
   console.log(`Base commit: ${base}`);
@@ -58,7 +56,9 @@ function changes() {
     if (hit.length) console.log(`  wiki/${page.file}: ${hit.join(", ")}`);
   }
 
-  const unmapped = changed.filter((f) => !content.some((p) => p.sources.some((s) => covers(s, f))));
+  const unmapped = changed
+    .filter((f) => existsSync(join(ROOT, f)))
+    .filter((f) => !content.some((p) => p.sources.some((s) => covers(s, f))));
   console.log(`\nUnmapped files: ${unmapped.length ? "" : "none"}`);
   for (const file of unmapped) console.log(`  ${file}`);
 }

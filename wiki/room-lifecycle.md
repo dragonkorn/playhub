@@ -1,7 +1,9 @@
 ---
-status: planned
+status: implemented
 sources:
   - specs/platform/spec.md
+  - apps/server/src/room/engine.ts
+  - apps/web/src/platform/
 ---
 
 # Room lifecycle
@@ -23,5 +25,7 @@ Only the host starts, and every seat must be connected (L1). The host can remove
 The platform has no turn logic. It asks the game who it's waiting for (T1). When the game reports it's done, the room moves to `finished`.
 
 If a player drops, see [Disconnects and host](disconnects-and-host.md).
+
+Room rules live in `apps/server/src/room/engine.ts`. Screens live in `apps/web/src/platform/`.
 
 Full rules: [platform spec](../specs/platform/spec.md), sections 2 to 5.

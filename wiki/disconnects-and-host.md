@@ -1,7 +1,9 @@
 ---
-status: planned
+status: implemented
 sources:
   - specs/platform/spec.md
+  - apps/server/src/room/engine.ts
+  - apps/web/src/platform/DisconnectPanel.tsx
   - design/battleship-journey/project/Reconnecting.dc.html
 ---
 
@@ -22,5 +24,7 @@ After the grace period, if the game is blocked on that player, the host chooses 
 The role moves to the next connected seat after the grace period (H2). A returning former host doesn't get it back (H4). If everyone is offline, the first to return becomes host (H3).
 
 Eliminated and lost players can hold the role, because they may still be watching.
+
+`DisconnectPanel` shows these choices on top of any game, so games need no disconnect code.
 
 Full rules: [platform spec](../specs/platform/spec.md), sections 6 and 7.

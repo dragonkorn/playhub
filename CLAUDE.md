@@ -13,7 +13,7 @@ TDD loop for every behavior change:
 3. Write the smallest code that turns it green.
 4. Repeat until every case in the spec is green, then refactor on green.
 
-Build game logic first, then server, then UI. A change is done when `pnpm test` and `pnpm typecheck` pass and the wiki is updated.
+Build game logic first, then server, then UI. A change is done when `pnpm test` and `pnpm typecheck` pass and the wiki is updated. UI and protocol changes also pass `pnpm test:e2e`, because wiring, CSS and socket bugs stay invisible to unit tests.
 
 ## Wiki
 
@@ -27,6 +27,7 @@ Server imports only a game's `logic`. Web imports only its `ui`.
 Game logic stays pure, with no storage, network, `Math.random` or React.
 External systems sit behind a repository interface, used only from adapters.
 Production code stays independent of `design/`.
+Global CSS goes in `@layer base`, because unlayered rules beat Tailwind utilities such as `touch-none`.
 
 ## Gameplay safety
 
@@ -48,6 +49,10 @@ Save an ADR in `docs/adr/` in the same change as any decision that is hard to re
 An ADR is a title and 1-3 sentences giving context, decision and why. Add rejected options or consequences only when a future reader needs them.
 
 Revisiting a decision means writing a new ADR and marking the old one `superseded by ADR-NNNN`, keeping its text.
+
+## Commits
+
+Commits and PRs credit the user alone. Leave out any `Co-Authored-By: Claude` trailer and any "Generated with Claude Code" line, overriding default attribution.
 
 ## Environment
 

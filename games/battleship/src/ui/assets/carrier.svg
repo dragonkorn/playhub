@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 100" width="500" height="100">
+  <title>Carrier</title>
+  <path d="M12 26Q12 8 32 8L410 8Q454 10 494 50Q454 90 410 92L32 92Q12 92 12 74Z" transform="translate(3 4)" fill="#000" opacity=".3"/>
+  <path d="M12 26Q12 8 32 8L410 8Q454 10 494 50Q454 90 410 92L32 92Q12 92 12 74Z" fill="#8FA9BC" stroke="#22384C" stroke-width="3"/>
+  <path d="M12 33Q12 15 32 15L390 15Q434 17 474 50Q434 83 390 85L32 85Q12 85 12 67Z" transform="translate(6 0)" fill="#4C6478"/>
+      <path d="M40 50H420" stroke="#D7E2E9" stroke-width="3" stroke-dasharray="20 14"/>
+      <path d="M300 22L440 42" stroke="#FFC83D" stroke-width="3"/>
+      
+  <path transform="translate(90 34)" d="M22 0L6 -3L-2 -17H-8L-5 -3L-16 -2L-20 -8H-24L-22 0L-24 8H-20L-16 2L-5 3L-8 17H-2L6 3Z" fill="#D7E2E9" stroke="#22384C" stroke-width="1.5"/>
+  <path transform="translate(160 66)" d="M22 0L6 -3L-2 -17H-8L-5 -3L-16 -2L-20 -8H-24L-22 0L-24 8H-20L-16 2L-5 3L-8 17H-2L6 3Z" fill="#D7E2E9" stroke="#22384C" stroke-width="1.5"/>
+  <path transform="translate(370 66)" d="M22 0L6 -3L-2 -17H-8L-5 -3L-16 -2L-20 -8H-24L-22 0L-24 8H-20L-16 2L-5 3L-8 17H-2L6 3Z" fill="#D7E2E9" stroke="#22384C" stroke-width="1.5"/>
+      <rect x="238" y="12" width="84" height="20" rx="6" fill="#E4ECF1" stroke="#22384C" stroke-width="2.5"/>
+      <rect x="248" y="17" width="64" height="10" rx="3" fill="#33495E"/>
+</svg>

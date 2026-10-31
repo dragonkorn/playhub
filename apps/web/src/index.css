@@ -1,1 +1,54 @@
 @import "tailwindcss";
+@source "../../../games";
+
+@theme {
+  --color-ground: #0b1a2b;
+  --color-panel: #12263b;
+  --color-line: #27425c;
+  --color-water: #16324a;
+  --color-text: #eaf2f6;
+  --color-muted: #9db4c4;
+  --color-signal: #ffc83d;
+  --color-hit: #ff6b4a;
+  --color-online: #4fd1a5;
+  --font-display: "Kanit", sans-serif;
+  --font-body: "Sarabun", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-ground);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+input {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* In a layer, so utilities like touch-none can override it. */
+@layer base {
+  button,
+  a {
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
+  }
+}

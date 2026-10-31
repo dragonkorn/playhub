@@ -129,7 +129,7 @@ export interface GameDefinition<State, Move, View, Options> {
   activePlayers(state: State): PlayerId[];
   eliminatedPlayers(state: State): PlayerId[];
   /** Applies a platform removal: lost or left. Must keep the game able to finish. */
-  removePlayer(state: State, player: PlayerId): State;
+  removePlayer(state: State, player: PlayerId, random: () => number): State;
   outcome(state: State): Outcome;
   /** viewer is null for a watcher with no seat in the game. */
   viewFor(state: State, viewer: PlayerId | null): View;
@@ -142,6 +142,9 @@ export interface GameUi<View, Move, Options> {
     me: PlayerId;
     players: readonly RoomPlayer[];
     send: (move: Move) => void;
+    leave: () => void;
+    /** Device storage for this player's unsent work in this room. */
+    draft: { load(): unknown; save(value: unknown): void };
   }) => unknown;
   OptionsPanel?: (props: {
     options: Options;
@@ -215,7 +218,7 @@ interface RoomSnapshot {
 ```
 
 - **P1** After any change, each connected player gets a full snapshot built for them. No patches (ADR-0003).
-- **P2** `version` increases on every change. A `move` with an old version is rejected with `stale`, so a shot queued while offline can't fire at the wrong moment.
+- **P2** `version` increases on every change. A `move` older than the version at which that player became active is rejected with `stale`, so a move queued while offline can't fire on a later turn, while moves sent during unrelated changes still count.
 - **P3** All client input is validated: message shape, host rights, phase, then `parseMove` or `parseOptions`.
 - **P4** Terminal closes use codes the client won't retry: `4001 room_closed`, `4002 removed`, `4003 replaced`.
 
@@ -270,7 +273,7 @@ Hibernation is mandatory. Without it, the free tier covers about 37 games a day 
 - **I5** Fonts must cover Thai, including the display font. Layouts must fit Thai text, which needs more line height for vowels and tone marks.
 - **I6** Player names are shown as entered and never translated.
 
-The library is `react-i18next`, subject to a check at implementation that it is maintained and fits this catalog split.
+The library is `react-i18next`.
 
 ## 13. Acceptance criteria
 
@@ -294,3 +297,5 @@ Unless noted, these run in Vitest against `engine.ts` with the in-memory reposit
 16. Every registered game passes the test kit. (G4)
 17. Manual on `wrangler dev`: a room hibernates, wakes, and serves a reconnecting player their own view. (V1 to V4)
 18. Manual on a real iPad: sleep and wake reconnects, and joining from a QR scan works. (R4, D2)
+
+`pnpm test:e2e` covers real sockets, Durable Object storage and alarms, and the app in headless Chrome. Run it against a local server for UI or protocol changes.

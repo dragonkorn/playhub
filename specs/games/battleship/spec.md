@@ -139,7 +139,7 @@ interface View {
 - **B26** Log text is built on the client from `Shot` data and translation codes.
 - **B27** While dragging, the ship snaps to cells and shows whether the spot is valid, drawn offset so a finger doesn't hide it. A drop on an invalid spot returns the ship to where it was. Dragging must not scroll the page.
 - **B28** Tapping a ship, then tapping a cell, also places it, for players who can't drag.
-- **B29** Use `@dnd-kit/react` if it passes a real iPad test at build time. Otherwise use browser Pointer Events directly, and record the choice.
+- **B29** Dragging uses browser Pointer Events directly (ADR-0004).
 
 ## 8. Acceptance criteria
 

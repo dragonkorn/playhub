@@ -4,6 +4,7 @@ packages:
   - games/*
 minimumReleaseAgeExclude:
   - '@cloudflare/workers-types@5.20261031.1'
+  - i18next@26.5.12
 allowBuilds:
   esbuild: true
   workerd: true
