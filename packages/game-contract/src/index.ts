@@ -70,6 +70,13 @@ export interface GameUi<View, Move, Options> {
     leave: () => void;
     /** Device storage for this player's unsent work in this room. */
     draft: { load(): unknown; save(value: unknown): void };
+    /** Per-device settings that outlive a room. */
+    preferences: { load(name: string): unknown; save(name: string, value: unknown): void };
+    /** False while this device's own connection is down. */
+    online: boolean;
+    /** True when the game ended and the platform is waiting for `release`. */
+    holding: boolean;
+    release: () => void;
   }) => unknown;
   OptionsPanel?: (props: {
     options: Options;
@@ -78,6 +85,8 @@ export interface GameUi<View, Move, Options> {
   }) => unknown;
   /** One message catalog per locale, namespaced by game id. */
   messages: Record<Locale, Record<string, string>>;
+  /** Keep showing the board after the game ends, until it calls `release`. */
+  holdsFinish?: boolean;
 }
 
 export type RoomPhase = "lobby" | "playing" | "finished";

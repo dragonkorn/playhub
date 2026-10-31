@@ -7,9 +7,12 @@
     "./logic": "./src/logic/index.ts",
     "./ui": "./src/ui/index.tsx"
   },
-  "scripts": { "typecheck": "tsc" },
+  "scripts": {
+    "typecheck": "tsc"
+  },
   "dependencies": {
-    "@playhub/game-contract": "workspace:*"
+    "@playhub/game-contract": "workspace:*",
+    "@playhub/ui": "workspace:*"
   },
   "peerDependencies": {
     "react": "^19.3.1",

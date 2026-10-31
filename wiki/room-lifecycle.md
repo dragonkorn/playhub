@@ -3,7 +3,7 @@ status: implemented
 sources:
   - specs/platform/spec.md
   - apps/server/src/room/engine.ts
-  - apps/web/src/platform/
+  - apps/web/src/pages/
 ---
 
 # Room lifecycle
@@ -26,6 +26,6 @@ The platform has no turn logic. It asks the game who it's waiting for (T1). When
 
 If a player drops, see [Disconnects and host](disconnects-and-host.md).
 
-Room rules live in `apps/server/src/room/engine.ts`. Screens live in `apps/web/src/platform/`.
+Room rules live in `apps/server/src/room/engine.ts`. Screens live in `apps/web/src/pages/`.
 
 Full rules: [platform spec](../specs/platform/spec.md), sections 2 to 5.

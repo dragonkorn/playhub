@@ -29,6 +29,10 @@ External systems sit behind a repository interface, used only from adapters.
 Production code stays independent of `design/`.
 Global CSS goes in `@layer base`, because unlayered rules beat Tailwind utilities such as `touch-none`.
 
+## UI
+
+UI follows atomic design: read `specs/platform/design-system.md` before adding a component. `atomic-rules.test.ts` enforces the layers.
+
 ## Gameplay safety
 
 Players receive only what `viewFor` allows. Every game passes the test kit in `packages/game-contract`.

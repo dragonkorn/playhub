@@ -157,7 +157,7 @@ Everything here runs on the client, from the shot log. Results are already publi
 | Sunk | 1.8s | Ship turns to sunk art, banner names the ship | Bigger shake, red edge flash |
 | Eliminated | 2.5s | Full-screen moment naming the player | The fleet sunk screen after it |
 
-- **B33** Shots play one at a time, in log order. The next shooter can act once playback ends on their device. A reconnecting device skips shots from before it reconnected.
+- **B33** Shots play one at a time, in log order. Results stay hidden until the shot lands. The next shooter can act once playback ends on their device. A reconnecting device skips shots from before it reconnected. The last shot plays in full before the result screen.
 - **B34** When a player's turn starts, a banner sweeps across the screen with a sound.
 - **B35** There are 8 sounds: aim, launch, whistle, splash, explosion, big explosion, your turn, eliminated. They play through the Web Audio API behind a `SoundPlayer` interface, unlocked by the player's first tap. Mute is per device and stays on a toggle in the game.
 - **B36** With the device's Reduce Motion setting on, shake and sweep become fades.

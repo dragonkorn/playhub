@@ -3,7 +3,7 @@ status: implemented
 sources:
   - specs/platform/spec.md
   - apps/server/src/room/engine.ts
-  - apps/web/src/platform/DisconnectPanel.tsx
+  - apps/web/src/organisms/DisconnectPanel.tsx
   - design/battleship-journey/project/Reconnecting.dc.html
 ---
 

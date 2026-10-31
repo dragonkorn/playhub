@@ -1,11 +1,12 @@
+import { NoticeBar } from "@playhub/ui";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { games } from "./games";
-import { HomePage } from "./platform/HomePage";
-import { JoinPage } from "./platform/JoinPage";
-import { RoomPage } from "./platform/RoomPage";
-import { useRoute } from "./platform/router";
-import { Stage } from "./platform/Stage";
+import { useRoute } from "./model/router";
+import { HomePage } from "./pages/HomePage";
+import { JoinPage } from "./pages/JoinPage";
+import { RoomPage } from "./pages/RoomPage";
+import { Stage } from "./templates/Stage";
 
 function useDeviceNotice() {
   const check = () => Object.values(games).every((g) => g.meta.orientation === "landscape") && innerHeight > innerWidth;
@@ -32,9 +33,7 @@ export function App() {
       {route.page === "home" && <HomePage />}
       {route.page === "join" && <JoinPage code={route.code} />}
       {route.page === "room" && <RoomPage key={route.code} code={route.code} />}
-      {notice && (
-        <div className="absolute inset-x-0 bottom-0 bg-panel p-3 text-center text-xl text-muted">{t("device.notice")}</div>
-      )}
+      {notice && <NoticeBar position="bottom">{t("device.notice")}</NoticeBar>}
     </Stage>
   );
 }

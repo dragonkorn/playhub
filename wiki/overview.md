@@ -10,6 +10,7 @@ sources:
   - apps/web/
   - apps/server/
   - packages/game-contract/
+  - packages/ui/
   - games/battleship/
   - docs/adr/0002-single-worker-hosting.md
 ---
@@ -23,6 +24,7 @@ PlayHub lets friends play a board game across devices with a room code and no ac
 - `apps/web`: the React PWA. Shows platform screens and each game's board. Holds no game rules.
 - `apps/server`: one Cloudflare Worker. Serves the web build and the API, and runs one Durable Object per room ([ADR-0002](../docs/adr/0002-single-worker-hosting.md)).
 - `packages/game-contract`: the shared types both sides and every game depend on.
+- `packages/ui`: shared design system. See [Design system](design-system.md).
 - `games/<game>`: one folder per game, split into `logic` and `ui`.
 
 ## Dependency direction

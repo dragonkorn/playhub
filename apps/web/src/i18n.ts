@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import { games } from "./games";
-import { messages } from "./platform/messages";
+import { messages } from "./model/messages";
 import { sessions } from "./repositories/session-repository";
 
 const flat = { keySeparator: false, nsSeparator: false } as const;

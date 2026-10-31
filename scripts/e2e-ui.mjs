@@ -1,6 +1,6 @@
 // Plays the real app in headless Chrome against a running `wrangler dev`.
 // Covers what unit tests can't see: wiring, translations, drag, layouts at 10 players.
-// Run: node scripts/e2e-ui.mjs [baseUrl] [screenshotDir] [caching]
+// Run: node scripts/e2e-ui.mjs [baseUrl] [screenshotDir] [scenario]
 import { mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join as joinPath } from "node:path";
@@ -21,8 +21,10 @@ function check(ok, label) {
   console.log(`ok - ${label}`);
 }
 
-async function device(label) {
+/** Playback runs fast by default, so whole games finish quickly. */
+async function device(label, fxSpeed = 20) {
   const context = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true });
+  await context.addInitScript((speed) => localStorage.setItem("playhub.pref.fxSpeed", speed), String(fxSpeed));
   const page = await context.newPage();
   page.on("console", (m) => {
     if (m.type() === "error") errors.push(`${label}: ${m.text()}`);
@@ -62,9 +64,13 @@ const myTurn = (page) => page.getByRole("heading", { name: "ตาคุณ" }).
 const shipCount = (page) => page.locator('main img[style*="position: absolute"]').count();
 
 /** Fires once and waits for the turn to pass, so the next read isn't this turn's stale header. */
-async function fire(page) {
+const aimAndFire = async (page) => {
   await page.getByRole("button", { name: /^[A-J]\d+$/ }).first().click();
   await page.getByRole("button", { name: /^ยิงที่/ }).click();
+};
+
+async function fire(page) {
+  await aimAndFire(page);
   await page.getByRole("heading", { name: "ตาคุณ" }).waitFor({ state: "hidden" });
 }
 
@@ -221,14 +227,16 @@ async function elimination() {
   for (const page of pages) await ready(page);
 
   const sunk = (page) => page.getByRole("heading", { name: "กองเรือจม" }).isVisible();
-  let out = null;
-  for (let i = 0; i < 500 && !out; i++) {
+  for (let i = 0; i < 500; i++) {
     const page = await waitTurn(pages);
     if (!page) break;
     await fire(page);
-    await pause(10);
-    for (const candidate of pages) if (await sunk(candidate)) out = candidate;
+    if (await host.getByText("ออกแล้ว").first().isVisible()) break;
   }
+  // The overlay waits for playback to finish on that screen.
+  await pause(800);
+  let out = null;
+  for (const page of pages) if (await sunk(page)) out = page;
   check(out !== null, "a player can be eliminated");
   await shot(out, "eliminated");
   await out.getByRole("button", { name: "ดูต่อ" }).click();
@@ -239,9 +247,61 @@ async function elimination() {
   for (const page of pages) await page.context().close();
 }
 
+/** Real speed, because this checks what each screen shows during a shot (B30 to B35). */
+async function feedback() {
+  const names = ["Mina", "Arm", "Ploy"];
+  const pages = await Promise.all(names.map((n) => device(n, 1)));
+  const [host, one, two] = pages;
+  const code = await create(host, names[0]);
+  await join(one, code, names[1]);
+  await join(two, code, names[2]);
+  await start(host);
+  for (const page of [one, two]) await page.getByRole("button", { name: "สุ่ม" }).waitFor();
+  for (const page of pages) await ready(page);
+
+  const shooter = await waitTurn(pages);
+  const title = (page) => page.locator("section h2").nth(1).innerText();
+  const targetName = (await title(shooter)).replace("น่านน้ำของ", "").trim();
+  const nameOf = (page) => names[pages.indexOf(page)];
+  const target = pages.find((page) => nameOf(page) === targetName);
+  const bystander = pages.find((page) => page !== shooter && page !== target);
+
+  const shipImages = (page) => page.locator('main img[style*="position: absolute"]').count();
+  check((await shipImages(bystander)) === 5, "a waiting player sees their own fleet");
+
+  await bystander.getByRole("button", { name: nameOf(shooter), exact: false }).click();
+  await pause(100);
+  check((await title(bystander)).includes(nameOf(shooter)), "a waiting player can browse another board");
+  check((await shipImages(bystander)) === 0, "browsing shows no hidden ships");
+
+  await aimAndFire(shooter);
+  await bystander.locator(".fx-flight").waitFor();
+  check((await title(bystander)).includes(targetName), "shot camera moves a bystander to the target's board");
+  check((await title(target)).includes("กองเรือของคุณ"), "the target stays on their own fleet");
+  check((await bystander.locator("ol li").count()) === 0, "the result stays hidden during flight");
+  await shot(bystander, "feedback-flight");
+
+  await bystander.locator("ol li").first().waitFor();
+  await shot(bystander, "feedback-result");
+  await bystander.locator(".fx-flight").waitFor({ state: "hidden" });
+  await pause(1100);
+  check((await title(bystander)).includes(nameOf(shooter)), "camera returns to the browsed board");
+
+  const next = await waitTurn(pages);
+  check(next !== null, "the next shooter gets their turn after playback");
+  await shot(next, "feedback-your-turn");
+
+  await bystander.getByRole("button", { name: "เสียง: เปิด" }).click();
+  await bystander.reload();
+  await bystander.getByRole("button", { name: "เสียง: ปิด" }).waitFor();
+  check(true, "mute survives a reload");
+  for (const page of pages) await page.context().close();
+}
+
 async function languageAndScale() {
   const page = await device("en");
   await page.goto(base);
+  check((await page.getByText("Connect Four").count()) + (await page.getByText("เรียงสี่").count()) === 0, "only playable games are listed");
   await page.getByRole("button", { name: "English" }).click();
   check(await page.getByRole("button", { name: "Create room" }).isVisible(), "English switch works");
   await page.reload();
@@ -272,6 +332,12 @@ async function caching() {
   check(assets.length > 0 && network.length === 0, `repeat visit served ${assets.length} assets with no downloads`);
   check(assets.some((r) => /fonts\.gstatic\.com/.test(r.url())), "fonts come from the service worker");
 
+  const precachedSounds = await page.evaluate(async () => {
+    const lists = await Promise.all((await caches.keys()).map(async (name) => (await caches.open(name)).keys()));
+    return lists.flat().filter((request) => request.url.includes(".m4a")).length;
+  });
+  check(precachedSounds === 8, `all 8 sounds are precached (${precachedSounds})`);
+
   const hashed = assets.find((r) => r.url().includes("/assets/"));
   const headers = (await fetch(hashed.url(), { method: "HEAD" })).headers.get("cache-control") ?? "";
   check(headers.includes("immutable"), `hashed files are immutable (${headers})`);
@@ -280,13 +346,9 @@ async function caching() {
   await page.context().close();
 }
 
-await caching();
-if (only !== "caching") {
-  await fullGame();
-  await tenPlayers();
-  await elimination();
-  await languageAndScale();
-  await disconnect();
+const scenarios = { caching, feedback, fullGame, tenPlayers, elimination, languageAndScale, disconnect };
+for (const [name, run] of Object.entries(scenarios)) {
+  if (!only || only === name) await run();
 }
 await browser.close();
 

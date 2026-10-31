@@ -14,7 +14,7 @@ Three layers, each catching what the one before can't.
 
 | Layer | Command | What it proves |
 |---|---|---|
-| Unit | `pnpm test` | Game rules, room rules, placement, translations |
+| Unit | `pnpm test` | Game rules, room rules, placement, playback, sound, translations, atomic layers |
 | Real room | `node scripts/e2e-room.mjs` | HTTP, WebSockets and Durable Object storage on `wrangler dev` |
 | Real app | `node scripts/e2e-ui.mjs` | Full journeys in headless Chrome, with touch drag and 10 players |
 
@@ -24,7 +24,7 @@ Every game must also pass the test kit in `packages/game-contract/src/testing.ts
 
 ## Why the real layers exist
 
-`node scripts/e2e-ui.mjs <url> <folder> caching` runs only the cache check (C6), which is quick enough to run after a deploy.
+`node scripts/e2e-ui.mjs <url> <folder> <scenario>` runs one scenario, such as `caching`, which is quick enough to run after a deploy. Scenarios run playback 20 times faster, except `feedback`, which checks real timing.
 
 Each of these passed unit tests, then failed for real:
 
@@ -34,6 +34,6 @@ Each of these passed unit tests, then failed for real:
 
 ## Still unverified
 
-- `UNVERIFIED`: real iPad behavior for drag, sleep and wake, QR join, and cache lifetime in Safari (spec acceptance items).
+- `UNVERIFIED`: real iPad behavior for drag, sleep and wake, QR join, sound unlock, and cache lifetime in Safari (spec acceptance items).
 - `UNVERIFIED`: whether the server notices a socket that dies silently, with no close event.
 - `UNVERIFIED`: free-tier counts during real play, including how the 20:1 WebSocket rule applies. Both real layers have passed on the live Worker, but nobody has read the dashboard numbers.

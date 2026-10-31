@@ -10,7 +10,7 @@ sources:
   - apps/server/src/repositories/
   - apps/server/src/index.ts
   - apps/server/wrangler.jsonc
-  - apps/web/src/platform/use-room.ts
+  - apps/web/src/model/use-room.ts
   - apps/web/src/repositories/
 ---
 

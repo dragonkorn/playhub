@@ -20,4 +20,6 @@ Questions for checking wiki accuracy. Answers and evidence come from sources, ne
 | 14 | Has drag been tested on a real iPad? | `UNVERIFIED`. Only headless Chrome touch events so far. | `wiki/testing.md` |
 | 15 | Does a returning player download the app again? | No. The service worker serves all build output and fonts. | `specs/platform/spec.md` C6 |
 | 16 | Which players can switch boards? | Players waiting for their turn who aren't the shooter or target. Browsing shows only public data. | `specs/games/battleship/spec.md` B30, B31 |
-| 17 | Is shot feedback in the live game yet? | No. Only a mockup exists. | `wiki/battleship.md` |
+| 17 | Can the next shooter act while a shot is playing? | No. They wait for playback on their own device. | `specs/games/battleship/spec.md` B33 |
+| 18 | May an atom translate text? | No. Atoms and molecules take text through props. | `specs/platform/design-system.md` A2 |
+| 19 | Is Storybook installed? | No. It is planned. | `specs/platform/storybook-plan.md` |

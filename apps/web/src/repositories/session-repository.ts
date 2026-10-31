@@ -13,6 +13,8 @@ export interface SessionRepository {
   saveLocale(locale: Locale): void;
   draft(code: string): unknown;
   saveDraft(code: string, value: unknown): void;
+  preference(name: string): unknown;
+  savePreference(name: string, value: unknown): void;
 }
 
 const read = (key: string): unknown => {
@@ -44,4 +46,6 @@ export const sessions: SessionRepository = {
   saveLocale: (locale) => write("playhub.locale", locale),
   draft: (code) => read(`playhub.draft.${code}`),
   saveDraft: (code, value) => write(`playhub.draft.${code}`, value),
+  preference: (name) => read(`playhub.pref.${name}`),
+  savePreference: (name, value) => write(`playhub.pref.${name}`, value),
 };

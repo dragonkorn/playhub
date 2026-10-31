@@ -3,7 +3,7 @@ status: implemented
 sources:
   - specs/platform/spec.md
   - apps/web/src/i18n.ts
-  - apps/web/src/platform/messages.ts
+  - apps/web/src/model/messages.ts
   - apps/web/src/index.css
   - apps/web/vite.config.ts
 ---

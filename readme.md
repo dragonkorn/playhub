@@ -54,6 +54,7 @@ iPad C ─┘                    │
 - **Decisions are recorded** — significant decisions are saved as ADRs in `docs/adr/`.
 - **Test first** — every behavior starts as a failing test, then code is written until it passes.
 - **Living wiki** — `wiki/` explains how the system works and is updated with every change.
+- **Atomic design** — UI is built from atoms, molecules, organisms, templates and pages, with shared parts in `packages/ui`.
 
 ## Roadmap
 
