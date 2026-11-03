@@ -1,5 +1,7 @@
 import { battleshipUi } from "@playhub/game-battleship/ui";
-import type { GameUi } from "@playhub/game-contract";
+import { fourInARow } from "@playhub/game-four-in-a-row/logic";
+import { fourInARowUi } from "@playhub/game-four-in-a-row/ui";
+import type { GameDefinition, GameUi } from "@playhub/game-contract";
 import type { ComponentType } from "react";
 
 type Base = GameUi<unknown, unknown, unknown>;
@@ -12,4 +14,10 @@ export interface WebGame extends Omit<Base, "Board" | "OptionsPanel"> {
 
 export const games: Record<string, WebGame> = {
   battleship: battleshipUi as unknown as WebGame,
+  "four-in-a-row": fourInARowUi as unknown as WebGame,
+};
+
+/** Rules for local-play games only, which run on this device (O3, ADR-0006). */
+export const localGames: Record<string, GameDefinition<unknown, unknown, unknown, unknown>> = {
+  "four-in-a-row": fourInARow as unknown as GameDefinition<unknown, unknown, unknown, unknown>,
 };

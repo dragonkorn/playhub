@@ -1,0 +1,24 @@
+/* Prefixed, because every game's CSS loads into one app. In a layer, so utilities still win (see CLAUDE.md). */
+@keyframes fir-fall { from { transform: translateY(var(--fall-from)); } to { transform: translateY(0); } }
+@keyframes fir-land { 0% { transform: scale(1.1, 0.88); } 45% { transform: translateY(-7%); } 100% { transform: none; } }
+@keyframes fir-win { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+@keyframes fir-banner { 0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0; } 12% { transform: translate(-50%, -50%) scale(1.06); opacity: 1; } 18%, 85% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+@keyframes fir-sweep { 0% { transform: translateX(-110%); } 18%, 80% { transform: translateX(0); } 100% { transform: translateX(110%); } }
+@keyframes fir-fade { 0% { opacity: 0; } 12%, 85% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes fir-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+@layer base {
+  .fir-fall { animation: fir-fall var(--fall-ms) cubic-bezier(0.55, 0, 1, 0.45) both; }
+  .fir-land { animation: fir-land 0.3s ease-out both; }
+  .fir-line { box-shadow: 0 0 0 4px var(--color-text); }
+  .fir-win { animation: fir-win 0.55s ease-in-out 4; }
+  .fir-banner { animation: fir-banner 2.2s ease-out both; }
+  .fir-sweep { animation: fir-sweep 1.1s ease-in-out both; }
+
+  /* F22: the fall fades in place, the sweep fades, and the line stays lit without pulsing. */
+  @media (prefers-reduced-motion: reduce) {
+    .fir-fall { animation: fir-fade-in var(--fall-ms) ease-out both; }
+    .fir-land, .fir-win { animation: none; }
+    .fir-sweep { animation: fir-fade 1.1s ease-out both; }
+  }
+}

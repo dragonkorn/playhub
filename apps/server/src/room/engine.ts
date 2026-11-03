@@ -5,12 +5,11 @@ import type {
   RoomSnapshot,
   ServerMessage,
 } from "@playhub/game-contract";
-import { CloseCode } from "@playhub/game-contract";
+import { CloseCode, normalizeName } from "@playhub/game-contract";
 import type { RoomRecord, RoomRepository, Seat } from "../repositories/room-repository";
 
 export const GRACE_MS = 30_000;
 export const RETENTION_MS = 60 * 60 * 1000;
-const MAX_NAME_GRAPHEMES = 16;
 
 export type Game = GameDefinition<unknown, unknown, unknown, unknown>;
 
@@ -38,13 +37,6 @@ class Rejected extends Error {}
 const reject = (code: string): never => {
   throw new Rejected(code);
 };
-
-function normalizeName(raw: unknown): string | null {
-  if (typeof raw !== "string" || /\p{Cc}/u.test(raw)) return null;
-  const name = raw.normalize("NFC").trim();
-  const graphemes = [...new Intl.Segmenter("th", { granularity: "grapheme" }).segment(name)].length;
-  return graphemes >= 1 && graphemes <= MAX_NAME_GRAPHEMES ? name : null;
-}
 
 /** Room rules with no Cloudflare APIs. The Durable Object shell delivers `out`. */
 export class RoomEngine {

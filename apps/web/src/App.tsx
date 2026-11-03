@@ -5,6 +5,7 @@ import { games } from "./games";
 import { useRoute } from "./model/router";
 import { HomePage } from "./pages/HomePage";
 import { JoinPage } from "./pages/JoinPage";
+import { LocalPage } from "./pages/LocalPage";
 import { RoomPage } from "./pages/RoomPage";
 import { Stage } from "./templates/Stage";
 
@@ -33,6 +34,7 @@ export function App() {
       {route.page === "home" && <HomePage />}
       {route.page === "join" && <JoinPage code={route.code} />}
       {route.page === "room" && <RoomPage key={route.code} code={route.code} />}
+      {route.page === "local" && <LocalPage key={route.gameId} gameId={route.gameId} />}
       {notice && <NoticeBar position="bottom">{t("device.notice")}</NoticeBar>}
     </Stage>
   );

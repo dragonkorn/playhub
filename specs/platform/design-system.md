@@ -23,7 +23,7 @@ UI follows atomic design. Every component lives in exactly one layer.
 
 | Place | Holds |
 |---|---|
-| `packages/ui/src/` | Tokens, plus atoms, molecules, organisms and templates shared by the platform and games |
+| `packages/ui/src/` | Tokens, plus atoms, molecules, organisms and templates shared by the platform and games. Its `model/` holds shared non-visual code, such as the sound player and log playback |
 | `apps/web/src/` | Platform organisms, templates and pages |
 | `games/<game>/src/ui/` | That game's components |
 

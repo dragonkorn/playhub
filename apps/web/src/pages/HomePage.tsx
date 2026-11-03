@@ -9,11 +9,12 @@ import { sessions } from "../repositories/session-repository";
 
 export function HomePage() {
   const { t, i18n } = useTranslation();
-  const [gameId] = useState("battleship");
+  const [gameId, setGameId] = useState(Object.keys(games)[0] ?? "");
   const [name, setName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const game = games[gameId];
+
+  const players = (min: number, max: number) => (min === max ? t("home.playersExact", { count: min }) : t("home.players", { min, max }));
 
   const create = async () => {
     setBusy(true);
@@ -55,11 +56,16 @@ export function HomePage() {
       right={
         <>
           <SectionLabel>{t("home.choose")}</SectionLabel>
-          <GameCard
-            title={t("name", { ns: gameId })}
-            meta={t("home.players", { min: game?.meta.minPlayers, max: game?.meta.maxPlayers })}
-            description={t("tagline", { ns: gameId })}
-          />
+          {Object.entries(games).map(([id, game]) => (
+            <GameCard
+              key={id}
+              title={t("name", { ns: id })}
+              meta={players(game.meta.minPlayers, game.meta.maxPlayers)}
+              description={t("tagline", { ns: id })}
+              selected={id === gameId}
+              onClick={() => setGameId(id)}
+            />
+          ))}
           <div className="mt-auto flex flex-col gap-3">
             <Field label={t("home.name")}>
               <TextInput value={name} onChange={(e) => setName(e.target.value)} maxLength={40} />
@@ -68,9 +74,16 @@ export function HomePage() {
             <Button disabled={busy} onClick={create}>
               {t("home.create")}
             </Button>
-            <Button variant="secondary" size="lg" onClick={() => navigate("/join")}>
-              {t("home.join")}
-            </Button>
+            <div className={`grid gap-3 ${games[gameId]?.meta.localPlay ? "grid-cols-2" : ""}`}>
+              <Button variant="secondary" size="lg" onClick={() => navigate("/join")}>
+                {t("home.join")}
+              </Button>
+              {games[gameId]?.meta.localPlay && (
+                <Button variant="secondary" size="lg" onClick={() => navigate(`/local/${gameId}`)}>
+                  {t("home.local")}
+                </Button>
+              )}
+            </div>
           </div>
         </>
       }

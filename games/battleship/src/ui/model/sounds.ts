@@ -6,9 +6,10 @@ import launch from "../assets/sounds/launch.m4a";
 import splash from "../assets/sounds/splash.m4a";
 import whistle from "../assets/sounds/whistle.m4a";
 import yourTurn from "../assets/sounds/your-turn.m4a";
-import { createSoundPlayer, webAudioDriver } from "./sound";
+import { createSoundPlayer, webAudioDriver } from "@playhub/ui";
+import { SOUND_NAMES } from "./sound";
 
-export const sounds = createSoundPlayer(() =>
+export const sounds = createSoundPlayer(SOUND_NAMES, () =>
   webAudioDriver({
     aim,
     launch,

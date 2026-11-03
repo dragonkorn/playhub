@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Placement, Shot, View } from "../../logic/types";
-import { STAGE_MS, boardFor, nextRevealed, revealedView, shownBoard, stagesFor } from "./playback";
+import { STAGE_MS, boardFor, revealedView, shownBoard, stagesFor } from "./playback";
 
 const miss = (shooter: string, target: string, row = 9): Shot => ({ shooter, target, row, col: 0, result: "miss" });
 const sunk = (target: string, ship: Shot["ship"], row = 0): Shot => ({ shooter: "a", target, row, col: 0, result: "sunk", ship });
@@ -38,16 +38,6 @@ describe("stages of a shot (B32)", () => {
     const shots = ships.map((ship) => sunk("b", ship));
     expect(stagesFor(shots, 3)).toEqual(["flight", "sunk"]);
     expect(stagesFor(shots, 4)).toEqual(["flight", "sunk", "eliminated"]);
-  });
-});
-
-describe("queue (B33)", () => {
-  it("keeps unplayed shots for playback in log order", () => {
-    expect(nextRevealed(1, 4, false)).toBe(1);
-  });
-
-  it("skips everything a reconnecting device missed", () => {
-    expect(nextRevealed(1, 4, true)).toBe(4);
   });
 });
 

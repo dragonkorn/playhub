@@ -9,6 +9,8 @@ export interface GameMeta {
   maxPlayers: number;
   device: Device;
   orientation: Orientation;
+  /** Can be played by everyone on one device (O1). */
+  localPlay?: boolean;
 }
 
 /** Translatable text. The client renders it, the server never sends sentences. */
@@ -77,6 +79,8 @@ export interface GameUi<View, Move, Options> {
     /** True when the game ended and the platform is waiting for `release`. */
     holding: boolean;
     release: () => void;
+    /** True when every seat plays on this device, and `me` is the active seat (O4). */
+    local: boolean;
   }) => unknown;
   OptionsPanel?: (props: {
     options: Options;
@@ -123,3 +127,13 @@ export const CloseCode = {
   removed: 4002,
   replaced: 4003,
 } as const;
+
+export const MAX_NAME_GRAPHEMES = 16;
+
+/** Spec R6: NFC, trimmed, 1 to 16 grapheme clusters, no control characters. Null when invalid. */
+export function normalizeName(raw: unknown): string | null {
+  if (typeof raw !== "string" || /\p{Cc}/u.test(raw)) return null;
+  const name = raw.normalize("NFC").trim();
+  const graphemes = [...new Intl.Segmenter("th", { granularity: "grapheme" }).segment(name)].length;
+  return graphemes >= 1 && graphemes <= MAX_NAME_GRAPHEMES ? name : null;
+}

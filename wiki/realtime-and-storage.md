@@ -32,6 +32,10 @@ Rooms sleep between messages while sockets stay open. Without this, the free tie
 
 Storage sits behind `RoomRepository`, with a Durable Object adapter and an in-memory adapter for tests. One Worker also serves the web build ([ADR-0002](../docs/adr/0002-single-worker-hosting.md)).
 
-Client reconnection comes from `partysocket`. Terminal closes use codes the client won't retry (P4).
+Client reconnection comes from `partysocket`. Terminal closes use codes the client won't retry (P4), and after 12 failed retries it stops and shows that the room has ended (`apps/web/src/model/use-room.ts`).
+
+## On the device
+
+`SessionRepository` wraps `localStorage` (C3). It holds each room's seat token and setup draft, the language, preferences such as mute, and any [local game](local-play.md) in progress. Leaving a room clears that room's token and draft, while language and preferences stay.
 
 Evidence: [research](../specs/research/realtime-server.md). Protocol: [platform spec](../specs/platform/spec.md), sections 9 and 10.

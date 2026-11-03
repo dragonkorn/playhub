@@ -27,14 +27,15 @@ async function device(label, fxSpeed = 20) {
   await context.addInitScript((speed) => localStorage.setItem("playhub.pref.fxSpeed", speed), String(fxSpeed));
   const page = await context.newPage();
   page.on("console", (m) => {
-    if (m.type() === "error") errors.push(`${label}: ${m.text()}`);
+    if (m.type() === "error") errors.push(`${label}: ${m.text()} ${m.location().url}`);
   });
   page.on("pageerror", (e) => errors.push(`${label}: ${e.message}`));
   return page;
 }
 
-async function create(page, name) {
+async function create(page, name, game) {
   await page.goto(base);
+  if (game) await page.getByRole("button", { name: new RegExp(`^${game}`) }).click();
   await page.locator("input").fill(name);
   await page.getByRole("button", { name: "สร้างห้อง" }).click();
   await page.waitForURL(/\/room\//);
@@ -301,7 +302,8 @@ async function feedback() {
 async function languageAndScale() {
   const page = await device("en");
   await page.goto(base);
-  check((await page.getByText("Connect Four").count()) + (await page.getByText("เรียงสี่").count()) === 0, "only playable games are listed");
+  check(await page.getByRole("button", { name: /^เรียงสี่/ }).isVisible(), "both games are listed");
+  check((await page.getByText(/connect\s*four/i).count()) === 0, "the trademark name never shows");
   await page.getByRole("button", { name: "English" }).click();
   check(await page.getByRole("button", { name: "Create room" }).isVisible(), "English switch works");
   await page.reload();
@@ -336,7 +338,7 @@ async function caching() {
     const lists = await Promise.all((await caches.keys()).map(async (name) => (await caches.open(name)).keys()));
     return lists.flat().filter((request) => request.url.includes(".m4a")).length;
   });
-  check(precachedSounds === 8, `all 8 sounds are precached (${precachedSounds})`);
+  check(precachedSounds === 14, `all 14 sounds are precached (${precachedSounds})`);
 
   const hashed = assets.find((r) => r.url().includes("/assets/"));
   const headers = (await fetch(hashed.url(), { method: "HEAD" })).headers.get("cache-control") ?? "";
@@ -346,12 +348,131 @@ async function caching() {
   await page.context().close();
 }
 
-const scenarios = { caching, feedback, fullGame, tenPlayers, elimination, languageAndScale, disconnect };
+/** Four in a Row at real speed: whoever moves first stacks column 1 and wins (F7, F13, F18, F19). */
+async function fourInARow() {
+  const host = await device("host", 1);
+  const guest = await device("guest", 1);
+  const code = await create(host, "มีนา", "เรียงสี่");
+  await join(guest, code, "Arm");
+  await host.getByText("Arm").waitFor();
+  await host.getByRole("button", { name: "เริ่มเกม" }).click();
+
+  const first = await waitTurn([host, guest]);
+  const second = first === host ? guest : host;
+  await shot(first, "four-your-turn");
+  for (let move = 0; move < 7; move++) {
+    const page = move % 2 === 0 ? first : second;
+    if (move > 0) await page.getByRole("heading", { name: "ตาคุณ" }).waitFor({ timeout: 10_000 });
+    const column = move % 2 === 0 ? 1 : 2;
+    await page.getByRole("button", { name: `ช่อง ${column}`, exact: true }).click();
+    if (move === 0) {
+      check(await page.locator("main span.opacity-60").isVisible(), "picking a column shows a ghost disc");
+      await shot(page, "four-picked");
+    }
+    await page.getByRole("button", { name: `ปล่อยที่ช่อง ${column}` }).click();
+    if (move === 0) {
+      await second.locator(".fir-fall").waitFor();
+      check(true, "the other screen plays the fall");
+      await shot(second, "four-falling");
+    }
+  }
+  await second.getByText("ชนะ!").waitFor();
+  await shot(second, "four-win-banner");
+  check((await second.locator(".fir-line").count()) === 4, "the winning line is marked");
+  await host.getByText("เรียงสี่ได้ก่อน").waitFor({ timeout: 10_000 });
+  await shot(host, "four-result");
+  await host.getByRole("button", { name: "ดูกระดานทั้งหมด" }).click();
+  check((await host.locator(".fir-line").count()) === 4, "the final board keeps the line");
+  await host.getByRole("button", { name: "กลับไปหน้าผล" }).click();
+  await host.getByRole("button", { name: "เล่นอีกครั้ง" }).click();
+  await host.getByRole("button", { name: "เริ่มเกม" }).waitFor();
+  check(true, "play again returns to the lobby");
+  await host.context().close();
+  await guest.context().close();
+}
+
+/** Fills the board with no line, so the result screen shows a draw (F9, L6). */
+async function fourInARowDraw() {
+  const DRAW = [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 5];
+  const host = await device("host");
+  const guest = await device("guest");
+  const code = await create(host, "มีนา", "เรียงสี่");
+  await join(guest, code, "Arm");
+  await host.getByText("Arm").waitFor();
+  await host.getByRole("button", { name: "เริ่มเกม" }).click();
+  for (const column of DRAW) {
+    const page = await waitTurn([host, guest]);
+    if (!page) break;
+    await page.getByRole("button", { name: `ช่อง ${column + 1}`, exact: true }).click();
+    await page.getByRole("button", { name: `ปล่อยที่ช่อง ${column + 1}` }).click();
+    await page.getByRole("heading", { name: "ตาคุณ" }).waitFor({ state: "hidden" });
+  }
+  await host.getByText("กระดานเต็ม ไม่มีใครเรียงสี่ได้").waitFor({ timeout: 10_000 });
+  check(await host.getByRole("heading", { name: "เสมอ" }).isVisible(), "a full board is a draw");
+  check((await host.locator("ol li").filter({ hasText: /^1\./ }).count()) === 2, "both players share first place");
+  await shot(host, "four-draw");
+  await host.context().close();
+  await guest.context().close();
+}
+
+/** Two players on one device with the network off (O2 to O7, F23). */
+async function localPlay() {
+  const page = await device("local");
+  await page.goto(base);
+  await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
+  await page.reload({ waitUntil: "networkidle" });
+  // A device that has used the app holds every font face. Fonts are cached on first use (C6).
+  await page.evaluate(() => Promise.all([...document.fonts].map((face) => face.load().catch(() => null))));
+  await pause(500);
+  await page.context().setOffline(true);
+
+  await page.getByRole("button", { name: /^เรียงสี่/ }).click();
+  await page.getByRole("button", { name: "เล่นในเครื่องนี้" }).click();
+  const inputs = page.locator("input");
+  await inputs.nth(0).fill("มีนา");
+  await inputs.nth(1).fill("มีนา");
+  await page.getByRole("button", { name: "เริ่มเล่น" }).click();
+  check(await page.getByText("มีคนใช้ชื่อนี้แล้ว").isVisible(), "repeated names are refused");
+  await inputs.nth(1).fill("Arm");
+  await page.getByRole("button", { name: "เริ่มเล่น" }).click();
+
+  const heading = page.getByRole("heading", { name: /^ตาของ / });
+  await heading.waitFor();
+  const first = (await heading.innerText()).replace("ตาของ", "").trim();
+  const second = first === "มีนา" ? "Arm" : "มีนา";
+  await shot(page, "local-turn");
+  for (let move = 0; move < 7; move++) {
+    const name = move % 2 === 0 ? first : second;
+    await page.getByRole("heading", { name: `ตาของ ${name}` }).waitFor();
+    const column = move % 2 === 0 ? 1 : 2;
+    await page.getByRole("button", { name: `ช่อง ${column}`, exact: true }).click();
+    await page.getByRole("button", { name: `ปล่อยที่ช่อง ${column}` }).click();
+    if (move === 2) {
+      await page.getByRole("heading", { name: `ตาของ ${second}` }).waitFor();
+      await page.reload();
+      await page.getByRole("heading", { name: `ตาของ ${second}` }).waitFor();
+      check((await page.locator("ol li").count()) === 3, "a reload resumes the local game offline");
+      move++;
+      await page.getByRole("button", { name: "ช่อง 2", exact: true }).click();
+      await page.getByRole("button", { name: "ปล่อยที่ช่อง 2" }).click();
+    }
+  }
+  check((await page.getByText("คุณ").count()) === 0, "local play names players instead of saying you");
+  await page.getByText("เรียงสี่ได้ก่อน").waitFor({ timeout: 10_000 });
+  check(await page.getByRole("heading", { name: `${first} ชนะ` }).isVisible(), "the first player wins on one device");
+  await shot(page, "local-result");
+  await page.getByRole("button", { name: "เล่นอีกครั้ง" }).click();
+  await heading.waitFor();
+  check((await page.locator("ol li").count()) === 0, "play again starts a fresh local game");
+  await page.context().close();
+}
+
+const scenarios = { caching, feedback, fullGame, tenPlayers, elimination, languageAndScale, disconnect, fourInARow, fourInARowDraw, localPlay };
 for (const [name, run] of Object.entries(scenarios)) {
   if (!only || only === name) await run();
 }
 await browser.close();
 
-for (const error of errors.slice(0, 10)) console.error(error);
+for (const error of errors.slice(0, 10)) console.error(`  ${error}`);
 check(errors.length === 0, "no console errors");
 console.log(`All UI checks passed. Screenshots: ${shots}`);

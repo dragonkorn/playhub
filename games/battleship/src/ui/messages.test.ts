@@ -16,6 +16,10 @@ describe("Battleship translations (I1, I2)", () => {
     expect(messages.th["ship.destroyer"]).toBe("เรือพิฆาต");
   });
 
+  it("gives the result screen its line (L7)", () => {
+    expect(messages.th["result.win"]).toBe("กองสุดท้ายที่เหลืออยู่");
+  });
+
   it("covers every rejection code", () => {
     for (const code of ["wrong_phase", "already_ready", "invalid_fleet", "invalid_target", "off_board", "already_shot"]) {
       expect(messages.th[`error.${code}`]).toBeTruthy();

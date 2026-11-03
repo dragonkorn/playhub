@@ -2,6 +2,8 @@ export * from "./atoms/Button";
 export * from "./atoms/SectionLabel";
 export * from "./atoms/StatusDot";
 export * from "./atoms/TextInput";
+export * from "./model/log-playback";
+export * from "./model/sound";
 export * from "./molecules/Field";
 export * from "./molecules/HeaderBar";
 export * from "./molecules/NoticeBar";

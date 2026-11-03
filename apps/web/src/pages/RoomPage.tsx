@@ -91,6 +91,7 @@ export function RoomPage({ code }: { code: string }) {
           online={online}
           holding={holding}
           release={release}
+          local={false}
         />
       )}
       {boards && (

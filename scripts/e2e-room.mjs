@@ -1,5 +1,5 @@
 // End-to-end check against a running `wrangler dev`: plays a full Battleship game
-// over real HTTP and WebSockets, including a reconnect.
+// over real HTTP and WebSockets, including a reconnect, then a Four in a Row game.
 // Run `pnpm build`, then `pnpm dev:server`, then: pnpm test:e2e
 const base = process.argv[2] ?? "http://localhost:8787";
 const wsBase = base.replace(/^http/, "ws");
@@ -101,4 +101,31 @@ assert(a.rejected.length + b.rejected.length === 0, "no moves rejected");
 
 a.socket.close();
 b.socket.close();
+
+// Four in a Row: the first player stacks column 0 and wins on their fourth disc.
+const yellow = await post("/rooms", { gameId: "four-in-a-row", name: "Ploy" });
+const red = await post(`/rooms/${yellow.code}/join`, { name: "Ben" });
+const third = await fetch(`${base}/rooms/${yellow.code}/join`, { method: "POST", body: '{"name":"Kit"}' });
+assert(third.status === 409 && (await third.json()).code === "room_full", "four in a row takes two players");
+const c = open(yellow.code, yellow.token);
+const d = open(yellow.code, red.token);
+await Promise.all([c.ready, d.ready]);
+await c.until((s) => s.players.every((p) => p.connection === "online"), "both online");
+c.send({ type: "start" });
+await Promise.all([c, d].map((x) => x.until((s) => s.phase === "playing" && s.view, "four in a row started")));
+const seats = { [yellow.playerId]: c, [red.playerId]: d };
+const first = c.snapshot.view.order[0];
+while (c.snapshot.phase === "playing") {
+  const current = c.snapshot.view.current;
+  const client = seats[current];
+  await client.until((s) => s.view.current === current, "turn reached");
+  const version = client.snapshot.version;
+  client.send({ type: "move", version, move: { type: "drop", column: current === first ? 0 : 1 } });
+  await c.until((s) => s.version > version, "drop applied");
+}
+await d.until((s) => s.phase === "finished", "red sees finish");
+assert(c.snapshot.ranking[0][0] === first && c.snapshot.view.line.length === 4, "four up wins with its line");
+assert(c.rejected.length + d.rejected.length === 0, "no drops rejected");
+c.socket.close();
+d.socket.close();
 console.log("All end-to-end checks passed");

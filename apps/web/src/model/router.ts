@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 
-export type Route = { page: "home" } | { page: "join"; code: string } | { page: "room"; code: string };
+export type Route =
+  | { page: "home" }
+  | { page: "join"; code: string }
+  | { page: "room"; code: string }
+  | { page: "local"; gameId: string };
 
 function parse(path: string): Route {
   const join = path.match(/^\/join(?:\/([^/]*))?$/);
   if (join) return { page: "join", code: (join[1] ?? "").toUpperCase() };
   const room = path.match(/^\/room\/([^/]+)$/);
   if (room) return { page: "room", code: (room[1] as string).toUpperCase() };
+  const local = path.match(/^\/local\/([^/]+)$/);
+  if (local) return { page: "local", gameId: local[1] as string };
   return { page: "home" };
 }
 

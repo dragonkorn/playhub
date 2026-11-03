@@ -15,6 +15,9 @@ export interface SessionRepository {
   saveDraft(code: string, value: unknown): void;
   preference(name: string): unknown;
   savePreference(name: string, value: unknown): void;
+  /** The local game in progress on this device, or null (O6). */
+  localGame(): unknown;
+  saveLocalGame(value: unknown): void;
 }
 
 const read = (key: string): unknown => {
@@ -48,4 +51,6 @@ export const sessions: SessionRepository = {
   saveDraft: (code, value) => write(`playhub.draft.${code}`, value),
   preference: (name) => read(`playhub.pref.${name}`),
   savePreference: (name, value) => write(`playhub.pref.${name}`, value),
+  localGame: () => read("playhub.local"),
+  saveLocalGame: (value) => write("playhub.local", value),
 };

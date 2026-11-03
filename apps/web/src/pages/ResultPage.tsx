@@ -15,7 +15,9 @@ export function ResultPage({ snapshot, me, send, leave, showBoards }: Props) {
   const { t } = useTranslation();
   const ranking = snapshot.ranking ?? [];
   const nameOf = (id: PlayerId) => snapshot.players.find((p) => p.id === id)?.name ?? "?";
-  const winner = nameOf(ranking[0]?.[0] ?? "");
+  const draw = (ranking[0]?.length ?? 0) > 1;
+  const title = draw ? t("result.draw") : t("result.wins", { name: nameOf(ranking[0]?.[0] ?? "") });
+  const line = t(draw ? "result.draw" : "result.win", { ns: snapshot.gameId, defaultValue: "" });
 
   return (
     <SplitLayout
@@ -24,13 +26,13 @@ export function ResultPage({ snapshot, me, send, leave, showBoards }: Props) {
       rightClassName="flex flex-col gap-2.5"
       left={
         <>
-          <p className="text-2xl font-bold text-signal">{t("result.last")}</p>
-          <h1 className="font-display text-8xl leading-none font-extrabold break-words">{t("result.wins", { name: winner })}</h1>
+          {line && <p className="text-2xl font-bold text-signal">{line}</p>}
+          <h1 className="font-display text-8xl leading-none font-extrabold break-words">{title}</h1>
         </>
       }
       right={
         <>
-          <RankingList ranking={ranking.flat()} me={me} nameOf={nameOf} />
+          <RankingList ranking={ranking} me={me} nameOf={nameOf} />
           {snapshot.hostId === me ? (
             <Button onClick={() => send({ type: "playAgain" })}>{t("result.again")}</Button>
           ) : (

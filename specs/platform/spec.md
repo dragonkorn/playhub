@@ -51,6 +51,8 @@ any phase ──1 hour inactive──► deleted
 - **L3** Only the host can trigger play again. Connected seats return to the lobby with the same code and options. Seats that are lost or disconnected are removed.
 - **L4** A player who leaves in the lobby or at the finished phase loses their seat. A player who leaves during play is marked lost (D6).
 - **L5** The host can remove a seat in the lobby. This is needed so a disconnected player can't block L1.
+- **L6** The result screen names the winner when one player ranks first, and says it's a draw when several players share first place.
+- **L7** The line above the result comes from the game's catalog, `result.win` or `result.draw`. A game without the key shows no line.
 
 ## 5. Turns and blocking
 
@@ -93,6 +95,8 @@ export interface GameMeta {
   maxPlayers: number;
   device: Device;
   orientation: Orientation;
+  /** Can be played by everyone on one device (O1). */
+  localPlay?: boolean;
 }
 
 /** Translatable text. The client renders it, the server never sends sentences. */
@@ -152,6 +156,8 @@ export interface GameUi<View, Move, Options> {
     /** True when the game ended and the platform is waiting for `release`. */
     holding: boolean;
     release: () => void;
+    /** True when every seat plays on this device, and `me` is the active seat (O4). */
+    local: boolean;
   }) => unknown;
   OptionsPanel?: (props: {
     options: Options;
@@ -167,7 +173,7 @@ export interface GameUi<View, Move, Options> {
 
 - **G1** All game functions are pure and synchronous. State is JSON-serializable. Any game log, such as public shot results, lives in state and reaches players through `viewFor`.
 - **G2** Adding a game means adding one folder plus one registration line in each of `apps/server` and `apps/web`.
-- **G3** The server imports only `logic`. Web imports only `ui`. Enforce this with package exports.
+- **G3** The server imports only `logic`. Web imports only `ui`, except the `logic` of local-play games (O3). Enforce this with package exports.
 - **G4** `packages/game-contract` ships a test kit that every game must pass: a random playthrough always finishes, state survives a JSON round trip, and no view contains another player's secret data.
 
 The third check needs a game-supplied list of secret values for a given state, so it stays generic.
@@ -273,6 +279,7 @@ Hibernation is mandatory. Without it, the free tier covers about 37 games a day 
 - **C4** The client trusts snapshots and keeps no game rules. It shows a connection-lost state while its own socket is down.
 - **C5** Game screens show only on the game's declared device and orientation. On any other device, the client shows a translated notice and doesn't block joining.
 - **C6** After the first visit, playing downloads no app assets. The service worker precaches all build output, including images and sound, and caches fonts on first use. Hashed files under `/assets/` are served `immutable` for one year. HTML and `sw.js` still revalidate, so a new deploy reaches players, and only changed files download.
+- **C7** The home page lists every registered game as a card the player can pick. The first registered game is picked by default.
 
 ## 12. Localization
 
@@ -285,7 +292,20 @@ Hibernation is mandatory. Without it, the free tier covers about 37 games a day 
 
 The library is `react-i18next`.
 
-## 13. Acceptance criteria
+## 13. Local play
+
+Two or more people can play one game on one device, with no room and no network (ADR-0006).
+
+- **O1** A game opts in with `meta.localPlay: true`. Only a game with no hidden information and one active player at a time may opt in, because everyone shares one screen.
+- **O2** On the home page, a local-play game shows a Play on this device button. It asks for one name per seat, `minPlayers` to `maxPlayers`. Names follow R6 and must differ, compared case-insensitively.
+- **O3** A local game runs entirely on the device: the web app runs the game's `logic`, and nothing goes over the network. Random comes from `crypto.getRandomValues`, injected as the game's `random`.
+- **O4** Seats get the ids `local-1`, `local-2` and so on. The board gets the active player as `me` and `local: true`, so the game names whose turn it is instead of saying "you".
+- **O5** A rejected move shows the same translated toast as online play.
+- **O6** The game is saved on the device after every move, so a reload resumes it. Leaving deletes it.
+- **O7** The end of a local game uses the same result screen. Play again restarts with the same names. There is no lobby, room code, host or disconnect handling.
+- **O8** Registering a local-play game takes one more line in `apps/web`, which maps the game id to its `logic`.
+
+## 14. Acceptance criteria
 
 Unless noted, these run in Vitest against `engine.ts` with the in-memory repository and a test game.
 
@@ -308,5 +328,11 @@ Unless noted, these run in Vitest against `engine.ts` with the in-memory reposit
 17. Manual on `wrangler dev`: a room hibernates, wakes, and serves a reconnecting player their own view. (V1 to V4)
 18. Manual on a real iPad: sleep and wake reconnects, and joining from a QR scan works. (R4, D2)
 19. A repeat visit gets every app asset and font from the service worker, and `/assets/` files are `immutable`. (C6)
+20. The result screen says it's a draw for a tie at the top, and shows the game's `result.win` or `result.draw` line. (L6, L7)
+21. The home page lists both games, and creating a room uses the picked one. (C7)
+22. A local game starts with valid, distinct names, refuses invalid or repeated ones, and plays a move as the active seat. (O2 to O4)
+23. A local game's rejected move returns the game's code and leaves the state alone. (O5)
+24. A finished local game ranks like an online one, and play again starts fresh with the same names. (O7)
+25. With the network off after the first visit, a whole Four in a Row game plays on one device. (O3, C6)
 
 `pnpm test:e2e` covers real sockets, Durable Object storage and alarms, and the app in headless Chrome. Run it against a local server for UI or protocol changes.

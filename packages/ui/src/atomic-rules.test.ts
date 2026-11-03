@@ -5,9 +5,10 @@ import { describe, expect, it } from "vitest";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const LAYERS = ["atoms", "molecules", "organisms", "templates", "pages"];
-const AREAS = ["packages/ui/src", "apps/web/src", "games/battleship/src/ui"];
+const GAMES = readdirSync(join(ROOT, "games"), { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+const AREAS = ["packages/ui/src", "apps/web/src", ...GAMES.map((game) => `games/${game}/src/ui`)];
 /** Entry points that only start the app or expose a game. */
-const ENTRY_FILES = new Set(["apps/web/src/App.tsx", "apps/web/src/main.tsx", "games/battleship/src/ui/index.tsx"]);
+const ENTRY_FILES = new Set(["apps/web/src/App.tsx", "apps/web/src/main.tsx", ...GAMES.map((game) => `games/${game}/src/ui/index.tsx`)]);
 const OUTSIDE_WORLD = /use-room|use-playback|model\/sounds|repositories\//;
 
 const layerOf = (path: string) => LAYERS.findIndex((layer) => path.split("/").includes(layer));

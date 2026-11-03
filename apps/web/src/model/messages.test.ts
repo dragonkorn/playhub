@@ -11,6 +11,11 @@ describe("platform translations (I1, I2)", () => {
     expect(Object.keys(messages.en).sort()).toEqual(Object.keys(messages.th).sort());
   });
 
+  it("says draw for a tie, and leaves the line above the result to the game (L6, L7)", () => {
+    expect(messages.th["result.draw"]).toBe("เสมอ");
+    expect(messages.th["result.last"]).toBeUndefined();
+  });
+
   it("covers the server's rejection and join codes", () => {
     for (const code of roomCodes) expect(messages.th[`error.${code}`]).toBeTruthy();
   });

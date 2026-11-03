@@ -17,9 +17,6 @@ export function stagesFor(shots: readonly Shot[], index: number): Stage[] {
   return stages;
 }
 
-/** A reconnecting device skips what it missed (B33). */
-export const nextRevealed = (revealed: number, total: number, resync: boolean) => (resync ? total : revealed);
-
 /** The view as it stood when only the first `revealed` shots had landed. */
 export function revealedView(view: View, revealed: number): View {
   const shots = view.shots.slice(0, revealed);

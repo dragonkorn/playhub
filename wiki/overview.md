@@ -12,6 +12,8 @@ sources:
   - packages/game-contract/
   - packages/ui/
   - games/battleship/
+  - games/four-in-a-row/
+  - docs/adr/0006-local-play-runs-logic-in-the-browser.md
   - docs/adr/0002-single-worker-hosting.md
 ---
 
@@ -25,19 +27,21 @@ PlayHub lets friends play a board game across devices with a room code and no ac
 - `apps/server`: one Cloudflare Worker. Serves the web build and the API, and runs one Durable Object per room ([ADR-0002](../docs/adr/0002-single-worker-hosting.md)).
 - `packages/game-contract`: the shared types both sides and every game depend on.
 - `packages/ui`: shared design system. See [Design system](design-system.md).
-- `games/<game>`: one folder per game, split into `logic` and `ui`.
+- `games/<game>`: one folder per game, split into `logic` and `ui`. Two exist: [Battleship](battleship.md) and [Four in a Row](four-in-a-row.md).
 
 ## Dependency direction
 
-Apps depend on games, and games depend on `game-contract`. The platform never contains game-specific code. See [Game plug-ins](game-plugins.md).
+Apps depend on games. Games depend on `game-contract` and `packages/ui`, never on the platform (A7). The platform names a game only in its two registration files. The home page lists every registered game (C7). See [Game plug-ins](game-plugins.md).
 
 ## Where a request goes
 
 A device sends a move over WebSocket. The room validates it, applies the game's rules, saves, then sends each player a personal snapshot. See [Realtime and storage](realtime-and-storage.md).
 
+The one exception is [Local play](local-play.md): everyone shares one device, and the browser runs the game's rules with no server ([ADR-0006](../docs/adr/0006-local-play-runs-logic-in-the-browser.md)).
+
 ## Caching
 
-After the first visit, players download no app assets (C6). The service worker holds all build output, and fonts once used. Files under `/assets/` have hashed names and are `immutable` for a year, while HTML revalidates, so a deploy downloads only what changed. Include any new asset type in `globPatterns` in `apps/web/vite.config.ts`. The room connection is live data, so it isn't cached.
+After the first visit, players download no app assets (C6). The service worker holds all build output, and fonts once used. Files under `/assets/` have hashed names and are `immutable` for a year, while HTML revalidates, so a deploy downloads only what changed. Include any new asset type in `globPatterns` in `apps/web/vite.config.ts`. `apps/web/index.html` links `icon.svg` as the page icon, so the browser never asks the network for `favicon.ico`, which would fail offline. The room connection is live data, so it isn't cached.
 
 ## Running it
 

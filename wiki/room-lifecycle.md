@@ -12,7 +12,7 @@ A room moves through `lobby`, `playing` and `finished`. Play again returns it to
 
 ## Getting in
 
-The host creates a room (R1). Others join by code or QR link (R4). Joining can fail for coded reasons (R5).
+The host picks a game on the home page, which lists every registered game (C7), and creates a room (R1). Others join by code or QR link (R4). Joining can fail for coded reasons (R5).
 
 There are no accounts. Each player holds a secret seat token on their device, which reclaims their seat when they return (S1, S2). The token is never sent to other players (S3).
 
@@ -22,10 +22,12 @@ Only the host starts, and every seat must be connected (L1). The host can remove
 
 ## Playing and finishing
 
-The platform has no turn logic. It asks the game who it's waiting for (T1). When the game reports it's done, the room moves to `finished`.
+The platform has no turn logic. It asks the game who it's waiting for (T1). When the game reports it's done, the room moves to `finished`, and the result screen appears once the game lets it ([Game plug-ins](game-plugins.md)). It names the winner, or says it's a draw when players tie for first, and tied players share a place in the ranking (L6). The line above the result comes from the game's catalog, `result.win` or `result.draw` (L7). From there, players can reopen the final boards.
 
 If a player drops, see [Disconnects and host](disconnects-and-host.md).
 
 Room rules live in `apps/server/src/room/engine.ts`. Screens live in `apps/web/src/pages/`.
+
+A game can also be played on one device with no room at all. See [Local play](local-play.md).
 
 Full rules: [platform spec](../specs/platform/spec.md), sections 2 to 5.

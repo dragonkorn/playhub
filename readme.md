@@ -68,7 +68,11 @@ Target device: iPad. Players: 2 to 10. Every player gets a 10×10 board and 5 sh
 - A player whose ships are all sunk is eliminated and stays to watch. Last fleet afloat wins.
 - If a player disconnects, the host chooses to wait or mark them as lost. If the host disconnects, the host role passes to the next connected player in turn order.
 
-### 2. Connect Four (second game)
+### 2. Four in a Row (second game)
 
-Proves the game contract works for more than one game. Starts after Battleship is finished.
+Thai name เรียงสี่. The classic vertical four-in-a-row game, named so to avoid the "Connect Four" trademark. Target device: iPad. Players: exactly 2. Proves the game contract works for more than one game.
+
+- Players take turns dropping a disc into one of 7 columns. Four in a line, in any direction, wins. A full board is a draw.
+- Every drop falls and lands with sound, and the winning line lights up.
+- **Local play:** two people can also play on one device, with no room and no network.
 
