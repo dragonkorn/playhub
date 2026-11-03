@@ -76,3 +76,12 @@ Thai name เรียงสี่. The classic vertical four-in-a-row game, nam
 - Every drop falls and lands with sound, and the winning line lights up.
 - **Local play:** two people can also play on one device, with no room and no network.
 
+
+### 3. ใบ้เรียง (third game)
+
+English name Hint in Order. A cooperative party game. Target devices: phone in portrait, or iPad in landscape. Players: 2 to 10. The app replaces the cards, and players hint at their numbers by talking.
+
+- Each level deals secret numbers from 1 to 100, one per player in level 1, two in level 2, three in level 3. The team shares 3 lives.
+- The game picks a topic each level, or the table agrees on one. Players reveal from low to high, in any order, with a 1 second hold.
+- Revealing over a lower number skips it and costs a life. Clear all 3 levels to win together.
+- Adds phone support to the platform: every screen has a portrait layout.

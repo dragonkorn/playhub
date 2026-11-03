@@ -36,19 +36,19 @@ export function HomePage() {
 
   return (
     <SplitLayout
-      leftClassName="flex flex-col justify-between gap-8"
-      rightClassName="flex flex-col gap-4"
+      leftClassName="flex flex-col justify-between gap-8 tall:flex-row tall:items-start tall:gap-4"
+      rightClassName="flex flex-col gap-4 tall:min-h-0 tall:grow tall:gap-2.5"
       left={
         <>
-          <div className="flex flex-col gap-5">
-            <h1 className="font-display text-9xl leading-none font-extrabold">
+          <div className="flex flex-col gap-5 tall:gap-1">
+            <h1 className="font-display text-9xl leading-none font-extrabold tall:text-5xl">
               Play
-              <br />
+              <br className="tall:hidden" />
               Hub
             </h1>
-            <p className="text-3xl leading-snug text-muted">{t("home.tagline")}</p>
+            <p className="text-3xl leading-snug text-muted tall:text-base">{t("home.tagline")}</p>
           </div>
-          <Button variant="secondary" size="md" onClick={switchLanguage} className="w-40">
+          <Button variant="secondary" size="md" onClick={switchLanguage} className="w-40 tall:h-11 tall:w-auto tall:flex-none tall:text-base">
             {t("language.switch")}
           </Button>
         </>
@@ -66,12 +66,12 @@ export function HomePage() {
               onClick={() => setGameId(id)}
             />
           ))}
-          <div className="mt-auto flex flex-col gap-3">
+          <div className="mt-auto flex flex-col gap-3 tall:gap-2.5">
             <Field label={t("home.name")}>
               <TextInput value={name} onChange={(e) => setName(e.target.value)} maxLength={40} />
             </Field>
             {error && <p className="text-lg text-hit">{t(`error.${error}`)}</p>}
-            <Button disabled={busy} onClick={create}>
+            <Button disabled={busy} onClick={create} className="tall:h-16">
               {t("home.create")}
             </Button>
             <div className={`grid gap-3 ${games[gameId]?.meta.localPlay ? "grid-cols-2" : ""}`}>

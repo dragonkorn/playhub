@@ -37,3 +37,10 @@ Questions for checking wiki accuracy. Answers and evidence come from sources, ne
 | 31 | Does a reload lose a local game in progress? | No. It is saved on the device after every move. | `specs/platform/spec.md` O6, `apps/web/src/repositories/session-repository.ts` |
 | 32 | What does the result screen show when players tie for first? | It says it's a draw, and tied players share a place. | `specs/platform/spec.md` L6, `apps/web/src/organisms/RankingList.tsx` |
 | 33 | Have the Four in a Row sounds been checked on a real iPad? | `UNVERIFIED`. Only generated and played in headless Chrome. | `wiki/testing.md` |
+| 34 | In ใบ้เรียง, how many lives does a mistake cost? | 1 for each lower number still out, which is skipped and discarded. | `specs/games/bai-riang/spec.md` N7, `games/bai-riang/src/logic/index.ts` |
+| 35 | Can a ใบ้เรียง topic repeat within one game? | No. Each level and each reroll draws a topic not yet used in the game. | `specs/games/bai-riang/spec.md` N4, `games/bai-riang/src/logic/index.ts`, `drawTopic` |
+| 36 | How long must a player hold to reveal a number? | 1 second. Letting go earlier cancels. | `games/bai-riang/src/ui/model/hold.ts`, `HOLD_MS` |
+| 37 | What size is the portrait frame? | 390×844. Landscape is 1180×820. | `apps/web/src/model/frame.ts`, `FRAMES` |
+| 38 | What does Battleship show on a phone held upright? | Its landscape screen, scaled down, with a notice to rotate. | `apps/web/src/model/frame.ts`, `frameFor`; `specs/platform/spec.md` C5 |
+| 39 | How does the result screen word a cooperative game's end? | Team won or team lost, with players listed without places. | `specs/platform/spec.md` L8, `apps/web/src/model/result.ts` |
+| 40 | Has hold to reveal been tested on a real phone? | `UNVERIFIED`. Only headless Chrome so far. | `wiki/testing.md` |

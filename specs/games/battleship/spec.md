@@ -7,7 +7,7 @@ Screens: `design/battleship-journey/`. Ship art: `design/assets/battleship/`.
 ## 1. Game setup
 
 ```ts
-meta = { id: "battleship", minPlayers: 2, maxPlayers: 10, device: "ipad", orientation: "landscape" };
+meta = { id: "battleship", minPlayers: 2, maxPlayers: 10, orientations: ["landscape"] };
 ```
 
 - **B1** Every player gets a 10×10 board and the same 5 ships, whatever the player count.

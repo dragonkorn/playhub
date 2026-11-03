@@ -24,7 +24,7 @@ The drop log is the only record of the board. `logic/board.ts` holds the board s
 
 ## Screen
 
-One iPad landscape screen on the shared `GameLayout`: players and disc colors on the left, the board in the middle, the latest moves and the Drop button on the right. A tap selects a column and shows a ghost disc above it, and Drop confirms (F13). Discs also differ by an inner ring or dot, for players who can't tell the colors apart (F16).
+One landscape screen on the shared `GameLayout`, so the game declares `orientations: ["landscape"]` ([Screens and frames](screens-and-frames.md)): players and disc colors on the left, the board in the middle, the latest moves and the Drop button on the right. A tap selects a column and shows a ghost disc above it, and Drop confirms (F13). Discs also differ by an inner ring or dot, for players who can't tell the colors apart (F16).
 
 ## Move feedback
 

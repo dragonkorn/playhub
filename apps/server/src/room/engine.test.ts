@@ -11,9 +11,10 @@ interface TestState {
   turn: number;
   scores: Record<string, number>;
   out: string[];
+  team?: "won";
 }
-const testGame: GameDefinition<TestState, { add: number; eliminate?: string }, { mine: number; turn: string }, { limit: number }> = {
-  meta: { id: "test", minPlayers: 2, maxPlayers: 10, device: "ipad", orientation: "landscape" },
+const testGame: GameDefinition<TestState, { add: number; eliminate?: string; team?: "won" }, { mine: number; turn: string }, { limit: number }> = {
+  meta: { id: "test", minPlayers: 2, maxPlayers: 10, orientations: ["landscape"] },
   defaultOptions: { limit: 3 },
   parseOptions: (raw) => (raw && typeof raw === "object" && "limit" in raw ? (raw as { limit: number }) : null),
   parseMove: (raw) => (raw && typeof raw === "object" && "add" in raw ? (raw as { add: number }) : null),
@@ -33,6 +34,7 @@ const testGame: GameDefinition<TestState, { add: number; eliminate?: string }, {
         scores: { ...state.scores, [player]: (state.scores[player] ?? 0) + 1 },
         turn: (left.indexOf(player) + 1) % left.length,
         out: move.eliminate ? [...state.out, move.eliminate] : state.out,
+        ...(move.team ? { team: move.team } : {}),
       },
     };
   },
@@ -43,6 +45,7 @@ const testGame: GameDefinition<TestState, { add: number; eliminate?: string }, {
   eliminatedPlayers: (state) => state.out,
   removePlayer: (state, player) => ({ ...state, out: [...state.out, player], turn: 0 }),
   outcome(state) {
+    if (state.team) return { done: true, ranking: [state.order], team: state.team };
     const left = state.order.filter((p) => !state.out.includes(p));
     const winner = Object.entries(state.scores).find(([, s]) => s >= 3)?.[0] ?? (left.length === 1 ? left[0] : undefined);
     return winner ? { done: true, ranking: [[winner]] } : { done: false };
@@ -490,6 +493,17 @@ describe("end of game", () => {
     const { host } = await finish();
     expect(latest(host).phase).toBe("finished");
     expect(latest(host).ranking).toEqual([[host]]);
+    expect(latest(host).team).toBeNull();
+  });
+
+  it("carries a team outcome into the snapshot, and clears it on play again (L8)", async () => {
+    const { host, arm, ploy } = await room();
+    const active = activeIn(host);
+    await send(active, { type: "move", version: latest(active).version, move: { add: 1, team: "won" } });
+    expect(latest(arm).team).toBe("won");
+    expect(latest(arm).ranking).toEqual([[host, arm, ploy]]);
+    await send(host, { type: "playAgain" });
+    expect(latest(host).team).toBeNull();
   });
 
   it("restarts with connected seats and options, dropping others (L3)", async () => {

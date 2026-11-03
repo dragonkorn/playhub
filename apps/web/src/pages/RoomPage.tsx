@@ -3,6 +3,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { games } from "../games";
 import { navigate } from "../model/router";
+import { BOTH } from "../model/frame";
+import { useScreenOrientations } from "../model/screen";
 import { useRoom } from "../model/use-room";
 import { DisconnectPanel } from "../organisms/DisconnectPanel";
 import { sessions } from "../repositories/session-repository";
@@ -51,6 +53,11 @@ export function RoomPage({ code }: { code: string }) {
   );
   const preferences = useMemo(() => ({ load: sessions.preference, save: sessions.savePreference }), []);
 
+  const game = snapshot ? games[snapshot.gameId] : undefined;
+  const holding = snapshot?.phase === "finished" && Boolean(game?.holdsFinish) && !released;
+  const onBoard = snapshot?.phase === "playing" || boards || holding;
+  useScreenOrientations(onBoard && game ? game.meta.orientations : BOTH);
+
   if (ended) {
     return (
       <main className="flex h-full flex-col items-center justify-center gap-6">
@@ -67,9 +74,7 @@ export function RoomPage({ code }: { code: string }) {
   }
 
   const me = session.playerId;
-  const game = games[snapshot.gameId];
   const Board = game?.Board;
-  const holding = snapshot.phase === "finished" && Boolean(game?.holdsFinish) && !released;
   const message = (error: string) =>
     t(`error.${error}`, { ns: snapshot.gameId, defaultValue: t(`error.${error}`, { defaultValue: t("error.generic") }) });
 
@@ -79,7 +84,7 @@ export function RoomPage({ code }: { code: string }) {
       {snapshot.phase === "finished" && !boards && !holding && (
         <ResultPage snapshot={snapshot} me={me} send={send} leave={leave} showBoards={() => setBoards(true)} />
       )}
-      {(snapshot.phase === "playing" || boards || holding) && Board && snapshot.view != null && (
+      {onBoard && Board && snapshot.view != null && (
         <Board
           view={snapshot.view}
           me={me}
@@ -95,7 +100,7 @@ export function RoomPage({ code }: { code: string }) {
         />
       )}
       {boards && (
-        <Button variant="secondary" size="sm" onClick={() => setBoards(false)} className="absolute top-6 right-6">
+        <Button variant="secondary" size="sm" onClick={() => setBoards(false)} className="absolute bottom-6 left-1/2 -translate-x-1/2">
           {t("result.backToResult")}
         </Button>
       )}

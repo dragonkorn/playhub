@@ -22,8 +22,10 @@ function check(ok, label) {
 }
 
 /** Playback runs fast by default, so whole games finish quickly. */
-async function device(label, fxSpeed = 20) {
-  const context = await browser.newContext({ viewport: { width: 1180, height: 820 }, hasTouch: true });
+const PHONE = { width: 390, height: 844 };
+
+async function device(label, fxSpeed = 20, viewport = { width: 1180, height: 820 }) {
+  const context = await browser.newContext({ viewport, hasTouch: true });
   await context.addInitScript((speed) => localStorage.setItem("playhub.pref.fxSpeed", speed), String(fxSpeed));
   const page = await context.newPage();
   page.on("console", (m) => {
@@ -302,7 +304,8 @@ async function feedback() {
 async function languageAndScale() {
   const page = await device("en");
   await page.goto(base);
-  check(await page.getByRole("button", { name: /^เรียงสี่/ }).isVisible(), "both games are listed");
+  check(await page.getByRole("button", { name: /^เรียงสี่/ }).isVisible(), "every game is listed");
+  check(await page.getByRole("button", { name: /^ใบ้เรียง/ }).isVisible(), "ใบ้เรียง is listed");
   check((await page.getByText(/connect\s*four/i).count()) === 0, "the trademark name never shows");
   await page.getByRole("button", { name: "English" }).click();
   check(await page.getByRole("button", { name: "Create room" }).isVisible(), "English switch works");
@@ -338,7 +341,7 @@ async function caching() {
     const lists = await Promise.all((await caches.keys()).map(async (name) => (await caches.open(name)).keys()));
     return lists.flat().filter((request) => request.url.includes(".m4a")).length;
   });
-  check(precachedSounds === 14, `all 14 sounds are precached (${precachedSounds})`);
+  check(precachedSounds === 19, `all 19 sounds are precached (${precachedSounds})`);
 
   const hashed = assets.find((r) => r.url().includes("/assets/"));
   const headers = (await fetch(hashed.url(), { method: "HEAD" })).headers.get("cache-control") ?? "";
@@ -467,7 +470,100 @@ async function localPlay() {
   await page.context().close();
 }
 
-const scenarios = { caching, feedback, fullGame, tenPlayers, elimination, languageAndScale, disconnect, fourInARow, fourInARowDraw, localPlay };
+/** Every element that matters sits inside the viewport (C5, criterion 28). */
+async function fits(page, label) {
+  const size = page.viewportSize();
+  const outside = await page.evaluate(({ width, height }) => {
+    const items = [...document.querySelectorAll("main button, main h1, main h2, main input, main li")];
+    return items
+      .map((el) => ({ el, box: el.getBoundingClientRect() }))
+      .filter(({ box }) => box.width > 0 && (box.left < -1 || box.top < -1 || box.right > width + 1 || box.bottom > height + 1))
+      .map(({ el }) => el.textContent?.trim().slice(0, 30));
+  }, size);
+  check(outside.length === 0, `${label} fits the ${size.width}x${size.height} frame${outside.length ? `: ${outside.join(", ")}` : ""}`);
+}
+
+/** Holds the reveal button for the full second (N16). */
+async function holdReveal(page, ms = 1150) {
+  const box = await page.getByRole("button", { name: /กดค้างเพื่อเปิด/ }).boundingBox();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await pause(ms);
+  await page.mouse.up();
+}
+
+/** The number on a player's large card, or null when they hold none. */
+async function nextNumber(page) {
+  const label = await page.getByRole("button", { name: /กดค้างเพื่อเปิด|เปิดเลขของคุณครบแล้ว/ }).textContent();
+  const match = label?.match(/เปิดเลข (\d+)/);
+  return match ? Number(match[1]) : null;
+}
+
+/** ใบ้เรียง on phones in portrait, with an iPad in landscape: a mistake, then a full win (N5 to N22, L8, C5). */
+async function baiRiang() {
+  const host = await device("br-host", 1, PHONE);
+  await host.goto(base);
+  await fits(host, "home");
+  const code = await create(host, "มีนา", "ใบ้เรียง");
+  await fits(host, "lobby");
+  const arm = await device("br-arm", 1, PHONE);
+  await arm.goto(`${base}/join/${code}`);
+  await fits(arm, "join");
+  await join(arm, code, "Arm");
+  const ipad = await device("br-ipad", 1);
+  await join(ipad, code, "ต้น");
+  const pages = [host, arm, ipad];
+  await host.getByText("ต้น").waitFor();
+  await host.getByRole("button", { name: "เริ่มเกม" }).click();
+  for (const page of pages) await page.getByRole("button", { name: /กดค้างเพื่อเปิด/ }).waitFor();
+  check((await host.locator("[data-frame=portrait]").count()) === 1, "a phone plays in the portrait frame");
+  check((await ipad.locator("[data-frame=landscape]").count()) === 1, "an iPad plays in the landscape frame");
+  await fits(host, "phone game screen");
+  await fits(ipad, "iPad game screen");
+  await shot(ipad, "bai-riang-ipad");
+
+  const numbers = async () => Promise.all(pages.map(nextNumber));
+  let level = await numbers();
+  const highest = level.indexOf(Math.max(...level));
+
+  // A short tap reveals nothing (N16).
+  await holdReveal(pages[highest], 300);
+  await pause(500);
+  check(JSON.stringify(await numbers()) === JSON.stringify(level), "releasing early cancels the reveal");
+
+  // Revealing the highest first skips the other two: 2 lives (N7, N21).
+  await holdReveal(pages[highest]);
+  await host.getByRole("alert").getByText("พลาด!").waitFor();
+  check(await host.getByText("−2 · เหลือ 1 ชีวิต").isVisible(), "a mistake costs a life per skipped number");
+  await shot(host, "bai-riang-mistake");
+  await host.getByRole("button", { name: "ไปด่าน 2" }).waitFor({ timeout: 10_000 });
+  await fits(host, "cleared level");
+
+  for (let next = 2; next <= 3; next++) {
+    await arm.getByRole("button", { name: `ไปด่าน ${next}` }).click();
+    for (const page of pages) await page.getByRole("button", { name: /กดค้างเพื่อเปิด/ }).waitFor();
+    check((await host.locator("main ol li").count()) === next, `level ${next} deals ${next} numbers each (N2, N15)`);
+    if (next === 3) await shot(host, "bai-riang-level3");
+    for (let reveal = 0; reveal < pages.length * next; reveal++) {
+      level = await numbers();
+      const lowest = Math.min(...level.filter((n) => n !== null));
+      await holdReveal(pages[level.indexOf(lowest)]);
+      await pause(400);
+    }
+    if (next === 2) await host.getByRole("button", { name: "ไปด่าน 3" }).waitFor({ timeout: 10_000 });
+  }
+
+  await host.getByText("ผ่านครบ 3 ด่าน").waitFor({ timeout: 10_000 });
+  check(await host.getByRole("heading", { name: "ทีมชนะ!" }).isVisible(), "the team result says the team won (L8, L9)");
+  await fits(host, "team result");
+  await shot(host, "bai-riang-result");
+  await host.getByRole("button", { name: "ดูลำดับที่เปิด" }).click();
+  await host.getByRole("button", { name: "กลับไปหน้าผล" }).click();
+  await host.getByRole("heading", { name: "ทีมชนะ!" }).waitFor();
+  for (const page of pages) await page.context().close();
+}
+
+const scenarios = { caching, feedback, fullGame, tenPlayers, elimination, languageAndScale, disconnect, fourInARow, fourInARowDraw, localPlay, baiRiang };
 for (const [name, run] of Object.entries(scenarios)) {
   if (!only || only === name) await run();
 }

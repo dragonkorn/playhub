@@ -7,7 +7,7 @@ The rules are the classic vertical four-in-a-row game. "Connect Four" is a Hasbr
 ## 1. Game setup
 
 ```ts
-meta = { id: "four-in-a-row", minPlayers: 2, maxPlayers: 2, device: "ipad", orientation: "landscape", localPlay: true };
+meta = { id: "four-in-a-row", minPlayers: 2, maxPlayers: 2, orientations: ["landscape"], localPlay: true };
 ```
 
 - **F1** The board has 7 columns and 6 rows. Row 0 is the bottom row, column 0 is the left column.

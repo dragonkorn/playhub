@@ -15,8 +15,8 @@ export interface HeaderBarProps {
 
 export function HeaderBar({ title, detail, tone = "plain", action }: HeaderBarProps) {
   return (
-    <header className={`flex h-16 flex-none items-center justify-between gap-6 ${TONES[tone]}`}>
-      <h1 className="truncate font-display text-4xl font-bold">{title}</h1>
+    <header className={`flex h-16 flex-none items-center justify-between gap-6 tall:h-11 tall:gap-3 ${TONES[tone]}`}>
+      <h1 className="truncate font-display text-4xl font-bold tall:text-2xl">{title}</h1>
       <div className="flex flex-none items-center gap-4">
         {detail && <p className={`text-lg font-medium ${tone === "turn" ? "" : "text-muted"}`}>{detail}</p>}
         {action}

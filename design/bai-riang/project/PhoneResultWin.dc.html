@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>PlayHub มือถือ ผล ทีมชนะ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b1a2b}
+a{color:#ffc83d}a:hover{color:#ffe08a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 24px; background: #0b1a2b; color: #eaf2f6; font-family: 'Sarabun', sans-serif;">
+  <section style="display: flex; flex-direction: column; gap: 4px; padding-top: 72px;">
+    <span style="font-size: 18px; color: #ffc83d; font-weight: 700;">ผ่านครบ 3 ด่าน</span>
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 64px; line-height: 1.1;">ทีมชนะ!</h1>
+    <div style="display: flex; align-items: center; gap: 6px; font-size: 17px; color: #9db4c4;">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z" fill="#ff6b4a"></path></svg>
+      เหลือ 1 ชีวิต
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 8px;">
+    <span style="font-size: 15px; color: #9db4c4; font-weight: 700;">ทีม</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+      <div style="height: 44px; border-radius: 10px; background: #12263b; display: flex; align-items: center; padding: 0 14px; font-weight: 700;">มีนา</div>
+      <div style="height: 44px; border-radius: 10px; background: #12263b; display: flex; align-items: center; padding: 0 14px; font-weight: 700;">Arm</div>
+      <div style="height: 44px; border-radius: 10px; background: #12263b; display: flex; align-items: center; padding: 0 14px; font-weight: 700;">ต้น</div>
+      <div style="height: 44px; border-radius: 10px; background: #12263b; display: flex; align-items: center; padding: 0 14px; font-weight: 700; color: #ffc83d;">ฝน (คุณ)</div>
+    </div>
+  </section>
+
+  <div style="flex-grow: 1;"></div>
+  <section style="display: flex; flex-direction: column; gap: 10px;">
+    <button style="height: 72px; border-radius: 18px; border: none; background: #ffc83d; color: #0b1a2b; font-family: 'Kanit', sans-serif; font-size: 22px; font-weight: 700;">เล่นอีกครั้ง</button>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+      <button style="height: 56px; border-radius: 14px; border: 2px solid #27425c; background: #12263b; color: #eaf2f6; font-family: 'Kanit', sans-serif; font-size: 17px; font-weight: 700;">ดูลำดับที่เปิด</button>
+      <button style="height: 56px; border-radius: 14px; border: 2px solid #27425c; background: #12263b; color: #eaf2f6; font-family: 'Kanit', sans-serif; font-size: 17px; font-weight: 700;">กลับไปหน้าเกม</button>
+    </div>
+  </section>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

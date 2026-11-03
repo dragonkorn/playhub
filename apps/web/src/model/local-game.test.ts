@@ -82,6 +82,7 @@ describe("end of a local game (O7)", () => {
     const snapshot = snapshotOf(game, won);
     expect(snapshot.phase).toBe("finished");
     expect(snapshot.ranking?.flat().sort()).toEqual(["local-1", "local-2"]);
+    expect(snapshot.team).toBeNull();
     expect(moveLocal(game, won, { type: "drop", column: 5 }, random)).toEqual({ ok: false, code: "wrong_phase" });
   });
 

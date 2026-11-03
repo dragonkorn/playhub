@@ -22,7 +22,7 @@ Only the host starts, and every seat must be connected (L1). The host can remove
 
 ## Playing and finishing
 
-The platform has no turn logic. It asks the game who it's waiting for (T1). When the game reports it's done, the room moves to `finished`, and the result screen appears once the game lets it ([Game plug-ins](game-plugins.md)). It names the winner, or says it's a draw when players tie for first, and tied players share a place in the ranking (L6). The line above the result comes from the game's catalog, `result.win` or `result.draw` (L7). From there, players can reopen the final boards.
+The platform has no turn logic. It asks the game who it's waiting for (T1). When the game reports it's done, the room moves to `finished`, and the result screen appears once the game lets it ([Game plug-ins](game-plugins.md)). It names the winner, or says it's a draw when players tie for first, and tied players share a place in the ranking (L6). The line above the result comes from the game's catalog, `result.win` or `result.draw` (L7). A cooperative game such as [ใบ้เรียง](bai-riang.md) ends as a team instead: the screen says the team won or lost, lists players without places, and takes its line from the game's `resultLine` (L8, L9). The wording lives in `apps/web/src/model/result.ts`. From there, players can reopen the final boards, with a back button at the bottom center (L10).
 
 If a player drops, see [Disconnects and host](disconnects-and-host.md).
 

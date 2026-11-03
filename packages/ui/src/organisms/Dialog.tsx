@@ -11,8 +11,8 @@ export interface DialogProps {
 export function Dialog({ title, body, tone = "plain", children }: DialogProps) {
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-ground/85">
-      <div className="flex w-[520px] flex-col gap-4 rounded-2xl border-2 border-line bg-panel p-8">
-        <h2 className={`font-display text-5xl leading-tight font-bold ${tone === "danger" ? "text-hit" : ""}`}>{title}</h2>
+      <div className="flex w-[520px] flex-col gap-4 rounded-2xl border-2 border-line bg-panel p-8 tall:mx-4 tall:w-auto tall:p-6">
+        <h2 className={`font-display text-5xl leading-tight font-bold tall:text-3xl ${tone === "danger" ? "text-hit" : ""}`}>{title}</h2>
         <p className="text-xl text-muted">{body}</p>
         {children}
       </div>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>ใบ้เรียง iPad เปิดพลาด</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b1a2b}
+a{color:#ffc83d}a:hover{color:#ffe08a}
+</style>
+</helmet>
+<main style="position: relative; width: 1180px; height: 820px; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: #0b1a2b; color: #eaf2f6; font-family: 'Sarabun', sans-serif; overflow: hidden;">
+  <header style="height: 48px; display: flex; align-items: center; gap: 12px;">
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 28px;">ด่าน 2<span style="color: #9db4c4; font-weight: 500;">/3</span></h1>
+    <div style="display: flex; gap: 4px; flex-grow: 1; padding-left: 8px;" role="img" aria-label="เหลือ 1 ชีวิต">
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z" fill="#ff6b4a"></path></svg>
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z" fill="none" stroke="#9db4c4" stroke-width="2"></path></svg>
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z" fill="none" stroke="#9db4c4" stroke-width="2"></path></svg>
+    </div>
+  </header>
+
+  <div style="flex-grow: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px;">
+    <div></div>
+    <div style="border-radius: 32px; background: #12263b;"></div>
+  </div>
+
+  <div style="position: absolute; inset: 0; background: rgba(11, 26, 43, 0.82); display: flex; align-items: center; justify-content: center;">
+    <div role="alert" style="width: 560px; border-radius: 24px; background: #12263b; border: 3px solid #ff6b4a; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;">
+      <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 56px; color: #ff6b4a; line-height: 1.1;">พลาด!</span>
+      <span style="font-size: 20px;"><b>ต้น</b> เปิด <b style="font-family: 'Kanit', sans-serif;">52</b> แต่ยังมีเลขที่น้อยกว่า 2 ใบ</span>
+      <div style="display: flex; gap: 12px;">
+        <div style="width: 96px; height: 96px; border-radius: 16px; background: #eaf2f6; color: #0b1a2b; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1;">
+          <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 40px;">47</span>
+          <span style="font-size: 15px; font-weight: 700;">Arm</span>
+        </div>
+        <div style="width: 96px; height: 96px; border-radius: 16px; background: #eaf2f6; color: #0b1a2b; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1;">
+          <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 40px;">50</span>
+          <span style="font-size: 15px; font-weight: 700;">มีนา</span>
+        </div>
+      </div>
+      <span style="font-size: 17px; color: #9db4c4;">ทิ้งเลขที่ข้ามไป 2 ใบ แล้วเล่นต่อจาก 52</span>
+      <div style="display: flex; align-items: center; gap: 8px; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 28px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z" fill="#ff6b4a"></path></svg>
+        −2 ชีวิต · เหลือ 1
+      </div>
+    </div>
+  </div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

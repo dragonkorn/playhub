@@ -30,8 +30,8 @@ export function LobbyPage({ snapshot, me, send, leave }: Props) {
           }
         />
       }
-      leftClassName="flex h-full flex-col items-center justify-center gap-5 rounded-2xl bg-panel p-8"
-      rightClassName="flex h-full min-h-0 flex-col gap-3"
+      leftClassName="flex h-full flex-col items-center justify-center gap-5 rounded-2xl bg-panel p-8 tall:grid tall:h-auto tall:flex-none tall:grid-cols-[1fr_auto] tall:items-center tall:justify-items-start tall:gap-x-4 tall:gap-y-0 tall:p-4"
+      rightClassName="flex h-full min-h-0 flex-col gap-3 tall:grow"
       left={<RoomCodeCard code={snapshot.code} joinUrl={`${location.origin}/join/${snapshot.code}`} />}
       right={
         <>
@@ -44,15 +44,15 @@ export function LobbyPage({ snapshot, me, send, leave }: Props) {
           />
           {Options && <Options options={snapshot.options} editable={isHost} change={(options: unknown) => send({ type: "setOptions", options })} />}
           {isHost ? (
-            <Button onClick={() => send({ type: "start" })} className="mt-auto flex-none">
+            <Button onClick={() => send({ type: "start" })} className="mt-auto flex-none tall:h-18">
               {t("lobby.start")}
             </Button>
           ) : (
-            <p className="mt-auto flex h-20 flex-none items-center justify-center rounded-2xl border-2 border-dashed border-line text-xl text-muted">
+            <p className="mt-auto flex h-20 flex-none items-center justify-center rounded-2xl border-2 border-dashed border-line text-xl text-muted tall:h-18 tall:text-lg">
               {t("lobby.waitHost")}
             </p>
           )}
-          <p className="text-center text-base text-muted">{t("lobby.hostHint")}</p>
+          <p className="text-center text-base text-muted tall:text-[13px]">{t("lobby.hostHint")}</p>
         </>
       }
     />

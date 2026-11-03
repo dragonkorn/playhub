@@ -324,8 +324,7 @@ describe("meta", () => {
       id: "battleship",
       minPlayers: 2,
       maxPlayers: 10,
-      device: "ipad",
-      orientation: "landscape",
+      orientations: ["landscape"],
     });
   });
 });

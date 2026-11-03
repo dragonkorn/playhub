@@ -13,6 +13,8 @@ sources:
   - packages/ui/
   - games/battleship/
   - games/four-in-a-row/
+  - games/bai-riang/
+  - docs/adr/0007-two-fixed-frames-by-orientation.md
   - docs/adr/0006-local-play-runs-logic-in-the-browser.md
   - docs/adr/0002-single-worker-hosting.md
 ---
@@ -27,7 +29,9 @@ PlayHub lets friends play a board game across devices with a room code and no ac
 - `apps/server`: one Cloudflare Worker. Serves the web build and the API, and runs one Durable Object per room ([ADR-0002](../docs/adr/0002-single-worker-hosting.md)).
 - `packages/game-contract`: the shared types both sides and every game depend on.
 - `packages/ui`: shared design system. See [Design system](design-system.md).
-- `games/<game>`: one folder per game, split into `logic` and `ui`. Two exist: [Battleship](battleship.md) and [Four in a Row](four-in-a-row.md).
+- `games/<game>`: one folder per game, split into `logic` and `ui`. Three exist: [Battleship](battleship.md), [Four in a Row](four-in-a-row.md) and [ใบ้เรียง](bai-riang.md).
+
+Screens use a landscape or a portrait frame, so the app runs on iPads and phones. See [Screens and frames](screens-and-frames.md).
 
 ## Dependency direction
 

@@ -275,6 +275,7 @@ export class RoomEngine {
     record.phase = "lobby";
     record.gameState = null;
     record.ranking = null;
+    record.team = null;
   }
 
   /** Copies eliminations, newly active players and the finish from the game into the room. */
@@ -290,6 +291,7 @@ export class RoomEngine {
     if (outcome.done) {
       record.phase = "finished";
       record.ranking = outcome.ranking;
+      record.team = outcome.team ?? null;
     }
   }
 
@@ -373,6 +375,7 @@ export class RoomEngine {
       activePlayers: playing ? game.activePlayers(record.gameState) : [],
       view: playing ? game.viewFor(record.gameState, viewer) : null,
       ranking: record.ranking,
+      team: record.team ?? null,
     };
   }
 }

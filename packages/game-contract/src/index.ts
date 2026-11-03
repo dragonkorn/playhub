@@ -1,5 +1,4 @@
 export type PlayerId = string;
-export type Device = "ipad" | "phone";
 export type Orientation = "landscape" | "portrait";
 export type Locale = "th" | "en";
 
@@ -7,8 +6,8 @@ export interface GameMeta {
   id: string;
   minPlayers: number;
   maxPlayers: number;
-  device: Device;
-  orientation: Orientation;
+  /** Orientations the game screen lays out for, preferred first (C5, ADR-0007). */
+  orientations: readonly Orientation[];
   /** Can be played by everyone on one device (O1). */
   localPlay?: boolean;
 }
@@ -26,12 +25,14 @@ export interface GameContext<Options> {
   random: () => number;
 }
 
+export type Team = "won" | "lost";
+
 export type MoveResult<State> = { ok: true; state: State } | { ok: false; code: string };
 
 export type Outcome =
   | { done: false }
-  /** Best first. Tied players share an inner array. */
-  | { done: true; ranking: PlayerId[][] };
+  /** Best first. Tied players share an inner array. A cooperative game also sets `team` (L8). */
+  | { done: true; ranking: PlayerId[][]; team?: Team };
 
 export interface GameDefinition<State, Move, View, Options> {
   meta: GameMeta;
@@ -91,6 +92,8 @@ export interface GameUi<View, Move, Options> {
   messages: Record<Locale, Record<string, string>>;
   /** Keep showing the board after the game ends, until it calls `release`. */
   holdsFinish?: boolean;
+  /** The result line from the final view, as a code in the game's catalog (L9). */
+  resultLine?: (view: View) => Message;
 }
 
 export type RoomPhase = "lobby" | "playing" | "finished";
@@ -106,6 +109,8 @@ export interface RoomSnapshot {
   activePlayers: PlayerId[];
   view: unknown | null;
   ranking: PlayerId[][] | null;
+  /** Set for a cooperative outcome (L8). */
+  team: Team | null;
 }
 
 export type ClientMessage =

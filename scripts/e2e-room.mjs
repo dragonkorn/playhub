@@ -1,5 +1,5 @@
 // End-to-end check against a running `wrangler dev`: plays a full Battleship game
-// over real HTTP and WebSockets, including a reconnect, then a Four in a Row game.
+// over real HTTP and WebSockets, including a reconnect, then Four in a Row and ใบ้เรียง games.
 // Run `pnpm build`, then `pnpm dev:server`, then: pnpm test:e2e
 const base = process.argv[2] ?? "http://localhost:8787";
 const wsBase = base.replace(/^http/, "ws");
@@ -128,4 +128,38 @@ assert(c.snapshot.ranking[0][0] === first && c.snapshot.view.line.length === 4, 
 assert(c.rejected.length + d.rejected.length === 0, "no drops rejected");
 c.socket.close();
 d.socket.close();
+
+// ใบ้เรียง: both players always reveal their lowest number in order, so the team clears all 3 levels.
+const mina = await post("/rooms", { gameId: "bai-riang", name: "มีนา" });
+const arm = await post(`/rooms/${mina.code}/join`, { name: "Arm" });
+const e = open(mina.code, mina.token);
+const f = open(mina.code, arm.token);
+await Promise.all([e.ready, f.ready]);
+await e.until((s) => s.players.every((p) => p.connection === "online"), "both online");
+e.send({ type: "start" });
+await Promise.all([e, f].map((x) => x.until((s) => s.phase === "playing" && s.view, "ใบ้เรียง started")));
+const hands = { [mina.playerId]: e, [arm.playerId]: f };
+const lowestOf = (view) => {
+  const out = new Set(view.reveals.flatMap((r) => [r.card, ...r.skipped.map((x) => x.card)]));
+  return view.mine.find((n) => !out.has(n)) ?? null;
+};
+assert(!JSON.stringify(e.snapshot.view).includes(JSON.stringify(f.snapshot.view.mine)), "a view never holds another player's numbers");
+while (e.snapshot.phase === "playing") {
+  const version = e.snapshot.version;
+  if (e.snapshot.view.phase === "cleared") {
+    e.send({ type: "move", version, move: { type: "next", level: e.snapshot.view.level + 1 } });
+  } else {
+    await f.until((s) => s.version >= version, "views in step");
+    const [owner, card] = Object.entries(hands)
+      .map(([id, client]) => [id, lowestOf(client.snapshot.view)])
+      .filter(([, n]) => n !== null)
+      .sort((x, y) => x[1] - y[1])[0];
+    hands[owner].send({ type: "move", version: hands[owner].snapshot.version, move: { type: "play", card } });
+  }
+  await e.until((s) => s.version > version, "move applied");
+}
+assert(e.snapshot.team === "won" && e.snapshot.view.lives === 3, "a perfect game clears every level as a team (L8)");
+assert(e.rejected.length + f.rejected.length === 0, "no reveals rejected");
+e.socket.close();
+f.socket.close();
 console.log("All end-to-end checks passed");

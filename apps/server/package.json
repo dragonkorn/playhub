@@ -9,6 +9,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@playhub/game-bai-riang": "workspace:*",
     "@playhub/game-battleship": "workspace:*",
     "@playhub/game-four-in-a-row": "workspace:*",
     "@playhub/game-contract": "workspace:*"

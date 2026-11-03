@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>PlayHub มือถือ เข้าห้อง</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b1a2b}
+a{color:#ffc83d}a:hover{color:#ffe08a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 24px 16px; display: flex; flex-direction: column; gap: 24px; background: #0b1a2b; color: #eaf2f6; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; justify-content: space-between; height: 44px;">
+    <a href="#" style="font-weight: 700; font-size: 16px; color: #9db4c4; text-decoration: none;">← กลับ</a>
+    <span style="font-weight: 700; font-size: 15px; color: #9db4c4;">ไทย · EN</span>
+  </header>
+  <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 40px; line-height: 1.1;">เข้าห้อง</h1>
+
+  <form style="display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <label for="code" style="font-size: 15px; color: #9db4c4; font-weight: 700;">รหัสห้อง</label>
+      <input id="code" value="9V4W" style="height: 72px; border-radius: 16px; border: 2px solid #27425c; background: #12263b; color: #eaf2f6; font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 40px; letter-spacing: 16px; text-align: center; box-sizing: border-box;">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <label for="name" style="font-size: 15px; color: #9db4c4; font-weight: 700;">ชื่อของคุณ</label>
+      <input id="name" value="ต้น" style="height: 56px; border-radius: 14px; border: 2px solid #ffc83d; background: #12263b; color: #eaf2f6; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 20px; padding: 0 16px; box-sizing: border-box;">
+      <span style="font-size: 14px; color: #9db4c4;">ไม่เกิน 16 ตัวอักษร</span>
+    </div>
+  </form>
+
+  <div style="flex-grow: 1;"></div>
+  <button style="height: 72px; border-radius: 18px; border: none; background: #ffc83d; color: #0b1a2b; font-family: 'Kanit', sans-serif; font-size: 22px; font-weight: 700;">เข้าห้อง</button>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

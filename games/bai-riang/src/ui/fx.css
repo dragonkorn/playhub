@@ -1,0 +1,15 @@
+/* Prefixed, because every game's CSS loads into one app. In a layer, so utilities still win (see CLAUDE.md). */
+@keyframes br-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes br-sheet-side { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes br-sheet-up { from { transform: translateY(100%); } to { transform: none; } }
+
+@layer base {
+  .br-fade { animation: br-fade 0.18s ease-out both; }
+  .br-sheet { animation: br-sheet-side 0.22s ease-out both; }
+  [data-frame="portrait"] .br-sheet { animation-name: br-sheet-up; }
+
+  /* N24: overlays fade in place instead of sliding. */
+  @media (prefers-reduced-motion: reduce) {
+    .br-sheet, [data-frame="portrait"] .br-sheet { animation-name: br-fade; }
+  }
+}

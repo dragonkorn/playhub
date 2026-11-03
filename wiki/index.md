@@ -1,5 +1,5 @@
 ---
-ingested_commit: 52eb01f
+ingested_commit: c53fe78
 ---
 
 # PlayHub wiki
@@ -18,6 +18,8 @@ Layers: sources (code, `specs/`, `docs/adr/`) are read-only truth, these pages a
 | [Localization](localization.md) | Thai-first text, codes, fonts | implemented |
 | [Battleship](battleship.md) | Game flow, placing ships, shot feedback, targeting, hidden information | implemented |
 | [Four in a Row](four-in-a-row.md) | Rules, drop log, screen, move feedback | implemented |
+| [ใบ้เรียง](bai-riang.md) | Cooperative number ordering, hold to reveal, topics, hidden numbers | implemented |
+| [Screens and frames](screens-and-frames.md) | Landscape and portrait frames, and how a screen gets its layout | implemented |
 | [Local play](local-play.md) | Playing on one device with no network, and why the browser runs the rules | implemented |
 | [Design system](design-system.md) | Atomic layers, shared UI, Storybook plan | implemented |
 | [Testing](testing.md) | The three test layers, and what is still unverified | implemented |

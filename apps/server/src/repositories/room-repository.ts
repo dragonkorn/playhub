@@ -1,4 +1,4 @@
-import type { ConnectionStatus, PlayerId, RoomPhase, SeatStatus } from "@playhub/game-contract";
+import type { ConnectionStatus, PlayerId, RoomPhase, SeatStatus, Team } from "@playhub/game-contract";
 
 export interface Seat {
   id: PlayerId;
@@ -23,6 +23,8 @@ export interface RoomRecord {
   seats: Seat[];
   gameState: unknown | null;
   ranking: PlayerId[][] | null;
+  /** Set for a cooperative outcome (L8). Missing in records saved before it existed. */
+  team?: Team | null;
   lastActivity: number;
 }
 

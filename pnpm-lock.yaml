@@ -178,6 +178,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@playhub/game-bai-riang':
+        specifier: workspace:*
+        version: link:../../games/bai-riang
       '@playhub/game-battleship':
         specifier: workspace:*
         version: link:../../games/battleship
@@ -197,6 +200,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@playhub/game-bai-riang':
+        specifier: workspace:*
+        version: link:../../games/bai-riang
       '@playhub/game-battleship':
         specifier: workspace:*
         version: link:../../games/battleship
@@ -249,6 +255,31 @@ importers:
       vite-plugin-pwa:
         specifier: ^2.0.0
         version: 2.0.0(supports-color@10.2.2)(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2))(workbox-build@7.4.1(supports-color@10.2.2))(workbox-window@7.4.1)
+
+  games/bai-riang:
+    dependencies:
+      '@playhub/game-contract':
+        specifier: workspace:*
+        version: link:../../packages/game-contract
+      '@playhub/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+    devDependencies:
+      '@types/react':
+        specifier: ^19
+        version: 19.3.0
+      i18next:
+        specifier: ^26.5.12
+        version: 26.5.12(typescript@7.0.2)
+      react:
+        specifier: ^19.3.1
+        version: 19.3.1
+      react-i18next:
+        specifier: ^17.1.9
+        version: 17.1.9(i18next@26.5.12(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(typescript@7.0.2)
+      vite:
+        specifier: ^8.3.5
+        version: 8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)
 
   games/battleship:
     dependencies:

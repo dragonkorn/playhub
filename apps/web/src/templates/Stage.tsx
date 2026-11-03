@@ -1,22 +1,15 @@
-import { useEffect, useState, type ReactNode } from "react";
+import type { Orientation } from "@playhub/game-contract";
+import type { ReactNode } from "react";
+import { FRAMES } from "../model/frame";
 
-const WIDTH = 1180;
-const HEIGHT = 820;
-
-/** Screens are laid out at one iPad size, then scaled to fit any device. */
-export function Stage({ children }: { children: ReactNode }) {
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    const fit = () => setScale(Math.min(innerWidth / WIDTH, innerHeight / HEIGHT));
-    fit();
-    addEventListener("resize", fit);
-    return () => removeEventListener("resize", fit);
-  }, []);
+/** Screens are laid out at one fixed frame per orientation, then scaled to fit the viewport (C5, ADR-0007). */
+export function Stage({ orientation, viewport, children }: { orientation: Orientation; viewport: { width: number; height: number }; children: ReactNode }) {
+  const { width, height } = FRAMES[orientation];
+  const scale = Math.min(viewport.width / width, viewport.height / height);
 
   return (
     <div className="flex h-full items-center justify-center overflow-hidden">
-      <div className="relative flex-none" style={{ width: WIDTH, height: HEIGHT, transform: `scale(${scale})` }}>
+      <div data-frame={orientation} className="relative flex-none" style={{ width, height, transform: `scale(${scale})` }}>
         {children}
       </div>
     </div>

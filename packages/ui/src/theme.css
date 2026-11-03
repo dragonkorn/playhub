@@ -12,6 +12,9 @@
   --font-body: "Sarabun", sans-serif;
 }
 
+/* Styles for the portrait frame (C5, ADR-0007). */
+@custom-variant tall (&:where([data-frame="portrait"] *));
+
 html,
 body,
 #root {

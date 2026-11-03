@@ -51,8 +51,11 @@ any phase ──1 hour inactive──► deleted
 - **L3** Only the host can trigger play again. Connected seats return to the lobby with the same code and options. Seats that are lost or disconnected are removed.
 - **L4** A player who leaves in the lobby or at the finished phase loses their seat. A player who leaves during play is marked lost (D6).
 - **L5** The host can remove a seat in the lobby. This is needed so a disconnected player can't block L1.
-- **L6** The result screen names the winner when one player ranks first, and says it's a draw when several players share first place.
+- **L6** The result screen names the winner when one player ranks first, and says it's a draw when several players share first place. A team outcome follows L8 instead.
 - **L7** The line above the result comes from the game's catalog, `result.win` or `result.draw`. A game without the key shows no line.
+- **L8** A cooperative game ends with `team: "won"` or `team: "lost"` in its outcome, and ranks every player together. The result screen then says the team won or lost, and lists the players without places.
+- **L9** A game can supply the result line from its final view through `resultLine`, which returns a message code in the game's catalog. It replaces L7's line.
+- **L10** The result screen's board button can be relabeled with `result.boards` in the game's catalog. On the board opened from it, the back button sits at the bottom center, clear of the game's top bar.
 
 ## 5. Turns and blocking
 
@@ -85,7 +88,6 @@ any phase ──1 hour inactive──► deleted
 
 ```ts
 export type PlayerId = string;
-export type Device = "ipad" | "phone";
 export type Orientation = "landscape" | "portrait";
 export type Locale = "th" | "en";
 
@@ -93,8 +95,8 @@ export interface GameMeta {
   id: string;
   minPlayers: number;
   maxPlayers: number;
-  device: Device;
-  orientation: Orientation;
+  /** Orientations the game screen lays out for (C5, ADR-0007). */
+  orientations: readonly Orientation[];
   /** Can be played by everyone on one device (O1). */
   localPlay?: boolean;
 }
@@ -118,8 +120,8 @@ export type MoveResult<State> =
 
 export type Outcome =
   | { done: false }
-  /** Best first. Tied players share an inner array. */
-  | { done: true; ranking: PlayerId[][] };
+  /** Best first. Tied players share an inner array. A cooperative game also sets `team` (L8). */
+  | { done: true; ranking: PlayerId[][]; team?: "won" | "lost" };
 
 export interface GameDefinition<State, Move, View, Options> {
   meta: GameMeta;
@@ -168,6 +170,8 @@ export interface GameUi<View, Move, Options> {
   messages: Record<Locale, Record<string, string>>;
   /** Keep showing the board after the game ends, until it calls `release`. */
   holdsFinish?: boolean;
+  /** The result line from the final view, as a code in the game's catalog (L9). */
+  resultLine?: (view: View) => Message;
 }
 ```
 
@@ -229,6 +233,8 @@ interface RoomSnapshot {
   activePlayers: PlayerId[];
   view: unknown | null;
   ranking: PlayerId[][] | null;
+  /** Set for a cooperative outcome (L8). */
+  team: "won" | "lost" | null;
 }
 ```
 
@@ -277,7 +283,7 @@ Hibernation is mandatory. Without it, the free tier covers about 37 games a day 
 - **C2** Use `react-qr-code` for QR, encoding the full join URL.
 - **C3** `SessionRepository` wraps `localStorage`, in `apps/web/src/repositories/`, so storage can be swapped and tested.
 - **C4** The client trusts snapshots and keeps no game rules. It shows a connection-lost state while its own socket is down.
-- **C5** Game screens show only on the game's declared device and orientation. On any other device, the client shows a translated notice and doesn't block joining.
+- **C5** Screens are laid out at a fixed frame and scaled to fit: 1180×820 in landscape, 390×844 in portrait (ADR-0007). Platform screens lay out for both. A game screen uses the viewport's orientation when the game lists it in `orientations`. Otherwise it uses the game's first orientation and shows a translated notice to rotate. Joining is never blocked.
 - **C6** After the first visit, playing downloads no app assets. The service worker precaches all build output, including images and sound, and caches fonts on first use. Hashed files under `/assets/` are served `immutable` for one year. HTML and `sw.js` still revalidate, so a new deploy reaches players, and only changed files download.
 - **C7** The home page lists every registered game as a card the player can pick. The first registered game is picked by default.
 
@@ -329,10 +335,13 @@ Unless noted, these run in Vitest against `engine.ts` with the in-memory reposit
 18. Manual on a real iPad: sleep and wake reconnects, and joining from a QR scan works. (R4, D2)
 19. A repeat visit gets every app asset and font from the service worker, and `/assets/` files are `immutable`. (C6)
 20. The result screen says it's a draw for a tie at the top, and shows the game's `result.win` or `result.draw` line. (L6, L7)
-21. The home page lists both games, and creating a room uses the picked one. (C7)
+21. The home page lists every game, and creating a room uses the picked one. (C7)
 22. A local game starts with valid, distinct names, refuses invalid or repeated ones, and plays a move as the active seat. (O2 to O4)
 23. A local game's rejected move returns the game's code and leaves the state alone. (O5)
 24. A finished local game ranks like an online one, and play again starts fresh with the same names. (O7)
 25. With the network off after the first visit, a whole Four in a Row game plays on one device. (O3, C6)
+26. A cooperative outcome reaches the snapshot as `team`, and the result screen says the team won or lost with the game's `resultLine`. (L8, L9)
+27. The portrait frame is used in a portrait viewport for platform screens and portrait games, and a landscape-only game stays landscape with the rotate notice. (C5)
+28. In e2e on a phone-sized portrait viewport, home, join, lobby, a ใบ้เรียง game and the result screen fit the frame with nothing clipped. (C5)
 
 `pnpm test:e2e` covers real sockets, Durable Object storage and alarms, and the app in headless Chrome. Run it against a local server for UI or protocol changes.

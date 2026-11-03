@@ -4,7 +4,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { games, localGames } from "../games";
 import { LOCAL_HOST, checkNames, deviceRandom, moveLocal, playAgainLocal, snapshotOf, startLocal, type LocalRecord } from "../model/local-game";
+import { BOTH } from "../model/frame";
 import { navigate } from "../model/router";
+import { useScreenOrientations } from "../model/screen";
 import { sessions } from "../repositories/session-repository";
 import { ResultPage } from "./ResultPage";
 
@@ -51,6 +53,10 @@ export function LocalPage({ gameId }: { gameId: string }) {
     navigate("/");
   }, []);
 
+  const holding = snapshot?.phase === "finished" && Boolean(ui?.holdsFinish) && !released;
+  const onBoard = snapshot?.phase === "playing" || boards || holding;
+  useScreenOrientations(onBoard && ui ? ui.meta.orientations : BOTH);
+
   const playable = Boolean(game?.meta.localPlay && ui);
   useEffect(() => {
     if (!playable) navigate("/");
@@ -95,7 +101,6 @@ export function LocalPage({ gameId }: { gameId: string }) {
     else setToast(result.code);
   };
 
-  const holding = snapshot.phase === "finished" && Boolean(ui.holdsFinish) && !released;
   const Board = ui.Board;
   const message = (code: string) =>
     t(`error.${code}`, { ns: gameId, defaultValue: t(`error.${code}`, { defaultValue: t("error.generic") }) });
@@ -105,7 +110,7 @@ export function LocalPage({ gameId }: { gameId: string }) {
       {snapshot.phase === "finished" && !boards && !holding && (
         <ResultPage snapshot={snapshot} me={LOCAL_HOST} send={send} leave={leave} showBoards={() => setBoards(true)} />
       )}
-      {(snapshot.phase === "playing" || boards || holding) && snapshot.view != null && (
+      {onBoard && snapshot.view != null && (
         <Board
           view={snapshot.view}
           me={snapshot.activePlayers[0] ?? LOCAL_HOST}
@@ -121,7 +126,7 @@ export function LocalPage({ gameId }: { gameId: string }) {
         />
       )}
       {boards && (
-        <Button variant="secondary" size="sm" onClick={() => setBoards(false)} className="absolute top-6 right-6">
+        <Button variant="secondary" size="sm" onClick={() => setBoards(false)} className="absolute bottom-6 left-1/2 -translate-x-1/2">
           {t("result.backToResult")}
         </Button>
       )}

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>PlayHub มือถือ ห้องรอ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b1a2b}
+a{color:#ffc83d}a:hover{color:#ffe08a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px; background: #0b1a2b; color: #eaf2f6; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; gap: 12px; height: 44px;">
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 26px; flex-grow: 1;">ห้องรอ ใบ้เรียง</h1>
+    <button style="height: 44px; padding: 0 12px; border: none; background: transparent; color: #9db4c4; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 16px;">ออก</button>
+  </header>
+
+  <section style="border-radius: 16px; background: #12263b; padding: 16px; display: flex; align-items: center; gap: 16px;">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px;">
+      <span style="font-size: 14px; color: #9db4c4; font-weight: 700;">รหัสห้อง</span>
+      <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 48px; letter-spacing: 6px; line-height: 1.1;">9V4W</span>
+      <span style="font-size: 13px; color: #9db4c4;">สแกนเพื่อเข้าร่วม หรือกรอกรหัส</span>
+    </div>
+    <div role="img" aria-label="QR สำหรับเข้าห้อง" style="width: 104px; height: 104px; border-radius: 12px; background: #eaf2f6; color: #0b1a2b; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">[QR]</div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 8px;">
+    <span style="font-size: 15px; color: #9db4c4; font-weight: 700;">ผู้เล่น 4 จาก 10</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+      <div style="height: 44px; border-radius: 10px; background: #12263b; display: flex; align-items: center; gap: 8px; padding: 0 12px; font-weight: 700;"><span style="width: 8px; height: 8px; border-radius: 4px; background: #4fd1a5;"></span><span style="flex-grow: 1;">มีนา</span><span style="font-size: 13px; color: #9db4c4; font-weight: 500;">เจ้าห้อง</span></div>
+      <div style="height: 44px; border-radius: 10px; background: #12263b; display: flex; align-items: center; gap: 8px; padding: 0 12px; font-weight: 700;"><span style="width: 8px; height: 8px; border-radius: 4px; background: #4fd1a5;"></span>Arm</div>
+      <div style="height: 44px; border-radius: 10px; background: #12263b; display: flex; align-items: center; gap: 8px; padding: 0 12px; font-weight: 700;"><span style="width: 8px; height: 8px; border-radius: 4px; background: #4fd1a5;"></span>ต้น</div>
+      <div style="height: 44px; border-radius: 10px; background: #12263b; display: flex; align-items: center; gap: 8px; padding: 0 12px; font-weight: 700;"><span style="width: 8px; height: 8px; border-radius: 4px; background: #4fd1a5;"></span>ฝน</div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 8px;">
+    <span style="font-size: 15px; color: #9db4c4; font-weight: 700;">หัวข้อ</span>
+    <button style="border-radius: 14px; border: 3px solid #ffc83d; background: #12263b; color: #eaf2f6; padding: 14px 16px; text-align: left; font-family: 'Sarabun', sans-serif; display: flex; flex-direction: column; gap: 2px;">
+      <span style="font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 20px;">เกมสุ่มให้</span>
+      <span style="font-size: 14px; color: #9db4c4;">ทุกคนเห็นหัวข้อบนจอ เปลี่ยนทุกด่าน ไม่ซ้ำในเกมเดียวกัน</span>
+    </button>
+    <button style="border-radius: 14px; border: 2px solid #27425c; background: transparent; color: #eaf2f6; padding: 14px 16px; text-align: left; font-family: 'Sarabun', sans-serif; display: flex; flex-direction: column; gap: 2px;">
+      <span style="font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 20px;">ตกลงกันเอง</span>
+      <span style="font-size: 14px; color: #9db4c4;">คุยกันในวงแล้วเลือกหัวข้อเองทุกด่าน</span>
+    </button>
+  </section>
+
+  <div style="flex-grow: 1;"></div>
+  <section style="display: flex; flex-direction: column; gap: 8px;">
+    <button style="height: 72px; border-radius: 18px; border: none; background: #ffc83d; color: #0b1a2b; font-family: 'Kanit', sans-serif; font-size: 22px; font-weight: 700;">เริ่มเกม</button>
+    <p style="margin: 0; text-align: center; font-size: 13px; color: #9db4c4;">เจ้าห้องเท่านั้นที่เริ่มเกมหรือเปลี่ยนการตั้งค่าได้</p>
+  </section>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-11-03T15:00:00Z" },
+  "title": "ใบ้เรียง design",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 390, "h": 844, "title": "มือถือ 1 · เริ่มด่าน หัวข้อสุ่ม" },
+    "PhoneHidden.dc.html": { "x": 470, "y": 0, "w": 390, "h": 844, "title": "มือถือ 2 · ซ่อนเลข" },
+    "PhoneHolding.dc.html": { "x": 940, "y": 0, "w": 390, "h": 844, "title": "มือถือ 3 · กดค้างเพื่อเปิด" },
+    "PhoneMistake.dc.html": { "x": 1410, "y": 0, "w": 390, "h": 844, "title": "มือถือ 4 · เปิดพลาด" },
+    "PhoneOwnTopic.dc.html": { "x": 1880, "y": 0, "w": 390, "h": 844, "title": "มือถือ 5 · ด่าน 2 หัวข้อตกลงกันเอง" },
+    "PhoneLevelClear.dc.html": { "x": 2350, "y": 0, "w": 390, "h": 844, "title": "มือถือ 6 · ผ่านด่าน" },
+    "PhoneSheet.dc.html": { "x": 2820, "y": 0, "w": 390, "h": 844, "title": "มือถือ 7 · sheet ดูวง (กดปุ่มคน)" },
+    "PhoneLevel3.dc.html": { "x": 3290, "y": 0, "w": 390, "h": 844, "title": "มือถือ 8 · ด่าน 3 (3 ใบ เปิดไปแล้ว 1)" },
+    "IpadLevel3.dc.html": { "x": 2520, "y": 1384, "w": 1180, "h": 820, "title": "iPad แนวนอน · ด่าน 3" },
+    "IpadPlay.dc.html": { "x": 0, "y": 1384, "w": 1180, "h": 820, "title": "iPad แนวนอน · เล่น" },
+    "IpadMistake.dc.html": { "x": 1260, "y": 1384, "w": 1180, "h": 820, "title": "iPad แนวนอน · เปิดพลาด" },
+    "PhoneJoin.dc.html": { "x": 0, "y": 2744, "w": 390, "h": 844, "title": "มือถือ · เข้าห้อง (platform)" },
+    "PhoneLobby.dc.html": { "x": 470, "y": 2744, "w": 390, "h": 844, "title": "มือถือ · ห้องรอ + ตั้งค่าหัวข้อ (platform)" },
+    "PhoneResultWin.dc.html": { "x": 940, "y": 2744, "w": 390, "h": 844, "title": "มือถือ · ผล ทีมชนะ (platform)" },
+    "IpadResultLose.dc.html": { "x": 1410, "y": 2744, "w": 1180, "h": 820, "title": "iPad · ผล ทีมแพ้ (platform)" }
+  },
+  "order": [
+    "Main.dc.html",
+    "PhoneHidden.dc.html",
+    "PhoneHolding.dc.html",
+    "PhoneMistake.dc.html",
+    "PhoneOwnTopic.dc.html",
+    "PhoneLevelClear.dc.html",
+    "PhoneSheet.dc.html",
+    "PhoneLevel3.dc.html",
+    "IpadPlay.dc.html",
+    "IpadMistake.dc.html",
+    "IpadLevel3.dc.html",
+    "PhoneJoin.dc.html",
+    "PhoneLobby.dc.html",
+    "PhoneResultWin.dc.html",
+    "IpadResultLose.dc.html"
+  ],
+  "notes": {
+    "t1": { "x": 0, "y": -300, "text": "ใบ้เรียง · มือถือแนวตั้ง (หน้าเล่น)", "kind": "title1", "maxW": 3680 },
+    "t2": { "x": 0, "y": 1084, "text": "ใบ้เรียง · iPad แนวนอน (หน้าเล่น)", "kind": "title1", "maxW": 3700 },
+    "t3": { "x": 0, "y": 2444, "text": "หน้า platform ที่ต้องรองรับมือถือ", "kind": "title1", "maxW": 2590 }
+  },
+  "designSystems": []
+}

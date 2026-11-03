@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>ใบ้เรียง มือถือ ผ่านด่าน</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b1a2b}
+a{color:#ffc83d}a:hover{color:#ffe08a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px; background: #0b1a2b; color: #eaf2f6; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; height: 44px;">
+    <button aria-label="ดูวง 4 คน" style="height: 44px; padding: 0 12px; border-radius: 10px; border: 2px solid #27425c; background: transparent; color: #eaf2f6; font-family: 'Sarabun', sans-serif; font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7"></path><path d="M18 14a6.5 6.5 0 0 1 3.5 6"></path></svg>
+      4
+    </button>
+    <button aria-label="ปิดเสียง" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #27425c; background: transparent; color: #eaf2f6; display: flex; align-items: center; justify-content: center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+    </button>
+  </header>
+
+  <section style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; text-align: center;">
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 60px; line-height: 1.1;">ผ่านด่าน 1</h1>
+    <div style="display: flex; gap: 4px;" role="img" aria-label="เหลือ 2 ชีวิต">
+      <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z" fill="#ff6b4a"></path></svg>
+      <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z" fill="#ff6b4a"></path></svg>
+      <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.6-9.5 9-9.5 9z" fill="none" stroke="#9db4c4" stroke-width="2"></path></svg>
+    </div>
+    <span style="font-size: 17px; color: #9db4c4;">ด่านต่อไป คนละ 2 ใบ</span>
+  </section>
+
+  <button style="height: 72px; border-radius: 18px; border: none; background: #ffc83d; color: #0b1a2b; font-family: 'Kanit', sans-serif; font-size: 22px; font-weight: 700;">ไปด่าน 2</button>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
