@@ -12,8 +12,9 @@
   "dependencies": {
     "@playhub/game-bai-riang": "workspace:*",
     "@playhub/game-battleship": "workspace:*",
-    "@playhub/game-four-in-a-row": "workspace:*",
     "@playhub/game-contract": "workspace:*",
+    "@playhub/game-four-in-a-row": "workspace:*",
+    "@playhub/game-salab-rang": "workspace:*",
     "@playhub/ui": "workspace:*",
     "i18next": "^26.5.11",
     "partysocket": "^1.3.0",

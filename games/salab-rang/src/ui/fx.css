@@ -1,0 +1,27 @@
+/* Prefixed, because every game's CSS loads into one app. In a layer, so utilities still win (see CLAUDE.md). */
+@keyframes sr-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sr-side { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes sr-up { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes sr-pop { from { opacity: 0; transform: translateY(-12px) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes sr-spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+@layer base {
+  /* Card back: a lantern lattice drawn from the theme colour. */
+  .sr-lattice {
+    --sr-line: color-mix(in srgb, currentColor 13%, transparent);
+    background-image:
+      repeating-linear-gradient(45deg, var(--sr-line) 0 10px, transparent 10px 20px),
+      repeating-linear-gradient(-45deg, var(--sr-line) 0 10px, transparent 10px 20px);
+  }
+
+  .sr-fade { animation: sr-fade 0.18s ease-out both; }
+  .sr-sheet { animation: sr-side 0.22s ease-out both; }
+  [data-frame="portrait"] .sr-sheet { animation-name: sr-up; }
+  .sr-pop { animation: sr-pop 0.24s ease-out both; }
+  .sr-spin { animation: sr-spin 1.6s ease-in-out both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sr-sheet, [data-frame="portrait"] .sr-sheet, .sr-pop { animation-name: sr-fade; }
+    .sr-spin { animation: none; }
+  }
+}

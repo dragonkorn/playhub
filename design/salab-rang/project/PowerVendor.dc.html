@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>สลับร่าง พลังแม่ค้าส้มตำ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#15112b}
+a{color:#ffb547}a:hover{color:#ffd28a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #15112b; color: #f3eefe; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffd76a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h18a9 9 0 0 1-18 0z"></path><path d="M8 8c0-1.5 1-2 1-3.5"></path><path d="M12 8c0-1.5 1-2 1-3.5"></path><path d="M16 8c0-1.5 1-2 1-3.5"></path></svg>
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">พลังแม่ค้าส้มตำ</h1>
+  </header>
+
+  <dc-import name="Strip" rows="{{rows}}" hint-size="358px,122px"></dc-import>
+
+  <p style="margin: 0; text-align: center; font-size: 16px; color: #cfc6ee;">แตะชื่อเพื่อน 1 คนเป็นลูกค้า</p>
+
+  <section style="flex-grow: 1; border-radius: 20px; background: #2c2456; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;">
+    <div style="display: flex; align-items: center; gap: 28px;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+        <span style="width: 76px; height: 76px; border-radius: 50%; background: #3b2a1c; border: 3px solid #ffb547; display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px; color: #ffd28a;">ฉัน</span>
+        <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 30px; color: #ffd76a;">+2</span>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+        <span style="width: 76px; height: 76px; border-radius: 50%; background: #173049; border: 3px solid #5cc8ff; display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">มายด์</span>
+        <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 30px; color: #5cc8ff;">+1</span>
+      </div>
+    </div>
+    <p style="margin: 0; text-align: center; font-size: 16px; line-height: 1.5;">คุณรับ 2 เหรียญ<br>ลูกค้ารับ 1 เหรียญ ทุกเหรียญมาจากธนาคาร</p>
+  </section>
+
+  <p style="margin: 0; text-align: center; font-size: 14px; color: #b3a9d6;">ช่วยคนที่เหรียญน้อย หรือซื้อใจเพื่อนก็ได้</p>
+  <button style="height: 64px; border-radius: 16px; border: none; background: #ffb547; color: #241a3d; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">ขายให้มายด์</button>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: [
+        { n: 'ฉัน', c: 7, me: true, turn: true, off: true },
+        { n: 'ก้อง', c: 9 },
+        { n: 'มายด์', c: 4, picked: true },
+        { n: 'บอส', c: 13, crown: true, near: true },
+        { n: 'แพร', c: 6, shield: true },
+        { n: 'ต้น', c: 5 },
+        { n: 'จูน', c: 8, lock: true },
+        { n: 'เบียร์ช้างน้อย', c: 3 },
+        { n: 'ฟ้า', c: 6 },
+        { n: 'นัท', c: 10 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

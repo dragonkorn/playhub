@@ -1,6 +1,7 @@
 import { Button, Field, FormLayout, TextInput } from "@playhub/ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { clampName } from "../model/name";
 import { navigate } from "../model/router";
 import { ApiError, joinRoom } from "../repositories/room-api";
 import { sessions } from "../repositories/session-repository";
@@ -38,7 +39,7 @@ export function JoinPage({ code: initialCode }: { code: string }) {
         <TextInput variant="code" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} maxLength={4} />
       </Field>
       <Field label={t("home.name")}>
-        <TextInput value={name} onChange={(e) => setName(e.target.value)} maxLength={40} />
+        <TextInput value={name} onChange={(e) => setName(clampName(e.target.value))} />
       </Field>
       {error && <p className="text-center text-lg text-hit">{t(`error.${error}`)}</p>}
       <Button disabled={busy || code.trim().length !== 4} onClick={join}>

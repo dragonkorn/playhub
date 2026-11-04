@@ -1,5 +1,5 @@
 ---
-ingested_commit: 2804785
+ingested_commit: 559a6a8
 ---
 
 # PlayHub wiki
@@ -19,6 +19,7 @@ Layers: sources (code, `specs/`, `docs/adr/`) are read-only truth, these pages a
 | [Battleship](battleship.md) | Game flow, placing ships, shot feedback, targeting, hidden information | implemented |
 | [Four in a Row](four-in-a-row.md) | Rules, drop log, screen, move feedback | implemented |
 | [ใบ้เรียง](bai-riang.md) | Cooperative number ordering, hold to reveal, topics, hidden numbers | implemented |
+| [สลับร่าง](salab-rang.md) | Bluffing with swapped character cards, challenges, what each phone may show | implemented |
 | [Screens and frames](screens-and-frames.md) | Landscape and portrait frames, and how a screen gets its layout | implemented |
 | [Local play](local-play.md) | Playing on one device with no network, and why the browser runs the rules | implemented |
 | [Design system](design-system.md) | Atomic layers, shared UI, Storybook plan | implemented |

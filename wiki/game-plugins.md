@@ -6,6 +6,7 @@ sources:
   - games/battleship/
   - games/four-in-a-row/
   - games/bai-riang/
+  - games/salab-rang/
   - apps/web/src/pages/LocalPage.tsx
   - apps/server/src/games.ts
   - apps/web/src/games.ts
@@ -16,7 +17,7 @@ sources:
 
 # Game plug-ins
 
-A game is one folder with two entry points. Adding a game needs one registration line in each app, in `apps/server/src/games.ts` and `apps/web/src/games.ts` (G2). The home page and the atomic rules test pick up new games by themselves. A game that offers [Local play](local-play.md) needs one more line in `localGames` (O8). Three games exist: [Battleship](battleship.md), [Four in a Row](four-in-a-row.md) and [ใบ้เรียง](bai-riang.md).
+A game is one folder with two entry points. Adding a game needs one registration line in each app, in `apps/server/src/games.ts` and `apps/web/src/games.ts` (G2). The home page and the atomic rules test pick up new games by themselves. A game that offers [Local play](local-play.md) needs one more line in `localGames` (O8). Four games exist: [Battleship](battleship.md), [Four in a Row](four-in-a-row.md), [ใบ้เรียง](bai-riang.md) and [สลับร่าง](salab-rang.md).
 
 - `logic` runs on the server. It is pure TypeScript with rules, per-player views and no React.
 - `ui` runs in the browser. It holds the board, optional options panel and translations.
@@ -50,5 +51,7 @@ Normally the result screen appears as soon as the game ends. A game that sets `h
 ## What a game declares
 
 `meta` holds the player range, the `orientations` its screen lays out for ([Screens and frames](screens-and-frames.md)), and `localPlay`. A cooperative game adds `team` to its outcome, which reaches the snapshot as `team` (L8).
+
+A game can also define `startError(options, playerCount)` to refuse a start with a code from its catalog, and its options panel receives `playerCount` (L11). [สลับร่าง](salab-rang.md) uses both for its custom card set.
 
 Contract code: `packages/game-contract/src/index.ts`. Spec: [platform spec](../specs/platform/spec.md), section 8.

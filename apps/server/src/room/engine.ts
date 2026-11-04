@@ -218,6 +218,8 @@ export class RoomEngine {
     const { meta } = this.gameOf(record);
     if (record.seats.length < meta.minPlayers) reject("not_enough_players");
     if (record.seats.some((s) => s.connection !== "online")) reject("players_disconnected");
+    const refused = this.gameOf(record).startError?.(record.options, record.seats.length);
+    if (refused) reject(refused);
 
     record.gameState = this.gameOf(record).setup({
       players: record.seats.map((s) => s.id),
@@ -376,6 +378,7 @@ export class RoomEngine {
       view: playing ? game.viewFor(record.gameState, viewer) : null,
       ranking: record.ranking,
       team: record.team ?? null,
+      startError: record.phase === "lobby" ? (game.startError?.(record.options, record.seats.length) ?? null) : null,
     };
   }
 }

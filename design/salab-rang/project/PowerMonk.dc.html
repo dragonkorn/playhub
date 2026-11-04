@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>สลับร่าง พลังหลวงพี่</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#15112b}
+a{color:#ffb547}a:hover{color:#ffd28a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #15112b; color: #f3eefe; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffd76a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20c-4 0-8-3-8-7 3 0 6 2 8 5 2-3 5-5 8-5 0 4-4 7-8 7z"></path><path d="M12 18c-2-3-2-8 0-12 2 4 2 9 0 12z"></path></svg>
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">พลังหลวงพี่</h1>
+  </header>
+
+  <dc-import name="Strip" rows="{{rows}}" hint-size="358px,122px"></dc-import>
+
+  <p style="margin: 0; text-align: center; font-size: 16px; color: #cfc6ee;">แตะชื่อเพื่อน 1 คนที่จะให้พร</p>
+
+  <section style="flex-grow: 1; border-radius: 20px; background: #2c2456; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center;">
+    <div style="position: relative; width: 120px; height: 120px; border-radius: 50%; background: #173049; border: 3px solid #5cc8ff; display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 28px;">
+      มายด์
+      <svg style="position: absolute; right: -10px; top: -10px;" width="48" height="48" viewBox="0 0 24 24" fill="#5cc8ff" stroke="#15112b" stroke-width="1.2" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5z"></path></svg>
+    </div>
+    <p style="margin: 0; font-size: 17px; line-height: 1.5;">ห้ามใครสลับการ์ดกับมายด์<br>จนถึงตาถัดไปของคุณ</p>
+    <p style="margin: 0; height: 40px; padding: 0 16px; border-radius: 20px; background: #3b2a1c; display: flex; align-items: center; gap: 6px; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 18px; color: #ffd28a;">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffd76a"></circle><circle cx="12" cy="12" r="5.5" fill="none" stroke="#a87412" stroke-width="2.5"></circle></svg>
+      คุณรับ +1
+    </p>
+    <p style="margin: 0; font-size: 14px; color: #b3a9d6;">ทุกคนเห็นโล่บนชื่อมายด์ · มายด์ยังสลับกับคนอื่นเองได้</p>
+  </section>
+
+  <button style="height: 64px; border-radius: 16px; border: none; background: #ffb547; color: #241a3d; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">ให้พรมายด์</button>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: [
+        { n: 'ฉัน', c: 7, me: true, turn: true, off: true },
+        { n: 'ก้อง', c: 9 },
+        { n: 'มายด์', c: 4, picked: true },
+        { n: 'บอส', c: 13, crown: true, near: true },
+        { n: 'แพร', c: 6, shield: true },
+        { n: 'ต้น', c: 5 },
+        { n: 'จูน', c: 8, lock: true },
+        { n: 'เบียร์ช้างน้อย', c: 3 },
+        { n: 'ฟ้า', c: 6 },
+        { n: 'นัท', c: 10 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

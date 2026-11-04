@@ -563,7 +563,145 @@ async function baiRiang() {
   for (const page of pages) await page.context().close();
 }
 
-const scenarios = { caching, feedback, fullGame, tenPlayers, elimination, languageAndScale, disconnect, fourInARow, fourInARowDraw, localPlay, baiRiang };
+/** The home page fits both frames however many games there are (C7, C8). */
+async function home() {
+  for (const [label, viewport] of [["phone", PHONE], ["iPad", undefined]]) {
+    const page = await device(`home-${label}`, 20, viewport);
+    await page.goto(base);
+    await page.getByRole("button", { name: "สร้างห้อง" }).waitFor();
+    await fits(page, `home on ${label === "phone" ? "a phone" : "an iPad"}`);
+    await page.getByRole("button", { name: /^สลับร่าง/ }).click();
+    check(await page.getByText("สลับการ์ดตัวละครลับ").isVisible(), `the picked game's tagline shows on ${label}`);
+    await page.context().close();
+  }
+}
+
+/** The page whose player is on turn, waiting until one is. */
+async function onTurn(pages) {
+  for (let i = 0; i < 100; i++) {
+    for (const page of pages) if (await page.getByText("ตาของคุณ · เลือก 1 ท่า").isVisible()) return page;
+    await pause(100);
+  }
+  throw new Error("Nobody is on turn");
+}
+
+/** สลับร่าง on three phones and an iPad: lobby check, memorize, swap, claim and challenge, peeks to the end (W1 to W41, L11). */
+async function salabRang() {
+  const host = await device("sr-host", 1, PHONE);
+  const code = await create(host, "มีนา", "สลับร่าง");
+  const others = await Promise.all([0, 1, 2].map((i) => device(`sr-${i}`, 1, i === 2 ? undefined : PHONE)));
+  for (const [i, name] of ["Arm", "เบียร์ช้างน้อยมาก", "ต้น"].entries()) await join(others[i], code, name);
+  const ipad = others[2];
+  const pages = [host, ...others];
+  await host.getByText("ต้น", { exact: true }).waitFor();
+  check(await host.getByText("เบียร์ช้างน้อย", { exact: true }).isVisible(), "a long name stops at 10 characters (R6)");
+
+  await host.getByRole("radio", { name: /^กำหนดเอง/ }).click();
+  await host.getByText("เลือกตัวละครให้ครบ 4 ใบก่อนเริ่ม").waitFor();
+  check(await host.getByRole("button", { name: "เริ่มเกม" }).isDisabled(), "a short custom deck can't start (L11, W6)");
+  await fits(host, "lobby with a custom set");
+  await shot(host, "salab-rang-lobby");
+  await host.getByRole("radio", { name: /^เริ่มต้น/ }).click();
+  await host.getByRole("button", { name: "เริ่มเกม" }).click();
+
+  for (const page of pages) await page.getByRole("button", { name: "ซ่อนการ์ด" }).waitFor();
+  check((await host.locator("main article").count()) === 1, "each phone shows its own card face up before hiding (W9)");
+  await fits(host, "memorize on a phone");
+  await fits(ipad, "memorize on an iPad");
+  await shot(ipad, "salab-rang-ipad");
+  await shot(host, "salab-rang-memorize");
+  for (const page of pages) await page.getByRole("button", { name: "ซ่อนการ์ด" }).click();
+  await onTurn(pages);
+  check((await host.locator("main article").count()) === 0, "no card face shows after hiding (W9)");
+
+  // Swap: pick a player on the strip, fake it (W11, W33).
+  let page = await onTurn(pages);
+  await fits(page, "turn actions");
+  await shot(page, "salab-rang-turn");
+  await page.getByRole("button", { name: /^สลับ/ }).click();
+  await page.locator("main ul button:not([disabled])").first().click();
+  await page.getByRole("radio", { name: "แกล้งสลับ" }).check();
+  await page.getByRole("button", { name: /^ยืนยัน สลับกับ/ }).click();
+
+  // Claim and challenge, with one player changing their mind (W13 to W17, W35).
+  page = await onTurn(pages);
+  await page.getByRole("button", { name: /^อ้าง/ }).click();
+  await page.getByRole("radio", { name: /^หมอดู/ }).click();
+  await page.getByRole("button", { name: "ประกาศ: ฉันคือหมอดู" }).click();
+  const answering = pages.filter((p) => p !== page);
+  for (const p of answering) await p.getByRole("button", { name: "ฉันต่างหาก!" }).waitFor();
+  await fits(answering[0], "challenge on a phone");
+  await shot(answering[0], "salab-rang-challenge");
+  await answering[0].getByRole("button", { name: "ฉันต่างหาก!" }).click();
+  await answering[0].getByText(/คุณเลือก ฉันต่างหาก!/).waitFor();
+  await answering[0].getByRole("button", { name: "ผ่าน" }).click();
+  await answering[0].getByText(/คุณเลือก ผ่าน/).waitFor();
+  await answering[1].getByRole("button", { name: "ฉันต่างหาก!" }).click();
+  await answering[1].getByText(/คุณเลือก/).waitFor();
+  await answering[2].getByRole("button", { name: "ผ่าน" }).click();
+  await page.getByRole("heading", { name: /ตัวจริง|ตัวปลอม/ }).waitFor();
+  await answering[1].getByRole("heading", { name: /ตัวจริง|ตัวปลอม/ }).waitFor();
+  check(!(await answering[0].getByRole("heading", { name: /ตัวจริง|ตัวปลอม/ }).isVisible()), "only claimants fill their phone with the card (W36)");
+  await pause(300);
+  await shot(page, "salab-rang-reveal");
+  await shot(answering[0], "salab-rang-reveal-table");
+  const actor = (await page.getByRole("button", { name: /ใช้พลังหมอดู|จบตา/ }).isVisible()) ? page : answering[1];
+  await actor.getByRole("button", { name: /ใช้พลังหมอดู|จบตา/ }).click();
+  await pause(800);
+  if (await actor.getByRole("button", { name: "ไม่ใช้พลัง" }).isVisible()) {
+    await fits(actor, "power panel");
+    await actor.getByRole("button", { name: "ไม่ใช้พลัง" }).click();
+  }
+
+  // An unchallenged seer picks two players on the strip and looks in private (W16, W21, W33, W34).
+  page = await onTurn(pages);
+  await page.getByRole("button", { name: /^อ้าง/ }).click();
+  await page.getByRole("radio", { name: /^หมอดู/ }).click();
+  await page.getByRole("button", { name: "ประกาศ: ฉันคือหมอดู" }).click();
+  for (const p of pages.filter((x) => x !== page)) await p.getByRole("button", { name: "ผ่าน" }).click();
+  await page.getByRole("button", { name: "ใช้พลัง", exact: true }).waitFor();
+  const targets = page.locator("main ul button:not([disabled])");
+  await targets.nth(0).click();
+  await targets.nth(1).click();
+  await fits(page, "power with two picks");
+  await shot(page, "salab-rang-power");
+  await page.getByRole("button", { name: "ใช้พลัง", exact: true }).click();
+  const look = page.getByRole("button", { name: "กดค้างเพื่อดู", exact: true });
+  const lookBox = await look.boundingBox();
+  await page.mouse.move(lookBox.x + lookBox.width / 2, lookBox.y + lookBox.height / 2);
+  await page.mouse.down();
+  await page.locator("main article").nth(1).waitFor();
+  await shot(page, "salab-rang-secret");
+  await page.mouse.up();
+  check((await page.locator("main article").count()) === 0, "the seer's look hides on release (W21, W34)");
+  check((await pages.find((x) => x !== page).locator("main article").count()) === 0, "nobody else sees the seer's look (W21)");
+  await page.getByRole("button", { name: "ดูแล้ว จบตา" }).click();
+
+  // Everyone else peeks until the market closes (W12, W26).
+  for (let turn = 0; turn < 16; turn++) {
+    if (await host.getByRole("button", { name: "ดูการ์ดสุดท้าย" }).isVisible()) break;
+    page = await onTurn(pages);
+    await page.getByRole("button", { name: /^แอบดู/ }).click();
+    const hold = page.getByRole("button", { name: "กดค้างเพื่อดูการ์ด" });
+    const box = await hold.boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.locator("main article").waitFor();
+    await page.mouse.up();
+    check((await page.locator("main article").count()) === 0, "a peek shows the card only while held (W34)");
+    await page.getByRole("button", { name: "ดูแล้ว จบตา" }).click();
+    await pause(150);
+  }
+  await host.getByText("ตลาดปิด · ครบ 4 รอบ").waitFor({ timeout: 10_000 });
+  await fits(host, "result");
+  await shot(host, "salab-rang-result");
+  await host.getByRole("button", { name: "ดูการ์ดสุดท้าย" }).click();
+  await host.getByRole("heading", { name: "การ์ดสุดท้ายของทุกคน" }).waitFor();
+  check((await host.locator("main ol li").count()) === 4, "the final board lists every player's card (W41)");
+  for (const p of pages) await p.context().close();
+}
+
+const scenarios = { home, caching, feedback, fullGame, tenPlayers, elimination, languageAndScale, disconnect, fourInARow, fourInARowDraw, localPlay, baiRiang, salabRang };
 for (const [name, run] of Object.entries(scenarios)) {
   if (!only || only === name) await run();
 }

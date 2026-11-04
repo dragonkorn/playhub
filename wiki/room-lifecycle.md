@@ -4,6 +4,7 @@ sources:
   - specs/platform/spec.md
   - apps/server/src/room/engine.ts
   - apps/web/src/pages/
+  - apps/web/src/model/name.ts
 ---
 
 # Room lifecycle
@@ -12,13 +13,17 @@ A room moves through `lobby`, `playing` and `finished`. Play again returns it to
 
 ## Getting in
 
-The host picks a game on the home page, which lists every registered game (C7), and creates a room (R1). Others join by code or QR link (R4). Joining can fail for coded reasons (R5).
+The host picks a game on the home page, which lists every registered game (C7), and creates a room (R1). Games sit in a two-column grid that scrolls when there are many, so the name field and buttons always stay on screen (C8). Others join by code or QR link (R4). Joining can fail for coded reasons (R5).
 
 There are no accounts. Each player holds a secret seat token on their device, which reclaims their seat when they return (S1, S2). The token is never sent to other players (S3).
 
 ## Starting
 
 Only the host starts, and every seat must be connected (L1). The host can remove a seat in the lobby, so a missing player can't block the start (L5). Options belong to the game, and the host sets them in the lobby (L2).
+
+A game may also refuse a start for its options and the seated count, such as a custom [สลับร่าง](salab-rang.md) set of the wrong size (L11). The server rejects the start, and puts the reason in each lobby snapshot as `startError`, because the browser can't run game logic. The lobby then disables Start and shows the game's message. On a phone, the lobby's right column scrolls, so 10 players and a game's options still fit.
+
+Names are 1 to 10 characters, counting a Thai letter and its marks as one (R6). The server checks this, and name fields stop taking input at the limit (`apps/web/src/model/name.ts`).
 
 ## Playing and finishing
 

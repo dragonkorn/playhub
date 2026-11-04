@@ -1,24 +1,21 @@
 export interface GameCardProps {
   title: string;
   meta: string;
-  description: string;
   selected: boolean;
   onClick: () => void;
 }
 
-export function GameCard({ title, meta, description, selected, onClick }: GameCardProps) {
+/** One game in the home grid (C8). */
+export function GameCard({ title, meta, selected, onClick }: GameCardProps) {
   return (
     <button
       type="button"
       aria-pressed={selected}
       onClick={onClick}
-      className={`flex flex-col gap-1 rounded-2xl border-3 bg-panel px-6 py-4 text-left tall:gap-0 tall:px-4 tall:py-2.5 ${selected ? "border-signal" : "border-line"}`}
+      className={`flex h-24 flex-col justify-center gap-0.5 rounded-2xl border-3 bg-panel px-5 text-left tall:h-[68px] tall:px-3.5 ${selected ? "border-signal" : "border-line"}`}
     >
-      <span className="flex w-full items-baseline justify-between gap-4">
-        <span className="font-display text-4xl font-bold tall:text-2xl">{title}</span>
-        <span className="text-lg text-muted tall:text-sm">{meta}</span>
-      </span>
-      <span className="text-lg text-muted tall:text-sm">{description}</span>
+      <span className="truncate font-display text-3xl font-bold tall:text-xl">{title}</span>
+      <span className="text-lg text-muted tall:text-sm">{meta}</span>
     </button>
   );
 }

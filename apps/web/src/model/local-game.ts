@@ -67,6 +67,7 @@ export function snapshotOf(game: Game, record: LocalRecord): RoomSnapshot {
     view: game.viewFor(record.state, active[0] ?? null),
     ranking: outcome.done ? outcome.ranking : null,
     team: outcome.done ? (outcome.team ?? null) : null,
+    startError: null,
   };
 }
 

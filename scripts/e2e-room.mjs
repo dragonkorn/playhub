@@ -1,5 +1,5 @@
 // End-to-end check against a running `wrangler dev`: plays a full Battleship game
-// over real HTTP and WebSockets, including a reconnect, then Four in a Row and ใบ้เรียง games.
+// over real HTTP and WebSockets, including a reconnect, then Four in a Row, ใบ้เรียง and สลับร่าง games.
 // Run `pnpm build`, then `pnpm dev:server`, then: pnpm test:e2e
 const base = process.argv[2] ?? "http://localhost:8787";
 const wsBase = base.replace(/^http/, "ws");
@@ -162,4 +162,61 @@ assert(e.snapshot.team === "won" && e.snapshot.view.lives === 3, "a perfect game
 assert(e.rejected.length + f.rejected.length === 0, "no reveals rejected");
 e.socket.close();
 f.socket.close();
+// สลับร่าง: a custom deck of the wrong size can't start (L11), then four players hide, claim,
+// challenge and peek through all 4 rounds.
+const sr = await post("/rooms", { gameId: "salab-rang", name: "มีนา" });
+const srSeats = [sr, ...(await Promise.all(["Arm", "Ploy", "ต้น"].map((name) => post(`/rooms/${sr.code}/join`, { name }))))];
+const srClients = srSeats.map((seat) => open(sr.code, seat.token));
+await Promise.all(srClients.map((x) => x.ready));
+const [g] = srClients;
+await g.until((s) => s.players.length === 4 && s.players.every((p) => p.connection === "online"), "four online");
+g.send({ type: "setOptions", options: { goal: 15, set: "custom", roles: ["seer", "dog", "monk"] } });
+await g.until((s) => s.startError === "deck_size", "lobby knows the custom deck is short");
+g.send({ type: "start" });
+await g.until(() => g.rejected.includes("deck_size"), "short custom deck refused");
+g.send({ type: "setOptions", options: { goal: 15, set: "starter", roles: [] } });
+await g.until((s) => s.startError === null, "starter deck can start");
+g.send({ type: "start" });
+await Promise.all(srClients.map((x) => x.until((s) => s.phase === "playing" && s.view, "สลับร่าง started")));
+assert(Object.keys(g.snapshot.view.cards).length === 4, "everyone sees every card before hiding (W9)");
+for (const client of srClients) client.send({ type: "move", version: client.snapshot.version, move: { type: "hide" } });
+await Promise.all(srClients.map((x) => x.until((s) => s.view.phase === "turn", "first turn")));
+assert(srClients.every((x) => Object.keys(x.snapshot.view.cards).length === 0), "no card is visible after hiding (W9)");
+
+const byId = Object.fromEntries(srSeats.map((seat, i) => [seat.playerId, srClients[i]]));
+const moveFor = async (id, move) => {
+  const client = byId[id];
+  await client.until((s) => s.version >= g.snapshot.version, "views in step");
+  client.send({ type: "move", version: client.snapshot.version, move });
+};
+let claimed = false;
+while (g.snapshot.phase === "playing") {
+  const view = g.snapshot.view;
+  const version = g.snapshot.version;
+  if (view.phase === "turn" && !claimed) {
+    claimed = true;
+    await moveFor(view.current, { type: "claim", role: "seer" });
+  } else if (view.phase === "turn") {
+    await moveFor(view.current, { type: "peek" });
+  } else if (view.phase === "peek" || view.phase === "secret" || view.phase === "massage") {
+    await moveFor(view.phase === "peek" ? view.current : view.actor, { type: "done" });
+  } else if (view.phase === "challenge") {
+    const waiting = view.order.filter((p) => p !== view.claim.player && !view.answered.includes(p));
+    await moveFor(waiting[0], { type: "respond", challenge: waiting.length === 1 });
+    if (waiting.length === 2) {
+      await g.until((s) => s.version > version, "answer counted");
+      assert(!JSON.stringify(g.snapshot.view).includes(`"${waiting[0]}":false`), "an answer stays private until the challenge resolves (W15)");
+      continue;
+    }
+  } else if (view.phase === "reveal" || view.phase === "shown") {
+    await moveFor(view.actor, { type: "continue" });
+  } else if (view.phase === "power") {
+    await moveFor(view.actor, { type: "done" });
+  }
+  await g.until((s) => s.version > version, "move applied");
+}
+assert(g.snapshot.view.reason === "rounds" && g.snapshot.ranking.flat().length === 4, "the market closes after 4 rounds, ranking everyone (W26)");
+assert(Object.keys(g.snapshot.view.cards).length === 4, "every card shows at the end (W27)");
+assert(srClients.every((x) => x.rejected.length === (x === g ? 1 : 0)), "no move rejected");
+srClients.forEach((x) => x.socket.close());
 console.log("All end-to-end checks passed");

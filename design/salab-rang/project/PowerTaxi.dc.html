@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>สลับร่าง พลังวินมอเตอร์ไซค์</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#15112b}
+a{color:#ffb547}a:hover{color:#ffd28a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #15112b; color: #f3eefe; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffd76a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17" r="3"></circle><circle cx="18.5" cy="17" r="3"></circle><path d="M5.5 17l4-7h5l4 7"></path><path d="M14 10l-1.5-4H10"></path></svg>
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">วินมอเตอร์ไซค์ส่งด่วน</h1>
+  </header>
+
+  <dc-import name="Strip" rows="{{rows}}" hint-size="358px,122px"></dc-import>
+
+  <p style="margin: 0; text-align: center; font-size: 16px; color: #cfc6ee;">แตะ<b style="color: #ff8f6b;">ต้นทาง</b> แล้วแตะ<b style="color: #5cc8ff;">ปลายทาง</b> · ห้ามเป็นตัวเอง</p>
+
+  <section style="flex-grow: 1; border-radius: 20px; background: #2c2456; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 100px; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+        <span style="font-size: 13px; font-weight: 700; color: #ff8f6b;">ต้นทาง</span>
+        <span style="width: 76px; height: 76px; border-radius: 50%; background: #3a1d18; border: 3px solid #ff8f6b; display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">บอส</span>
+        <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 28px; color: #ff8f6b;">−2</span>
+      </div>
+      <svg width="60" height="40" viewBox="0 0 60 40" fill="none" stroke="#ffd76a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 26h48"></path><path d="M44 19l8 7-8 7"></path><circle cx="18" cy="10" r="4"></circle><circle cx="34" cy="10" r="4"></circle></svg>
+      <div style="width: 100px; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+        <span style="font-size: 13px; font-weight: 700; color: #5cc8ff;">ปลายทาง</span>
+        <span style="width: 76px; height: 76px; border-radius: 50%; background: #173049; border: 3px solid #5cc8ff; display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 17px; text-align: center; line-height: 1.1;">เบียร์<br>ช้างน้อย</span>
+        <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 28px; color: #5cc8ff;">+2</span>
+      </div>
+    </div>
+    <p style="margin: 0; height: 40px; padding: 0 16px; border-radius: 20px; background: #3b2a1c; display: flex; align-items: center; gap: 6px; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 18px; color: #ffd28a;">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffd76a"></circle><circle cx="12" cy="12" r="5.5" fill="none" stroke="#a87412" stroke-width="2.5"></circle></svg>
+      ค่าวิน คุณรับ +1
+    </p>
+    <p style="margin: 0; text-align: center; font-size: 14px; color: #b3a9d6;">เบรกคนที่ใกล้ชนะ หรือช่วยคนที่ตามหลัง</p>
+  </section>
+
+  <button style="height: 64px; border-radius: 16px; border: none; background: #ffb547; color: #241a3d; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 21px;">ส่ง 2 เหรียญ บอส → เบียร์ช้างน้อย</button>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: [
+        { n: 'ฉัน', c: 7, me: true, turn: true, off: true },
+        { n: 'ก้อง', c: 9 },
+        { n: 'มายด์', c: 4 },
+        { n: 'บอส', c: 13, crown: true, near: true, from: true },
+        { n: 'แพร', c: 6, shield: true },
+        { n: 'ต้น', c: 5 },
+        { n: 'จูน', c: 8, lock: true },
+        { n: 'เบียร์ช้างน้อย', c: 3, picked: true },
+        { n: 'ฟ้า', c: 6 },
+        { n: 'นัท', c: 10 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -8,6 +8,33 @@
   --color-signal: #ffc83d;
   --color-hit: #ff6b4a;
   --color-online: #4fd1a5;
+
+  /* สลับร่าง night market, from design/salab-rang/. */
+  --color-sr-night: #15112b;
+  --color-sr-shade: #0b0817;
+  --color-sr-panel: #211b40;
+  --color-sr-raised: #2c2456;
+  --color-sr-line: #3a3266;
+  --color-sr-me: #8b7fd0;
+  --color-sr-text: #f3eefe;
+  --color-sr-soft: #cfc6ee;
+  --color-sr-muted: #b3a9d6;
+  --color-sr-lantern: #ffb547;
+  --color-sr-glow: #ffd28a;
+  --color-sr-stall: #3b2a1c;
+  --color-sr-coin: #ffd76a;
+  --color-sr-coin-edge: #a87412;
+  --color-sr-true: #5cc8ff;
+  --color-sr-true-deep: #173049;
+  --color-sr-true-ground: #0d2236;
+  --color-sr-false: #ff8f6b;
+  --color-sr-false-deep: #3a1d18;
+  --color-sr-false-ground: #2a1512;
+  --color-sr-card: #fff3d6;
+  --color-sr-ink: #241a3d;
+  --color-sr-ink-soft: #6b5a8e;
+  --color-sr-back: #2b2150;
+  --color-sr-online: #3ddc97;
   --font-display: "Kanit", sans-serif;
   --font-body: "Sarabun", sans-serif;
 }

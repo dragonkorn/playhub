@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>สลับร่าง พลังนักล้วงกระเป๋า</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#15112b}
+a{color:#ffb547}a:hover{color:#ffd28a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #15112b; color: #f3eefe; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffd76a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V5a1.5 1.5 0 0 1 3 0v6"></path><path d="M11 11V4a1.5 1.5 0 0 1 3 0v7"></path><path d="M14 11V5.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L3 14a1.6 1.6 0 0 1 2.6-1.8L8 15"></path></svg>
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">พลังนักล้วงกระเป๋า</h1>
+  </header>
+
+  <dc-import name="Strip" rows="{{rows}}" hint-size="358px,122px"></dc-import>
+
+  <p style="margin: 0; text-align: center; font-size: 16px; color: #cfc6ee;">แตะชื่อเหยื่อ 1 คน</p>
+
+  <section style="flex-grow: 1; border-radius: 20px; background: #2c2456; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+        <span style="width: 76px; height: 76px; border-radius: 50%; background: #173049; border: 3px solid #5cc8ff; display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">บอส</span>
+        <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 30px; color: #ff8f6b;">−2</span>
+      </div>
+      <svg width="64" height="24" viewBox="0 0 64 24" fill="none" stroke="#ffd76a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h54"></path><path d="M50 5l8 7-8 7"></path></svg>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+        <span style="width: 76px; height: 76px; border-radius: 50%; background: #3b2a1c; border: 3px solid #ffb547; display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px; color: #ffd28a;">ฉัน</span>
+        <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 30px; color: #ffd76a;">+2</span>
+      </div>
+    </div>
+    <p style="margin: 0; text-align: center; font-size: 16px; line-height: 1.5;">ขโมย 2 เหรียญจากบอส<br><span style="color: #cfc6ee; font-size: 14px;">มีไม่ถึง 2 ได้เท่าที่มี</span></p>
+    <p style="margin: 0; width: 100%; box-sizing: border-box; border-radius: 14px; border: 2px solid #ff8f6b; background: #3a1d18; padding: 12px 14px; display: flex; align-items: center; gap: 10px; font-size: 15px; line-height: 1.45; color: #ffd9cc;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff8f6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5z"></path><path d="M12 8l1.2 2.5 2.8.4-2 2 .5 2.8L12 14.4l-2.5 1.3.5-2.8-2-2 2.8-.4z"></path></svg>
+      ถ้าบอสถือการ์ดตำรวจอยู่จริง คุณโดนจับ ต้องจ่ายบอส 3 เหรียญแทน
+    </p>
+  </section>
+
+  <button style="height: 64px; border-radius: 16px; border: none; background: #ffb547; color: #241a3d; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">ล้วงบอส</button>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: [
+        { n: 'ฉัน', c: 7, me: true, turn: true, off: true },
+        { n: 'ก้อง', c: 9 },
+        { n: 'มายด์', c: 4 },
+        { n: 'บอส', c: 13, crown: true, near: true, picked: true },
+        { n: 'แพร', c: 6, shield: true },
+        { n: 'ต้น', c: 5 },
+        { n: 'จูน', c: 8, lock: true },
+        { n: 'เบียร์ช้างน้อย', c: 3 },
+        { n: 'ฟ้า', c: 6 },
+        { n: 'นัท', c: 10 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

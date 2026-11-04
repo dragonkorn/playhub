@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>สลับร่าง รอคนอื่นเล่น</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#15112b}
+a{color:#ffb547}a:hover{color:#ffd28a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #15112b; color: #f3eefe; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; gap: 8px; height: 44px;">
+    <h1 style="margin: 0; flex-grow: 1; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">รอบ 2<span style="color: #b3a9d6; font-weight: 500;">/4</span> <span style="color: #b3a9d6; font-weight: 500; font-size: 16px;">· เป้า 15</span></h1>
+    <button aria-label="ประวัติ" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #3a3266; background: transparent; color: #f3eefe; display: flex; align-items: center; justify-content: center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+    </button>
+    <button aria-label="คู่มือตัวละคร" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #3a3266; background: transparent; color: #f3eefe; display: flex; align-items: center; justify-content: center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3z"></path><path d="M21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"></path></svg>
+    </button>
+    <button aria-label="ปิดเสียง" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #3a3266; background: transparent; color: #f3eefe; display: flex; align-items: center; justify-content: center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+    </button>
+  </header>
+
+  <ul aria-label="ผู้เล่น 10 คน เรียงตามลำดับตา" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px;">
+    <sc-for list="{{players}}" as="p" hint-placeholder-count="10">
+      <li aria-label="{{p.label}}" style="position: relative; height: 58px; box-sizing: border-box; border-radius: 12px; border: {{p.border}}; background: {{p.bg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+        <span style="position: absolute; top: 6px; left: 6px; width: 8px; height: 8px; box-sizing: border-box; border-radius: 50%; background: {{p.dot}}; border: {{p.dotRing}};"></span>
+        <span style="position: absolute; top: 3px; right: 4px; display: flex; gap: 1px;">
+          <sc-if value="{{p.crown}}" hint-placeholder-val="{{ false }}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#ffd76a" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg>
+          </sc-if>
+          <sc-if value="{{p.shield}}" hint-placeholder-val="{{ false }}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#5cc8ff" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5z"></path></svg>
+          </sc-if>
+          <sc-if value="{{p.lock}}" hint-placeholder-val="{{ false }}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff8f6b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+          </sc-if>
+        </span>
+        <span style="max-width: 100%; box-sizing: border-box; padding: 0 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 700; color: {{p.nameColor}};">{{p.n}}</span>
+        <span style="display: flex; align-items: center; gap: 3px; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 20px; line-height: 1; color: {{p.coinColor}};">
+          <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffd76a"></circle><circle cx="12" cy="12" r="5.5" fill="none" stroke="#a87412" stroke-width="2.5"></circle></svg>
+          {{p.c}}
+        </span>
+      </li>
+    </sc-for>
+  </ul>
+
+  <p style="margin: 0; align-self: center; height: 36px; padding: 0 16px; border-radius: 18px; background: #3b2a1c; color: #ffd28a; display: flex; align-items: center; gap: 8px; font-family: 'Kanit', sans-serif; font-weight: 500; font-size: 17px;">
+    <span style="width: 8px; height: 8px; border-radius: 50%; background: #ffb547;"></span>
+    ตาของ ก้อง
+  </p>
+
+  <section style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+    <div role="img" aria-label="การ์ดของคุณ คว่ำอยู่" style="width: 240px; height: 336px; box-sizing: border-box; border-radius: 22px; border: 4px solid #ffb547; background-color: #2b2150; background-image: repeating-linear-gradient(45deg, rgba(255,181,71,0.13) 0 10px, transparent 10px 20px), repeating-linear-gradient(-45deg, rgba(255,181,71,0.13) 0 10px, transparent 10px 20px); display: flex; align-items: center; justify-content: center;">
+      <div style="width: 124px; height: 124px; box-sizing: border-box; border-radius: 50%; background: #15112b; border: 3px solid #ffb547; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <span style="font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 56px; line-height: 1; color: #ffb547;">?</span>
+        <span style="font-family: 'Kanit', sans-serif; font-weight: 500; font-size: 14px; color: #ffd28a;">สลับร่าง</span>
+      </div>
+    </div>
+    <span style="font-size: 14px; color: #b3a9d6;">การ์ดของคุณ · คว่ำอยู่</span>
+  </section>
+
+  <footer style="min-height: 112px; box-sizing: border-box; border-radius: 16px; background: #211b40; padding: 14px 16px; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+    <span style="font-family: 'Kanit', sans-serif; font-weight: 500; font-size: 18px;">ก้องกำลังเลือกท่า…</span>
+    <span style="font-size: 14px; color: #b3a9d6;">ล่าสุด: นัทสลับกับมายด์ (จริงหรือแกล้ง ไม่มีใครรู้)</span>
+  </footer>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var rows = [
+      { n: 'ฉัน', c: 7, me: true },
+      { n: 'ก้อง', c: 9, turn: true },
+      { n: 'มายด์', c: 4 },
+      { n: 'บอส', c: 13, crown: true, near: true },
+      { n: 'แพร', c: 6, shield: true },
+      { n: 'ต้น', c: 5 },
+      { n: 'จูน', c: 8, lock: true },
+      { n: 'เบียร์', c: 3, away: true },
+      { n: 'ฟ้า', c: 6 },
+      { n: 'นัท', c: 10 }
+    ];
+    return {
+      players: rows.map(function (p) {
+        return {
+          n: p.n,
+          c: p.c,
+          crown: !!p.crown,
+          shield: !!p.shield,
+          lock: !!p.lock,
+          dot: p.away ? 'transparent' : '#3ddc97',
+          dotRing: p.away ? '2px solid #ffd76a' : 'none',
+          border: p.turn ? '3px solid #ffb547' : (p.me ? '2px solid #8b7fd0' : '2px solid #3a3266'),
+          bg: p.turn ? '#3b2a1c' : (p.me ? '#2c2456' : '#211b40'),
+          nameColor: p.me ? '#ffd28a' : '#f3eefe',
+          coinColor: p.near ? '#ff8f6b' : '#f3eefe',
+          label: p.n + ' ' + p.c + ' เหรียญ' + (p.turn ? ' ตานี้' : '') + (p.crown ? ' นำอยู่' : '') + (p.near ? ' ใกล้ถึงเป้า' : '') + (p.shield ? ' ได้รับพร' : '') + (p.lock ? ' โดนปิดปาก' : '') + (p.away ? ' กำลังต่อใหม่' : '')
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>สลับร่าง คู่มือตัวละคร</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b0817}
+a{color:#ffb547}a:hover{color:#ffd28a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding-top: 40px; display: flex; flex-direction: column; background: #0b0817; color: #f3eefe; font-family: 'Sarabun', sans-serif;">
+  <section role="dialog" aria-label="คู่มือตัวละคร" style="flex-grow: 1; min-height: 0; border-radius: 24px 24px 0 0; background: #211b40; padding: 10px 16px 16px; display: flex; flex-direction: column; gap: 10px;">
+    <span aria-hidden="true" style="align-self: center; width: 44px; height: 5px; border-radius: 3px; background: #3a3266;"></span>
+    <header style="display: flex; align-items: center; height: 44px;">
+      <h1 style="margin: 0; flex-grow: 1; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 24px;">ตัวละครในเกมนี้</h1>
+      <button aria-label="ปิด" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #3a3266; background: transparent; color: #f3eefe; display: flex; align-items: center; justify-content: center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg>
+      </button>
+    </header>
+    <p style="margin: 0; border-radius: 12px; background: #3b2a1c; padding: 10px 12px; font-size: 14px; line-height: 1.45; color: #ffd28a;">ไม่มีใครท้า ใช้พลังได้เลย · มีคนท้า ทุกคนที่อ้างเปิดการ์ด ตัวจริงใช้พลัง ตัวปลอมเสีย 1</p>
+
+    <dl style="margin: 0; display: flex; flex-direction: column; gap: 6px; overflow: hidden;">
+      <sc-for list="{{roles}}" as="r" hint-placeholder-count="10">
+        <div style="border-radius: 12px; background: #15112b; padding: 8px 12px; display: flex; flex-direction: column; gap: 1px;">
+          <dt style="font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 17px; color: #ffd28a;">{{r.name}}</dt>
+          <dd style="margin: 0; font-size: 14px; line-height: 1.4; color: #e3dcf7;">{{r.power}}</dd>
+        </div>
+      </sc-for>
+    </dl>
+  </section>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var list = [
+      ['แม่ค้าส้มตำ', 'รับ 2 เหรียญ แล้วเลือกลูกค้า 1 คนรับ 1 เหรียญ'],
+      ['นักล้วงกระเป๋า', 'ขโมย 2 เหรียญจาก 1 คน ถ้าเขาเป็นตำรวจตัวจริง คุณจ่ายเขา 3 แทน'],
+      ['ตำรวจ', 'ดูการ์ด 1 คน ถ้าเป็นนักล้วงกระเป๋า ยึด 4 เหรียญ'],
+      ['หมอดู', 'ดูการ์ดเพื่อน 2 คน แล้วรับ 1 เหรียญ'],
+      ['หลวงพี่', 'ให้พร 1 คน ห้ามใครสลับกับเขาจนถึงตาหลวงพี่ถัดไป รับ 1 เหรียญ'],
+      ['นักมายากล', 'ทุกคนส่งการ์ดให้คนถัดไปตามลำดับตา แล้วรับ 1 เหรียญ'],
+      ['คนเก็บค่าที่', 'เก็บ 1 เหรียญจากทุกคนที่มีมากกว่าคุณ'],
+      ['ร่างทรง', 'จ่าย 1 เหรียญ เลือกตัวละครอื่นในเกม แล้วใช้พลังนั้น'],
+      ['ป้าขี้เม้าท์', 'เปิดการ์ด 1 คนให้ทั้งวงดู แล้วรับ 1 เหรียญ'],
+      ['หมาวัด', 'ไม่มีพลัง อ้างไม่ได้ ถูกเปิดตอนท้าได้ 2 เหรียญ']
+    ];
+    return { roles: list.map(function (r) { return { name: r[0], power: r[1] }; }) };
+  }
+}
+</script>
+</body>
+</html>

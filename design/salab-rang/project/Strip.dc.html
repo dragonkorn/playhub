@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>แถบผู้เล่น</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<ul aria-label="ผู้เล่นเรียงตามลำดับตา" style="width: {{width}}; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: {{cols}}; gap: 6px; font-family: 'Sarabun', sans-serif; color: #f3eefe;">
+  <sc-for list="{{players}}" as="p" hint-placeholder-count="10">
+    <li aria-label="{{p.label}}" style="position: relative; height: 58px; box-sizing: border-box; border-radius: 12px; border: {{p.border}}; background: {{p.bg}}; opacity: {{p.opacity}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+      <span style="position: absolute; top: 6px; left: 6px; width: 8px; height: 8px; box-sizing: border-box; border-radius: 50%; background: {{p.dot}}; border: {{p.dotRing}};"></span>
+      <span style="position: absolute; top: 3px; right: 4px; display: flex; gap: 1px;">
+        <sc-if value="{{p.crown}}" hint-placeholder-val="{{ false }}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#ffd76a" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg>
+        </sc-if>
+        <sc-if value="{{p.shield}}" hint-placeholder-val="{{ false }}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#5cc8ff" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5z"></path></svg>
+        </sc-if>
+        <sc-if value="{{p.lock}}" hint-placeholder-val="{{ false }}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff8f6b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+        </sc-if>
+        <sc-if value="{{p.eye}}" hint-placeholder-val="{{ false }}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffb547" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </sc-if>
+        <sc-if value="{{p.check}}" hint-placeholder-val="{{ false }}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3ddc97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+        </sc-if>
+      </span>
+      <span style="max-width: 100%; box-sizing: border-box; padding: 0 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 700; color: {{p.nameColor}};">{{p.n}}</span>
+      <span style="display: flex; align-items: center; gap: 3px; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 20px; line-height: 1; color: {{p.coinColor}};">
+        <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffd76a"></circle><circle cx="12" cy="12" r="5.5" fill="none" stroke="#a87412" stroke-width="2.5"></circle></svg>
+        {{p.c}}
+      </span>
+    </li>
+  </sc-for>
+</ul>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"rows":{"editor":null},"columns":{"editor":"int","default":5,"min":5,"max":10},"$preview":{"width":358,"height":122}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var rows = this.props.rows || [
+      { n: 'ฉัน', c: 7, me: true },
+      { n: 'ก้อง', c: 9, turn: true },
+      { n: 'มายด์', c: 4 },
+      { n: 'บอส', c: 13, crown: true, near: true },
+      { n: 'แพร', c: 6, shield: true },
+      { n: 'ต้น', c: 5 },
+      { n: 'จูน', c: 8, lock: true },
+      { n: 'เบียร์', c: 3, away: true },
+      { n: 'ฟ้า', c: 6 },
+      { n: 'นัท', c: 10 }
+    ];
+    var cols = this.props.columns || 5;
+    return {
+      width: cols > 5 ? '100%' : '358px',
+      cols: 'repeat(' + cols + ', minmax(0, 1fr))',
+      players: rows.map(function (p) {
+        var border = '2px solid #3a3266';
+        var bg = '#211b40';
+        if (p.me) { border = '2px solid #8b7fd0'; bg = '#2c2456'; }
+        if (p.turn) { border = '3px solid #ffb547'; bg = '#3b2a1c'; }
+        if (p.picked) { border = '3px solid #5cc8ff'; bg = '#173049'; }
+        if (p.from) { border = '3px solid #ff8f6b'; bg = '#3a1d18'; }
+        return {
+          n: p.n,
+          c: p.c,
+          crown: !!p.crown,
+          shield: !!p.shield,
+          lock: !!p.lock,
+          eye: !!p.eye,
+          check: !!p.check,
+          opacity: p.off ? '0.4' : '1',
+          dot: p.away ? 'transparent' : '#3ddc97',
+          dotRing: p.away ? '2px solid #ffd76a' : 'none',
+          border: border,
+          bg: bg,
+          nameColor: p.me ? '#ffd28a' : '#f3eefe',
+          coinColor: p.near ? '#ff8f6b' : '#f3eefe',
+          label: p.n + ' ' + p.c + ' เหรียญ' + (p.turn ? ' ตานี้' : '') + (p.crown ? ' นำอยู่' : '') + (p.near ? ' ใกล้ถึงเป้า' : '') + (p.shield ? ' ได้รับพร' : '') + (p.lock ? ' โดนปิดปาก' : '') + (p.eye ? ' ยังไม่ซ่อน' : '') + (p.check ? ' ตอบแล้ว' : '') + (p.picked ? ' เลือกอยู่' : '') + (p.from ? ' ต้นทาง' : '') + (p.off ? ' เลือกไม่ได้' : '') + (p.away ? ' กำลังต่อใหม่' : '')
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

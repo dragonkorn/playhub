@@ -41,6 +41,8 @@ export interface GameDefinition<State, Move, View, Options> {
   parseOptions(raw: unknown): Options | null;
   parseMove(raw: unknown): Move | null;
 
+  /** Why these options can't start with this many players, as a catalog code, or null (L11). */
+  startError?(options: Options, playerCount: number): string | null;
   setup(ctx: GameContext<Options>): State;
   applyMove(state: State, player: PlayerId, move: Move, random: () => number): MoveResult<State>;
   activePlayers(state: State): PlayerId[];
@@ -87,6 +89,8 @@ export interface GameUi<View, Move, Options> {
     options: Options;
     editable: boolean;
     change: (options: Options) => void;
+    /** Seats currently in the lobby (L11). */
+    playerCount: number;
   }) => unknown;
   /** One message catalog per locale, namespaced by game id. */
   messages: Record<Locale, Record<string, string>>;
@@ -111,6 +115,8 @@ export interface RoomSnapshot {
   ranking: PlayerId[][] | null;
   /** Set for a cooperative outcome (L8). */
   team: Team | null;
+  /** In the lobby, why the game would refuse to start now, as a code in its catalog (L11). */
+  startError: string | null;
 }
 
 export type ClientMessage =
@@ -133,9 +139,9 @@ export const CloseCode = {
   replaced: 4003,
 } as const;
 
-export const MAX_NAME_GRAPHEMES = 16;
+export const MAX_NAME_GRAPHEMES = 10;
 
-/** Spec R6: NFC, trimmed, 1 to 16 grapheme clusters, no control characters. Null when invalid. */
+/** Spec R6: NFC, trimmed, 1 to 10 grapheme clusters, no control characters. Null when invalid. */
 export function normalizeName(raw: unknown): string | null {
   if (typeof raw !== "string" || /\p{Cc}/u.test(raw)) return null;
   const name = raw.normalize("NFC").trim();

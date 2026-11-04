@@ -45,3 +45,12 @@ Questions for checking wiki accuracy. Answers and evidence come from sources, ne
 | 39 | How does the result screen word a cooperative game's end? | Team won or team lost, with players listed without places. | `specs/platform/spec.md` L8, `apps/web/src/model/result.ts` |
 | 40 | Has hold to reveal been tested on a real phone? | `UNVERIFIED`. Only headless Chrome so far. | `wiki/testing.md` |
 | 41 | Does the server send ใบ้เรียง topic text? | No. It sends a topic index, and each device reads `topic.<index>.title`, `.low` and `.high` from its catalog. | `games/bai-riang/src/ui/messages.ts`, `games/bai-riang/src/logic/index.ts` |
+| 42 | In สลับร่าง, does the player who swaps see either card afterwards? | No. Nobody sees any card after a swap, and nobody learns whether it was real. | `specs/games/salab-rang/spec.md` W11 |
+| 43 | Does a สลับร่าง challenge close on a timer? | No. It waits for every other player's answer, and answers can change until the last one arrives. | `specs/games/salab-rang/spec.md` W14 |
+| 44 | Can a game stop the host from starting even when everyone is connected? | Yes, through `startError`, for example a custom สลับร่าง set of the wrong size. | `specs/platform/spec.md` L11, `apps/server/src/room/engine.ts`, `start` |
+| 45 | Can two players hold the same character card in สลับร่าง? | No. Every game uses as many cards as players, with no duplicates. | `specs/games/salab-rang/spec.md` W2 |
+| 46 | How does the lobby know a start would be refused, when the browser can't run game logic? | The server puts the game's code in each lobby snapshot as `startError`. | `specs/platform/spec.md` L11, `apps/server/src/room/engine.ts`, `snapshot` |
+| 47 | Does สลับร่าง play sounds? | No. It has no sounds, so its top bar has no mute button. | `specs/games/salab-rang/spec.md` section 7 |
+| 48 | Can a สลับร่าง player skip a power they claimed? | Yes. `done` in the power phase skips it, which matters when no legal target is left. | `specs/games/salab-rang/spec.md` W18, `games/salab-rang/src/logic/index.ts` |
+| 49 | Has hold to peek in สลับร่าง been tried on a real phone? | `UNVERIFIED`. Only headless Chrome so far. | `docs/changes/2026-11-04-salab-rang.md` |
+| 50 | What happens to the home page when more games are added? | The two-column game grid scrolls, and the name field, Create and Join stay on screen. | `specs/platform/spec.md` C8, `apps/web/src/pages/HomePage.tsx` |

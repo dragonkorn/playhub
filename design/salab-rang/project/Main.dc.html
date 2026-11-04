@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>สลับร่าง จำการ์ดตอนเริ่ม</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#15112b}
+a{color:#ffb547}a:hover{color:#ffd28a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #15112b; color: #f3eefe; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; gap: 8px; height: 44px;">
+    <h1 style="margin: 0; flex-grow: 1; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">เริ่มเกม <span style="color: #b3a9d6; font-weight: 500; font-size: 16px;">· เป้า 15 เหรียญ</span></h1>
+    <button aria-label="คู่มือตัวละคร" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #3a3266; background: transparent; color: #f3eefe; display: flex; align-items: center; justify-content: center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3z"></path><path d="M21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"></path></svg>
+    </button>
+    <button aria-label="ปิดเสียง" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #3a3266; background: transparent; color: #f3eefe; display: flex; align-items: center; justify-content: center;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+    </button>
+  </header>
+
+  <ul aria-label="ผู้เล่น 10 คน" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px;">
+    <sc-for list="{{players}}" as="p" hint-placeholder-count="10">
+      <li aria-label="{{p.label}}" style="position: relative; height: 58px; box-sizing: border-box; border-radius: 12px; border: {{p.border}}; background: {{p.bg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+        <span style="position: absolute; top: 6px; left: 6px; width: 8px; height: 8px; border-radius: 50%; background: {{p.dot}};"></span>
+        <sc-if value="{{p.eye}}" hint-placeholder-val="{{ false }}">
+          <svg style="position: absolute; top: 3px; right: 4px;" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffb547" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </sc-if>
+        <span style="max-width: 100%; box-sizing: border-box; padding: 0 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 700; color: {{p.nameColor}};">{{p.n}}</span>
+        <span style="display: flex; align-items: center; gap: 3px; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 20px; line-height: 1; color: {{p.coinColor}};">
+          <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffd76a"></circle><circle cx="12" cy="12" r="5.5" fill="none" stroke="#a87412" stroke-width="2.5"></circle></svg>
+          {{p.c}}
+        </span>
+      </li>
+    </sc-for>
+  </ul>
+
+  <p style="margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; color: #b3a9d6;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffb547" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+    ยังไม่ซ่อน 4 คน · ซ่อนครบแล้วเกมเริ่ม
+  </p>
+
+  <section style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+    <article aria-label="การ์ดของคุณ หมอดู" style="width: 240px; height: 336px; box-sizing: border-box; border-radius: 22px; border: 4px solid #ffb547; background: #fff3d6; color: #241a3d; padding: 20px 18px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+      <span style="font-size: 13px; font-weight: 700; color: #6b5a8e;">การ์ดของคุณ</span>
+      <div style="width: 116px; height: 116px; border-radius: 50%; background: #2b2150; color: #ffd76a; display: flex; align-items: center; justify-content: center;">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="10" r="7"></circle><path d="M9 8a3 3 0 0 1 3-3"></path><path d="M7 16.5 5.5 21h13L17 16.5"></path></svg>
+      </div>
+      <h2 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 40px; line-height: 1.1;">หมอดู</h2>
+      <p style="margin: 0; font-size: 15px; line-height: 1.45; text-align: center;">ดูการ์ดของเพื่อน 2 คน แล้วรับ 1 เหรียญ</p>
+    </article>
+  </section>
+
+  <footer style="display: flex; flex-direction: column; gap: 10px;">
+    <p style="margin: 0; text-align: center; font-size: 15px; color: #b3a9d6;">ชูมือถือให้ทั้งวงดู จำให้ได้ แล้วกดซ่อน<br>ซ่อนแล้วดูเองไม่ได้อีก</p>
+    <button style="height: 64px; border-radius: 16px; border: none; background: #ffb547; color: #241a3d; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.9"></path><path d="M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6"></path></svg>
+      ซ่อนการ์ด
+    </button>
+  </footer>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var rows = [
+      { n: 'ฉัน', c: 5, me: true, eye: true },
+      { n: 'ก้อง', c: 5 },
+      { n: 'มายด์', c: 5, eye: true },
+      { n: 'บอส', c: 5 },
+      { n: 'แพร', c: 5 },
+      { n: 'ต้น', c: 5, eye: true },
+      { n: 'จูน', c: 5 },
+      { n: 'เบียร์', c: 5, eye: true },
+      { n: 'ฟ้า', c: 5 },
+      { n: 'นัท', c: 5 }
+    ];
+    return {
+      players: rows.map(function (p) {
+        return {
+          n: p.n,
+          c: p.c,
+          eye: !!p.eye,
+          dot: '#3ddc97',
+          border: p.me ? '2px solid #8b7fd0' : '2px solid #3a3266',
+          bg: p.me ? '#2c2456' : '#211b40',
+          nameColor: p.me ? '#ffd28a' : '#f3eefe',
+          coinColor: '#f3eefe',
+          label: p.n + ' ' + p.c + ' เหรียญ' + (p.eye ? ' ยังไม่ซ่อน' : '')
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

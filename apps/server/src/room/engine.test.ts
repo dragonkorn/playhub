@@ -18,6 +18,7 @@ const testGame: GameDefinition<TestState, { add: number; eliminate?: string; tea
   defaultOptions: { limit: 3 },
   parseOptions: (raw) => (raw && typeof raw === "object" && "limit" in raw ? (raw as { limit: number }) : null),
   parseMove: (raw) => (raw && typeof raw === "object" && "add" in raw ? (raw as { add: number }) : null),
+  startError: (options, playerCount) => (options.limit > playerCount * 10 ? "limit_too_high" : null),
   setup: ({ players }) => ({
     order: [...players],
     turn: 0,
@@ -186,10 +187,10 @@ describe("rooms", () => {
 
   it("counts graphemes, so Thai marks don't use up the limit (R6)", async () => {
     await create();
-    const sixteen = "กำ".repeat(16);
-    const seventeen = "กำ".repeat(17);
-    expect((await run((e) => e.join(sixteen))).ok).toBe(true);
-    expect(await run((e) => e.join(seventeen))).toEqual({ ok: false, code: "name_invalid" });
+    const ten = "กำ".repeat(10);
+    const eleven = "กำ".repeat(11);
+    expect((await run((e) => e.join(ten))).ok).toBe(true);
+    expect(await run((e) => e.join(eleven))).toEqual({ ok: false, code: "name_invalid" });
   });
 
   it("rejects empty names and control characters, and trims (R6)", async () => {
@@ -260,6 +261,19 @@ describe("lobby", () => {
     await disconnect(arm);
     await send(host, { type: "start" });
     expect(rejectionFor(host)).toBe("players_disconnected");
+  });
+
+  it("refuses a start the game rejects for its options and player count (L11)", async () => {
+    const { host, arm } = await room(false);
+    await send(host, { type: "setOptions", options: { limit: 99 } });
+    expect(latest(arm).startError).toBe("limit_too_high");
+    await send(host, { type: "start" });
+    expect(rejectionFor(host)).toBe("limit_too_high");
+    expect(latest(arm).phase).toBe("lobby");
+    await send(host, { type: "setOptions", options: { limit: 3 } });
+    expect(latest(arm).startError).toBeNull();
+    await send(host, { type: "start" });
+    expect(latest(arm).phase).toBe("playing");
   });
 
   it("lets only the host change options, and validates them (L2)", async () => {

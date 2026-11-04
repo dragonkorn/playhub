@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>สลับร่าง พลังตำรวจ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#15112b}
+a{color:#ffb547}a:hover{color:#ffd28a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #15112b; color: #f3eefe; font-family: 'Sarabun', sans-serif;">
+  <header style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffd76a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5z"></path><path d="M12 8l1.2 2.5 2.8.4-2 2 .5 2.8L12 14.4l-2.5 1.3.5-2.8-2-2 2.8-.4z"></path></svg>
+    <h1 style="margin: 0; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 22px;">ตำรวจค้นตัวต้น</h1>
+  </header>
+
+  <dc-import name="Strip" rows="{{rows}}" hint-size="358px,122px"></dc-import>
+
+  <h2 style="margin: 4px 0 0; text-align: center; font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 40px; line-height: 1.1; color: #5cc8ff;">เจอขโมย!</h2>
+
+  <section style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+    <article aria-label="ต้น คือ นักล้วงกระเป๋า" style="width: 190px; height: 264px; box-sizing: border-box; border-radius: 20px; border: 4px solid #5cc8ff; background: #fff3d6; color: #241a3d; padding: 16px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+      <span style="font-size: 13px; font-weight: 700; color: #6b5a8e;">ต้น คือ</span>
+      <div style="width: 96px; height: 96px; border-radius: 50%; background: #2b2150; color: #ffd76a; display: flex; align-items: center; justify-content: center;">
+        <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V5a1.5 1.5 0 0 1 3 0v6"></path><path d="M11 11V4a1.5 1.5 0 0 1 3 0v7"></path><path d="M14 11V5.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L3 14a1.6 1.6 0 0 1 2.6-1.8L8 15"></path></svg>
+      </div>
+      <h3 style="margin: 0; text-align: center; font-family: 'Kanit', sans-serif; font-weight: 900; font-size: 26px; line-height: 1.15;">นักล้วง<br>กระเป๋า</h3>
+    </article>
+    <p style="margin: 0; height: 44px; padding: 0 18px; border-radius: 22px; background: #173049; display: flex; align-items: center; gap: 8px; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 20px; color: #c4ecff;">
+      ยึดจากต้น 4 เหรียญ
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffd76a"></circle><circle cx="12" cy="12" r="5.5" fill="none" stroke="#a87412" stroke-width="2.5"></circle></svg>
+      +4
+    </p>
+    <p style="margin: 0; text-align: center; font-size: 14px; line-height: 1.45; color: #b3a9d6;">การ์ดเห็นแค่บนเครื่องคุณ · ทุกคนเห็นแค่เหรียญที่ย้าย<br>ถ้าค้นไม่เจอ ไม่มีเหรียญย้าย</p>
+  </section>
+
+  <footer style="display: flex; flex-direction: column; gap: 8px;">
+    <button style="height: 64px; border-radius: 16px; border: 3px solid #5cc8ff; background: #173049; color: #c4ecff; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 19px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      กำลังดู · ปล่อยนิ้วเพื่อซ่อน
+    </button>
+    <button style="height: 52px; border-radius: 14px; border: 2px solid #3a3266; background: transparent; color: #f3eefe; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 17px;">ดูแล้ว จบตา</button>
+  </footer>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: [
+        { n: 'ฉัน', c: 11, me: true, turn: true },
+        { n: 'ก้อง', c: 9 },
+        { n: 'มายด์', c: 4 },
+        { n: 'บอส', c: 13, crown: true, near: true },
+        { n: 'แพร', c: 6, shield: true },
+        { n: 'ต้น', c: 1, picked: true },
+        { n: 'จูน', c: 8, lock: true },
+        { n: 'เบียร์ช้างน้อย', c: 3 },
+        { n: 'ฟ้า', c: 6 },
+        { n: 'นัท', c: 10 }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

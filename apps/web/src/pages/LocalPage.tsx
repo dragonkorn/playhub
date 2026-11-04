@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { games, localGames } from "../games";
 import { LOCAL_HOST, checkNames, deviceRandom, moveLocal, playAgainLocal, snapshotOf, startLocal, type LocalRecord } from "../model/local-game";
 import { BOTH } from "../model/frame";
+import { clampName } from "../model/name";
 import { navigate } from "../model/router";
 import { useScreenOrientations } from "../model/screen";
 import { sessions } from "../repositories/session-repository";
@@ -82,7 +83,7 @@ export function LocalPage({ gameId }: { gameId: string }) {
         <p className="text-center text-2xl text-muted">{t("name", { ns: gameId })}</p>
         {names.map((name, i) => (
           <Field key={i} label={t("local.player", { number: i + 1 })}>
-            <TextInput value={name} onChange={(e) => setNames(names.map((n, j) => (j === i ? e.target.value : n)))} maxLength={40} />
+            <TextInput value={name} onChange={(e) => setNames(names.map((n, j) => (j === i ? clampName(e.target.value) : n)))} />
           </Field>
         ))}
         {error && <p className="text-center text-lg text-hit">{t(`error.${error}`)}</p>}

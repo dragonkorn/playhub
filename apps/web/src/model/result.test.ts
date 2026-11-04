@@ -14,6 +14,7 @@ const snapshot = (over: Partial<RoomSnapshot>): RoomSnapshot => ({
   view: { level: 2 },
   ranking: [["a"], ["b"]],
   team: null,
+  startError: null,
   ...over,
 });
 

@@ -17,7 +17,7 @@ Three layers, each catching what the one before can't.
 |---|---|---|
 | Unit | `pnpm test` | Game rules, room rules, local play, placement, playback, sound, translations, atomic layers |
 | Real room | `node scripts/e2e-room.mjs` | HTTP, WebSockets and Durable Object storage on `wrangler dev`, for every game |
-| Real app | `node scripts/e2e-ui.mjs` | Full journeys in headless Chrome, with touch drag, 10 players, a Four in a Row win and draw, local play offline, and ใบ้เรียง on phones and an iPad |
+| Real app | `node scripts/e2e-ui.mjs` | Full journeys in headless Chrome, with touch drag, 10 players, a Four in a Row win and draw, local play offline, ใบ้เรียง on phones and an iPad, and a สลับร่าง game with a challenge and a private look |
 
 `pnpm test:e2e` runs both real layers. It needs `pnpm build`, then `pnpm dev:server` running. To test a deployment, pass its URL to either script.
 
@@ -25,7 +25,7 @@ Every game must also pass the test kit in `packages/game-contract/src/testing.ts
 
 ## Why the real layers exist
 
-`node scripts/e2e-ui.mjs <url> <folder> <scenario>` runs one scenario, such as `caching`, which is quick enough to run after a deploy. Scenarios set the `fxSpeed` device preference to run playback 20 times faster, except `feedback` and `fourInARow`, which check real timing. `baiRiang` plays on two portrait phones and a landscape iPad, makes one mistake, wins all 3 levels, and checks every screen fits its frame. `localPlay` loads every font face before cutting the network, like a device that has used the app, because fonts are cached on first use (C6).
+`node scripts/e2e-ui.mjs <url> <folder> <scenario>` runs one scenario, such as `caching`, which is quick enough to run after a deploy. Scenarios set the `fxSpeed` device preference to run playback 20 times faster, except `feedback` and `fourInARow`, which check real timing. `baiRiang` plays on two portrait phones and a landscape iPad, makes one mistake, wins all 3 levels, and checks every screen fits its frame. `salabRang` checks the lobby refuses a short custom set, then plays memorize, a swap, a challenge where a player changes their answer, a seer's private look, and peeks until the market closes. The room script plays a whole สลับร่าง game over sockets and checks answers stay private. `localPlay` loads every font face before cutting the network, like a device that has used the app, because fonts are cached on first use (C6).
 
 Each of these passed unit tests, then failed for real:
 
@@ -37,7 +37,7 @@ Each of these passed unit tests, then failed for real:
 
 ## Reviewing UI changes
 
-A UI change comes with a review doc in `docs/changes/`, with before and after screenshots from the real app and a list of issues seen in them. Examples: `docs/changes/2026-11-03-four-in-a-row.md` and `docs/changes/2026-11-04-bai-riang.md`.
+A UI change comes with a review doc in `docs/changes/`, with before and after screenshots from the real app and a list of issues seen in them. Examples: `docs/changes/2026-11-03-four-in-a-row.md`, `docs/changes/2026-11-04-bai-riang.md` and `docs/changes/2026-11-04-salab-rang.md`.
 
 ## Still unverified
 

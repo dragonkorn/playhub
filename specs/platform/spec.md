@@ -25,7 +25,7 @@ Requirement IDs are stable. Tests and tasks should cite them.
 - **R3** The server picks a random code. If the room is already in use, it retries with a new code.
 - **R4** A player joins by entering the code and a name, or by opening the QR link `/join/<code>`, which fills in the code. The join flow must work in a normal browser tab, because a QR scan on iOS may not open the installed PWA.
 - **R5** Joining fails with a coded reason: `room_not_found`, `room_full`, `game_started`, `name_taken`, `name_invalid`.
-- **R6** Names are 1 to 16 grapheme clusters, counted with `Intl.Segmenter`, so Thai combining marks don't count as extra characters. The server normalizes to NFC, trims, and rejects control characters. Names are compared case-insensitively within a room.
+- **R6** Names are 1 to 10 grapheme clusters, short enough for a player chip. They are counted with `Intl.Segmenter`, so Thai combining marks don't count as extra characters, and name fields stop taking input at the limit. The server normalizes to NFC, trims, and rejects control characters. Names are compared case-insensitively within a room.
 - **R7** The player count limit comes from the game (`minPlayers`, `maxPlayers`).
 - **R8** A room's data is deleted 1 hour after its last activity, using a storage alarm and `deleteAll()`.
 
@@ -46,7 +46,7 @@ lobby ──start──► playing ──game outcome done──► finished
 any phase ──1 hour inactive──► deleted
 ```
 
-- **L1** Only the host can start, and only when the seated count is within the game's range and every seat is connected.
+- **L1** Only the host can start, and only when the seated count is within the game's range, every seat is connected, and the game accepts the options for that count (L11).
 - **L2** The host can change game options in the lobby. Everyone sees the current options.
 - **L3** Only the host can trigger play again. Connected seats return to the lobby with the same code and options. Seats that are lost or disconnected are removed.
 - **L4** A player who leaves in the lobby or at the finished phase loses their seat. A player who leaves during play is marked lost (D6).
@@ -56,6 +56,7 @@ any phase ──1 hour inactive──► deleted
 - **L8** A cooperative game ends with `team: "won"` or `team: "lost"` in its outcome, and ranks every player together. The result screen then says the team won or lost, and lists the players without places.
 - **L9** A game can supply the result line from its final view through `resultLine`, which returns a message code in the game's catalog. It replaces L7's line.
 - **L10** The result screen's board button can be relabeled with `result.boards` in the game's catalog. On the board opened from it, the back button sits at the bottom center, clear of the game's top bar.
+- **L11** A game can refuse a start through `startError(options, playerCount)`, which returns a code in the game's catalog or null. The server rejects such a start with that code, and puts the code in each lobby snapshot as `startError`, because web can't import `logic` (G3). The lobby disables Start and shows the game's `start.<code>` message, and the options panel receives the seated count.
 
 ## 5. Turns and blocking
 
@@ -130,6 +131,8 @@ export interface GameDefinition<State, Move, View, Options> {
   parseOptions(raw: unknown): Options | null;
   parseMove(raw: unknown): Move | null;
 
+  /** Why these options can't start with this many players, as a catalog code, or null (L11). */
+  startError?(options: Options, playerCount: number): string | null;
   setup(ctx: GameContext<Options>): State;
   applyMove(state: State, player: PlayerId, move: Move, random: () => number): MoveResult<State>;
   activePlayers(state: State): PlayerId[];
@@ -165,6 +168,8 @@ export interface GameUi<View, Move, Options> {
     options: Options;
     editable: boolean;
     change: (options: Options) => void;
+    /** Seats currently in the lobby (L11). */
+    playerCount: number;
   }) => unknown;
   /** One message catalog per locale, namespaced by game id. */
   messages: Record<Locale, Record<string, string>>;
@@ -235,6 +240,8 @@ interface RoomSnapshot {
   ranking: PlayerId[][] | null;
   /** Set for a cooperative outcome (L8). */
   team: "won" | "lost" | null;
+  /** In the lobby, why the game would refuse to start now (L11). */
+  startError: string | null;
 }
 ```
 
@@ -286,6 +293,7 @@ Hibernation is mandatory. Without it, the free tier covers about 37 games a day 
 - **C5** Screens are laid out at a fixed frame and scaled to fit: 1180×820 in landscape, 390×844 in portrait (ADR-0007). Platform screens lay out for both. A game screen uses the viewport's orientation when the game lists it in `orientations`. Otherwise it uses the game's first orientation and shows a translated notice to rotate. Joining is never blocked.
 - **C6** After the first visit, playing downloads no app assets. The service worker precaches all build output, including images and sound, and caches fonts on first use. Hashed files under `/assets/` are served `immutable` for one year. HTML and `sw.js` still revalidate, so a new deploy reaches players, and only changed files download.
 - **C7** The home page lists every registered game as a card the player can pick. The first registered game is picked by default.
+- **C8** The games sit in a two-column grid of tiles, each with the name and player count, and the picked game's tagline shows below the grid. The grid scrolls when it doesn't fit, so the name field, Create and Join stay on screen however many games are registered.
 
 ## 12. Localization
 
@@ -336,6 +344,7 @@ Unless noted, these run in Vitest against `engine.ts` with the in-memory reposit
 19. A repeat visit gets every app asset and font from the service worker, and `/assets/` files are `immutable`. (C6)
 20. The result screen says it's a draw for a tie at the top, and shows the game's `result.win` or `result.draw` line. (L6, L7)
 21. The home page lists every game, and creating a room uses the picked one. (C7)
+21a. In e2e, the home page fits a phone and an iPad with every registered game, and Create stays visible. (C8)
 22. A local game starts with valid, distinct names, refuses invalid or repeated ones, and plays a move as the active seat. (O2 to O4)
 23. A local game's rejected move returns the game's code and leaves the state alone. (O5)
 24. A finished local game ranks like an online one, and play again starts fresh with the same names. (O7)

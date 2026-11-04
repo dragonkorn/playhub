@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>สลับร่าง ประวัติ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;900&family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b0817}
+a{color:#ffb547}a:hover{color:#ffd28a}
+</style>
+</helmet>
+<main style="width: 390px; height: 844px; box-sizing: border-box; padding-top: 96px; display: flex; flex-direction: column; background: #0b0817; color: #f3eefe; font-family: 'Sarabun', sans-serif;">
+  <section role="dialog" aria-label="ประวัติ" style="flex-grow: 1; min-height: 0; border-radius: 24px 24px 0 0; background: #211b40; padding: 10px 16px 16px; display: flex; flex-direction: column; gap: 12px;">
+    <span aria-hidden="true" style="align-self: center; width: 44px; height: 5px; border-radius: 3px; background: #3a3266;"></span>
+    <header style="display: flex; align-items: center; height: 44px;">
+      <h1 style="margin: 0; flex-grow: 1; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 24px;">ประวัติ</h1>
+      <button aria-label="ปิด" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #3a3266; background: transparent; color: #f3eefe; display: flex; align-items: center; justify-content: center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"></path><path d="M18 6 6 18"></path></svg>
+      </button>
+    </header>
+    <p style="margin: 0; font-size: 14px; color: #b3a9d6;">เฉพาะสิ่งที่ทุกคนเห็น ล่าสุดอยู่บน</p>
+
+    <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; overflow: hidden;">
+      <sc-for list="{{entries}}" as="e" hint-placeholder-count="7">
+        <li style="border-radius: 14px; background: #15112b; padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px; background: #2c2456; color: #ffb547; display: flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 13px;">{{e.kind}}</span>
+          <span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 16px; font-weight: 700; line-height: 1.35;">{{e.text}}</span>
+            <sc-if value="{{e.hasDetail}}" hint-placeholder-val="{{ true }}">
+              <span style="font-size: 14px; line-height: 1.4; color: #cfc6ee;">{{e.detail}}</span>
+            </sc-if>
+          </span>
+        </li>
+      </sc-for>
+    </ol>
+  </section>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var rows = [
+      ['อ้าง', 'ต้น อ้างนักล้วงกระเป๋า · ไม่มีใครท้า', 'ล้วงจูน แต่จูนคือตำรวจ · ต้น −3 จูน +3'],
+      ['ท้า', 'ฉัน อ้างหมอดู · ก้อง และนัท ท้า', 'เปิดการ์ด: ฉันตัวจริง · ก้องคือตำรวจ −1 · นัทคือหมาวัด +2'],
+      ['ดู', 'บอส แอบดูการ์ด', ''],
+      ['สลับ', 'นัท สลับกับมายด์', 'จริงหรือแกล้ง ไม่มีใครรู้'],
+      ['อ้าง', 'จูน อ้างหลวงพี่ · ไม่มีใครท้า', 'ให้พรแพร · จูน +1'],
+      ['เม้าท์', 'ฟ้า อ้างป้าขี้เม้าท์ · ไม่มีใครท้า', 'เปิดการ์ดเบียร์ให้วงดู: แม่ค้าส้มตำ · ฟ้า +1'],
+      ['สลับ', 'เบียร์ สลับกับบอส', 'จริงหรือแกล้ง ไม่มีใครรู้']
+    ];
+    return {
+      entries: rows.map(function (r) {
+        return { kind: r[0], text: r[1], detail: r[2], hasDetail: r[2] !== '' };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

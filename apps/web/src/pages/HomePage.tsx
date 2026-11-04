@@ -2,6 +2,7 @@ import { Button, Field, SectionLabel, SplitLayout, TextInput } from "@playhub/ui
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { games } from "../games";
+import { clampName } from "../model/name";
 import { navigate } from "../model/router";
 import { GameCard } from "../molecules/GameCard";
 import { ApiError, createRoom } from "../repositories/room-api";
@@ -37,7 +38,7 @@ export function HomePage() {
   return (
     <SplitLayout
       leftClassName="flex flex-col justify-between gap-8 tall:flex-row tall:items-start tall:gap-4"
-      rightClassName="flex flex-col gap-4 tall:min-h-0 tall:grow tall:gap-2.5"
+      rightClassName="flex min-h-0 flex-col gap-4 overflow-hidden tall:grow tall:gap-2.5"
       left={
         <>
           <div className="flex flex-col gap-5 tall:gap-1">
@@ -56,19 +57,22 @@ export function HomePage() {
       right={
         <>
           <SectionLabel>{t("home.choose")}</SectionLabel>
-          {Object.entries(games).map(([id, game]) => (
-            <GameCard
-              key={id}
-              title={t("name", { ns: id })}
-              meta={players(game.meta.minPlayers, game.meta.maxPlayers)}
-              description={t("tagline", { ns: id })}
-              selected={id === gameId}
-              onClick={() => setGameId(id)}
-            />
-          ))}
-          <div className="mt-auto flex flex-col gap-3 tall:gap-2.5">
+          {/* C8: the grid scrolls, so the form below stays on screen however many games there are. */}
+          <div className="grid min-h-0 shrink auto-rows-min grid-cols-2 gap-3 overflow-y-auto tall:gap-2">
+            {Object.entries(games).map(([id, game]) => (
+              <GameCard
+                key={id}
+                title={t("name", { ns: id })}
+                meta={players(game.meta.minPlayers, game.meta.maxPlayers)}
+                selected={id === gameId}
+                onClick={() => setGameId(id)}
+              />
+            ))}
+          </div>
+          <p className="flex-none text-lg leading-snug text-muted tall:text-sm">{t("tagline", { ns: gameId })}</p>
+          <div className="mt-auto flex flex-none flex-col gap-3 tall:gap-2.5">
             <Field label={t("home.name")}>
-              <TextInput value={name} onChange={(e) => setName(e.target.value)} maxLength={40} />
+              <TextInput value={name} onChange={(e) => setName(clampName(e.target.value))} />
             </Field>
             {error && <p className="text-lg text-hit">{t(`error.${error}`)}</p>}
             <Button disabled={busy} onClick={create} className="tall:h-16">
