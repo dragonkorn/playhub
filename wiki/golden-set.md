@@ -44,3 +44,4 @@ Questions for checking wiki accuracy. Answers and evidence come from sources, ne
 | 38 | What does Battleship show on a phone held upright? | Its landscape screen, scaled down, with a notice to rotate. | `apps/web/src/model/frame.ts`, `frameFor`; `specs/platform/spec.md` C5 |
 | 39 | How does the result screen word a cooperative game's end? | Team won or team lost, with players listed without places. | `specs/platform/spec.md` L8, `apps/web/src/model/result.ts` |
 | 40 | Has hold to reveal been tested on a real phone? | `UNVERIFIED`. Only headless Chrome so far. | `wiki/testing.md` |
+| 41 | Does the server send ใบ้เรียง topic text? | No. It sends a topic index, and each device reads `topic.<index>.title`, `.low` and `.high` from its catalog. | `games/bai-riang/src/ui/messages.ts`, `games/bai-riang/src/logic/index.ts` |
